@@ -1,4 +1,6 @@
 ﻿using MapApp.Models;
+using MapApp.Models.EF;
+using MapApp.Models.EF.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,17 +14,39 @@ namespace MapApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private MapAppContext context;
+        public HomeController(ILogger<HomeController> logger, MapAppContext mapAppContext)
         {
             _logger = logger;
+            context = mapAppContext;
         }
 
         public IActionResult Index()
         {
+
+            //var paths = context.Set<Path>().ToList();
+            //var routes = context.Set<Bus>().ToList();
+            //var wayPointSchedules = context.Set<WayPointsSchedule>().ToList();
+            //var cities = context.Set<City>().ToList();
+            //var schedules = context.Set<Schedule>().ToList();
+            //foreach (var route in routes)
+            //{
+            //    var path = route.Path;
+            //    var wayPoints = route.WayPointsSchedule;
+            //}
+            //ViewBag.Routes = routes;
+
             return View();
+            
         }
 
+        
+        public JsonResult GetAllPaths()
+        {
+            var routes = context.Paths.ToList().GroupBy(p => p.BusId);
+
+            return Json(routes);
+        }
         public IActionResult Privacy()
         {
             return View();

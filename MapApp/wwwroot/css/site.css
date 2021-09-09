@@ -1,71 +1,62 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿* {
+    font-family: Lato,Verdana,Helvetica,arial,sans-serif !important;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+#map {
+    height: 100vh;
+    width: 100%;
+    position: relative;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.formBlock {
+    max-width: 300px;
+    background-color: #FFF;
+    border: 1px solid #ddd;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    z-index: 999;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 5px;
+    width: 100%;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.leaflet-top {
+    margin-top: 50px;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    background-color: rgba(55, 65, 81) !important;
+    color: white !important;
+    opacity: 0.8;
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.input {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 15px;
+    border-radius: 3px;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+#form {
+    padding: 0;
+    margin: 0;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+input:nth-child(1) {
+    margin-bottom: 10px;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+.FooterIcon img {
+    filter: invert(100%);
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+.FooterIcon:hover img {
+    filter: invert(0%);
+}
+
+#StartButton {
+    display: none;
 }
