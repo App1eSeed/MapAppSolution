@@ -1,4 +1,5 @@
 ﻿L.AnimatedMarker = L.Marker.extend({
+
   options: {
     // meters
     distance: 200,
@@ -85,8 +86,10 @@
   },
 
   // Start the animation
-  start: function() {
-    this.animate();
+    start: function () {
+
+      this.animate();
+      
   },
 
   // Stop the animation in place

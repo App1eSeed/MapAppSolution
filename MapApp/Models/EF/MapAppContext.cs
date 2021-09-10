@@ -25,7 +25,7 @@ namespace MapApp.Models.EF
         }
 
         public DbSet<Bus> Buses { get; set; }
-        public DbSet<City> WayPoints { get; set; }
+        public DbSet<City> Cities { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<WayPointsSchedule> WayPointsSchedules { get; set; }
         public DbSet<Path> Paths { get; set; }
@@ -159,9 +159,10 @@ namespace MapApp.Models.EF
             });
 
             List<Path> paths = new List<Path>();
+            
+            paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
             paths.AddRange(GetWayBetweenCities("1", new List<string>() { "Kyiv", "Svitlovodsk" }));
             paths.AddRange(GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
-            paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
 
             modelBuilder.Entity<Path>().HasData(paths);
 

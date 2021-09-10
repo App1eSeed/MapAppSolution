@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿const markers = [];
+
+$(document).ready(function () {
 	var map = L.map('map').setView([49.047968403958926, 33.22724770404179], 7);
 
 //const { ajax } = require("jquery");
@@ -30,7 +32,7 @@
 	//];
 	var tempArr = [];
 	var routeLines = [];
-	var markers = [];
+	var icons = [];
 
 
     //$.post("/Home/GetAllPaths", function (result) {
@@ -53,36 +55,45 @@
 				});
 				
 				routeLines.push(L.polyline(tempArr[i]));
+				console.log(result[i][0].city);
+				console.log(result);
+				let myCustomColour = colourForBus(result[i][0].city);
+				console.log(routeLine);
+				const markerHtmlStyles = `
+				  background-color: ${myCustomColour};
+				  width: 0.6rem;
+				  height: 0.6rem;
+				  display: block;
+				  position: relative;
+				  border-radius: 1rem 1rem 1rem 1rem ;
+				  transform: rotate(45deg);
+				  border: 1px solid #000000`;
+
+
+				 icons.push(L.divIcon({
+					customId: "",
+					className: "my-custom-pin",
+					html: `<span style="${markerHtmlStyles}" />`
+				}));
 			});
-			console.log(routeLines);
 
-			var myCustomColour = 'green';
-
-			const markerHtmlStyles = `
-			  background-color: ${myCustomColour};
-			  width: 0.6rem;
-			  height: 0.6rem;
-			  display: block;
-			  position: relative;
-			  border-radius: 1rem 1rem 1rem 1rem ;
-			  transform: rotate(45deg);
-			  border: 1px solid #000000`;
-
-
-			var icon = L.divIcon({
-				customId: "",
-				className: "my-custom-pin",
-				html: `<span style="${markerHtmlStyles}" />`
-			});
+			console.log(icons);
+		
+		
 
 			$.each(routeLines, function (i, routeLine) {
-				var marker = L.animatedMarker(routeLine.getLatLngs(), {
-					customId: "Enter Id here",
 
-					//distance: 80,					
+				
+
+				
+
+				var marker = L.animatedMarker(routeLine.getLatLngs(), {
+					customId: "09943222988",
+
+					distance: 80,					
 					//interval: 1000,
 
-					icon: icon,
+					icon: icons[i],
 					autoStart: false,
 					onEnd: function () {
 						$(this._shadow).fadeOut();
@@ -98,6 +109,7 @@
 
 			$.each(markers, function (i, marker) {
 				marker.start();
+			
 			});
 
 		},
@@ -112,7 +124,18 @@
 		console.log(customId);
 	}
 
-
+	function colourForBus(city){
+        switch (city) {
+			case "Kyiv":
+				return "Green";
+			case "Kharkiv":
+				return "Blue";
+			case "Svitlovodsk":
+				return "Yellow";
+			default:
+				return "red";
+        }
+		
+	}
 
 });
-
