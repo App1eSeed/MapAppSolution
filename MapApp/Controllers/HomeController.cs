@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MapApp.Controllers
@@ -16,12 +17,12 @@ namespace MapApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private MapAppContext context;
+        //private MapAppContext context;
         private static readonly HttpClient client = new HttpClient();
-        public HomeController(ILogger<HomeController> logger, MapAppContext mapAppContext)
+        public HomeController(ILogger<HomeController> logger/*, MapAppContext mapAppContext*/)
         {
             _logger = logger;
-            context = mapAppContext;
+           // context = mapAppContext;
         }
 
         public IActionResult Index()
@@ -46,34 +47,39 @@ namespace MapApp.Controllers
         
         public JsonResult GetAllPaths()
         {
-            var routes = (from bus in context.Buses
-                         join path in context.Paths on bus.Id equals path.BusId
-                         join city in context.Cities on bus.FromCityId equals city.Id
-                         select new {BusId = bus.Id, city = city.Name, path.Longtitude, path.Latitude }).ToList().GroupBy(g => new { g.BusId, g.city });
-                        
-            
+            using (var context = new MapAppContext())
+            {
+                var routes = (from bus in context.Buses
+                              join path in context.Paths on bus.Id equals path.BusId
+                              join city in context.Cities on bus.FromCityId equals city.Id
+                              select new { BusId = bus.Id, city = city.Name, path.Longtitude, path.Latitude }).ToList().GroupBy(g => new { g.BusId, g.city });
 
-
-
-
-
+                return Json(routes);
+            }
             //var routes = context.Paths.ToList().GroupBy(p => p.BusId);
 
-            return Json(routes);
+            
         }
 
-        //public JsonResult GetWay(int BusId)
-        //{
+        public JsonResult GetAllCities()
+        {
+            using (var context = new MapAppContext())
+            {
+                var cities = context.Cities.ToList();
+                return Json(cities);
+            }
+            
+        }
 
-        //    //string jsonString = JsonSerializer.Serialize<RoutingRequest>(routingRequest);
-        //    //var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-        //    //HttpResponseMessage response = client.PostAsJsonAsync(
-        //    //    "http://open.mapquestapi.com/directions/v2/route?key=iVOoDHSx5Ykdj4sIKnWbkmO2SgjbCOBI", new { }).Result;
-
-        //    .//RoutingApiResponseModel responseModel = response.Content.ReadFromJsonAsync<RoutingApiResponseModel>().Result;
-        //    return View();
-        //}
+        [HttpPost]
+        public JsonResult GetWay(string busId)
+        {
+            using (var context = new MapAppContext())
+            {
+                var route = context.Paths.Where(p => p.BusId == busId).ToList();
+                return Json(route);
+            }
+        }
 
         public IActionResult Privacy()
         {

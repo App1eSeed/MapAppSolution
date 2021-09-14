@@ -3,8 +3,8 @@ using MapApp.Models.EF.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -19,10 +19,16 @@ namespace MapApp.Models.EF
         private static readonly HttpClient client = new HttpClient();
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
+            // Database.EnsureDeleted();
             Database.EnsureCreated();
- 
+
         }
+        public MapAppContext()
+        {
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
+        }
+
 
         public DbSet<Bus> Buses { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -30,10 +36,15 @@ namespace MapApp.Models.EF
         public DbSet<WayPointsSchedule> WayPointsSchedules { get; set; }
         public DbSet<Path> Paths { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=DESKTOP-UJK1CNS;Database=MapAppDB;Trusted_Connection=True;");
+            }
+        }
+
+
 
         public List<Path> GetWayBetweenCities(string busId, List<string> cities)
         {
@@ -64,27 +75,44 @@ namespace MapApp.Models.EF
 
             //string testjson = await response.Content.ReadAsStringAsync();
 
-          //  response.EnsureSuccessStatusCode();
+           // response.EnsureSuccessStatusCode();
            // var test = response.Headers.Location;
             
             return coordinates;
 
         }
+
+        public City GetCityCoords(string id, string city)
+        {
+            GeocodeApiRequestModel geocodeRequest = new GeocodeApiRequestModel(city);
+            HttpResponseMessage response = client.PostAsJsonAsync(
+                "http://www.mapquestapi.com/geocoding/v1/address?key=iVOoDHSx5Ykdj4sIKnWbkmO2SgjbCOBI", geocodeRequest).Result;
+
+            GeocodeApiResponseModel responseModel = response.Content.ReadFromJsonAsync< GeocodeApiResponseModel>().Result;
+
+            return new City()
+            {
+                Id = id,
+                Name = city,
+                Longtitude = responseModel.Results[0].Locations[0].LatLng.Lng,
+                Latitude = responseModel.Results[0].Locations[0].LatLng.Lat
+            };
+
+        }
+
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<City>().HasData(
-            new City(){
-                Id = "1",
-                Name = "Kyiv"
-            },
-            new City(){
-                Id = "2",
-                Name = "Kharkiv"
-            },
-            new City(){
-                Id = "3",
-                Name = "Svitlovodsk"
-            });
+ 
+        
+        //var test = GetCityCoords("Kyiv");
+        //var t1 = test.Item1;
+        //var t2 = test.Item2;
+        modelBuilder.Entity<City>().HasData(
+                GetCityCoords("1","Kyiv"), 
+                GetCityCoords("2", "Kharkiv"), 
+                GetCityCoords("3", "Svitlovodsk")
+            );
             modelBuilder.Entity<Bus>().HasData(
             new Bus(){
                 Id = "1",
@@ -160,8 +188,9 @@ namespace MapApp.Models.EF
 
             List<Path> paths = new List<Path>();
             
-            paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
+            
             paths.AddRange(GetWayBetweenCities("1", new List<string>() { "Kyiv", "Svitlovodsk" }));
+            paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
             paths.AddRange(GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
 
             modelBuilder.Entity<Path>().HasData(paths);

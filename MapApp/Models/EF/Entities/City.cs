@@ -13,6 +13,8 @@ namespace MapApp.Models.EF.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string Name { get; set; }
+        public float Longtitude { get; set; }
+        public float Latitude { get; set; }
         public List<WayPointsSchedule> TransportationSchedule { get; set; }
         public City()
         {

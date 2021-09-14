@@ -6,7 +6,36 @@ $(document).ready(function () {
 //const { ajax } = require("jquery");
 
 	L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J', { attribution: 'OSM' })
-	.addTo(map);
+		.addTo(map);
+
+	map.on('zoomstart', function (e) {
+		updateMap();
+	});
+
+	setInterval(function () {
+		console.log(markers);
+	}, 1000);
+
+	function updateMap() {
+		var geo = map.getCenter();
+		console.log(map.getZoom());
+		if (true) {
+			$.each(markers, function (i, marker) {
+				$('.my-custom-pin').fadeOut(0);
+				map.removeLayer(polyBusWayLine);
+
+				setTimeout(function () {
+					$('.my-custom-pin').fadeIn(0);
+					map.addLayer(polyBusWayLine);
+				}, 500);
+
+				marker.setLatLng(marker._latlng);
+				marker.addTo(map);
+			});
+			
+			
+		}
+	}
 
 ////var line = L.polyline([[40.68510, -73.94136], [40.68576, -73.94149], [40.68649, -73.94165]]);
 ////map.addLayer(line);
@@ -33,6 +62,8 @@ $(document).ready(function () {
 	var tempArr = [];
 	var routeLines = [];
 	var icons = [];
+	var busWay = [];
+	var polyBusWayLine = L.polyline(busWay).addTo(map);
 
 
     //$.post("/Home/GetAllPaths", function (result) {
@@ -55,10 +86,8 @@ $(document).ready(function () {
 				});
 				
 				routeLines.push(L.polyline(tempArr[i]));
-				console.log(result[i][0].city);
-				console.log(result);
 				let myCustomColour = colourForBus(result[i][0].city);
-				console.log(routeLine);
+
 				const markerHtmlStyles = `
 				  background-color: ${myCustomColour};
 				  width: 0.6rem;
@@ -71,27 +100,20 @@ $(document).ready(function () {
 
 
 				 icons.push(L.divIcon({
-					customId: "",
-					className: "my-custom-pin",
-					html: `<span style="${markerHtmlStyles}" />`
+					 className: "my-custom-pin",
+					 color: myCustomColour,
+					 html: `<span style="${markerHtmlStyles}" />`
 				}));
 			});
-
-			console.log(icons);
 		
 		
 
 			$.each(routeLines, function (i, routeLine) {
-
-				
-
-				
-
 				var marker = L.animatedMarker(routeLine.getLatLngs(), {
-					customId: "09943222988",
+					customId: result[i][0].busId,
 
 					distance: 80,					
-					//interval: 1000,
+					interval: 1000,
 
 					icon: icons[i],
 					autoStart: false,
@@ -107,6 +129,7 @@ $(document).ready(function () {
 				markers.push(marker);
 			});
 
+
 			$.each(markers, function (i, marker) {
 				marker.start();
 			
@@ -118,24 +141,86 @@ $(document).ready(function () {
 		}
 	});
 
+	
+
+	$.ajax({
+		type: "Get",//Post???
+		url: "/Home/GetAllCities",
+		dataType: "json",
+		success: function (result) {
+			console.log(result);
+
+
+
+			$.each(result, function (i, city) {
+
+				//let myCustomColour = colourForBus(city.name);
+
+				const markerHtmlStyles = `
+				  background-color: #E93724;
+				  width: 0.3rem;
+				  height: 0.3rem;
+				  display: block;
+				  position: relative;
+				  border-radius: 1rem 1rem 1rem 1rem ;
+				  transform: rotate(45deg);
+				  border: 1px solid #000000`;
+
+				let marker = new L.marker([city.latitude, city.longtitude], {
+					icon: L.divIcon({
+						className: "my-custom-pin",
+						color: "#E93724",
+						html: `<span style="${markerHtmlStyles}" />`
+					})
+				}).addTo(map);
+			});
+		},
+		error: function (error) {
+			alert("There was an error posting the data to the server: " + error.responseText);
+		}
+	});
+
+
 
 	function markerOnClick(e) {
 		var customId = this.options.customId;
-		console.log(customId);
+		var color = this.options.icon.options.color;
+		drawWay(customId,color);
 	}
 
 	function colourForBus(city){
         switch (city) {
 			case "Kyiv":
-				return "Green";
+				return "#189C6E";
 			case "Kharkiv":
-				return "Blue";
+				return "#F66F89";
 			case "Svitlovodsk":
-				return "Yellow";
+				return "#FFC540";
 			default:
-				return "red";
+				return "#E93724";
         }
 		
 	}
+
+	function drawWay(busId,color) {
+
+		$.post("/Home/GetWay", { busId: busId }, function (result) {
+
+			map.removeLayer(polyBusWayLine);
+			busWay.length = 0;
+			$.each(result, function (i, coordinate) {
+				busWay.push([coordinate.longtitude, coordinate.latitude]);
+			});
+
+			polyBusWayLine = L.polyline(busWay).addTo(map);
+			polyBusWayLine.setStyle({
+				color: color,
+				opacity: 0.6,
+				weigth: 2
+			});
+		});
+	}
+
+	
 
 });
