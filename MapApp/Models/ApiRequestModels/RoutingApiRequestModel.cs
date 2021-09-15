@@ -53,7 +53,7 @@ namespace MapApp.Models.ApiRequestModels
             {
                 Avoids = new string[] { };
                 AvoidTimedConditions = false;
-                DoReverseGeocode = true;
+                DoReverseGeocode = false;
                 ShapeFormat = "raw";
                 Generalize = 0;
                 RouteType = "fastest";

@@ -13,10 +13,6 @@ namespace MapApp.Models.EF.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string Operator { get; set; }
-        public string FromCityId { get; set; }
-        public City FromCity { get; set; }
-        public string ToCityId { get; set; }
-        public City ToCity { get; set; }
         public List<Path> Path { get; set; }
         public List<Schedule> Schedule { get; set; }
         public List<WayPointsSchedule> WayPointsSchedule { get; set; }

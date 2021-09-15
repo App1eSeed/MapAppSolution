@@ -11,11 +11,6 @@ $(document).ready(function () {
 	map.on('zoomstart', function (e) {
 		updateMap();
 	});
-
-	setInterval(function () {
-		console.log(markers);
-	}, 1000);
-
 	function updateMap() {
 		var geo = map.getCenter();
 		console.log(map.getZoom());
@@ -148,9 +143,6 @@ $(document).ready(function () {
 		url: "/Home/GetAllCities",
 		dataType: "json",
 		success: function (result) {
-			console.log(result);
-
-
 
 			$.each(result, function (i, city) {
 

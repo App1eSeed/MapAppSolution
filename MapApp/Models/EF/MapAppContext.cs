@@ -20,13 +20,13 @@ namespace MapApp.Models.EF
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
             // Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
 
         }
         public MapAppContext()
         {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+           // Database.EnsureDeleted();
+           // Database.EnsureCreated();
         }
 
 
@@ -40,6 +40,7 @@ namespace MapApp.Models.EF
         {
             if (!optionsBuilder.IsConfigured)
             {
+
                 optionsBuilder.UseSqlServer("Server=DESKTOP-UJK1CNS;Database=MapAppDB;Trusted_Connection=True;");
             }
         }
@@ -111,89 +112,153 @@ namespace MapApp.Models.EF
         modelBuilder.Entity<City>().HasData(
                 GetCityCoords("1","Kyiv"), 
                 GetCityCoords("2", "Kharkiv"), 
-                GetCityCoords("3", "Svitlovodsk")
+                GetCityCoords("3", "Svitlovodsk"),
+                GetCityCoords("4", "Lutsk"),
+                GetCityCoords("5", "Lviv"),
+                GetCityCoords("6", "Ternopil"),
+                GetCityCoords("7", "Sumy"),
+                GetCityCoords("8", "Poltava"),
+                GetCityCoords("9", "Kremenchuk"),
+
+                GetCityCoords("10", "Moscow"),
+                GetCityCoords("11", "Belgorod"),
+                GetCityCoords("12", "Tula"),
+                GetCityCoords("13", "Tambov"),
+                GetCityCoords("14", "Penza"),
+                GetCityCoords("15", "Smolensk"),
+                GetCityCoords("16", "Bryansk"),
+                GetCityCoords("17", "Ryazan"),
+                GetCityCoords("18", "Tver"),
+
+                GetCityCoords("19", "Dnipropetrovsk")
             );
-            modelBuilder.Entity<Bus>().HasData(
-            new Bus(){
-                Id = "1",
-                Operator = "Ivan",
-                FromCityId = "1",
-                ToCityId = "3"
-            },
-            new Bus()
-            {
-                Id = "2",
-                Operator = "Dmitriy",
-                FromCityId = "3",
-                ToCityId = "2"
-            },
-            new Bus()
-            {
-                Id = "3",
-                Operator = "David",
-                FromCityId = "2",
-                ToCityId = "3"
-            });
-            modelBuilder.Entity<Schedule>().HasData(
-            new Schedule(){
-                Id  = "1",
-                BusId = "1",
-                Day = DayOfWeek.Monday,
+            //modelBuilder.Entity<Bus>().HasData(
+            //new Bus(){
+            //    Id = "1",
+            //    Operator = "Ivan",
+
+            //},
+            //new Bus()
+            //{
+            //    Id = "2",
+            //    Operator = "Dmitriy",
+
+            //},
+            //new Bus()
+            //{
+            //    Id = "3",
+            //    Operator = "David",
+
+            //});
+            //modelBuilder.Entity<Schedule>().HasData(
+            //new Schedule(){
+            //    Id  = "1",
+            //    BusId = "1",
+            //    Day = DayOfWeek.Monday,
                 
-            },
-            new Schedule()
-            {
-                Id = "2",
-                BusId = "1",
-                Day = DayOfWeek.Wednesday,
+            //},
+            //new Schedule()
+            //{
+            //    Id = "2",
+            //    BusId = "1",
+            //    Day = DayOfWeek.Wednesday,
 
-            },
-            new Schedule()
-            {
-                Id = "3",
-                BusId = "2",
-                Day = DayOfWeek.Tuesday,
+            //},
+            //new Schedule()
+            //{
+            //    Id = "3",
+            //    BusId = "2",
+            //    Day = DayOfWeek.Tuesday,
 
-            },
-            new Schedule()
-            {
-                Id = "4",
-                BusId = "2",
-                Day = DayOfWeek.Thursday,
+            //},
+            //new Schedule()
+            //{
+            //    Id = "4",
+            //    BusId = "2",
+            //    Day = DayOfWeek.Thursday,
 
-            },
-            new Schedule()
-            {
-                Id = "5",
-                BusId = "3",
-                Day = DayOfWeek.Friday,
+            //},
+            //new Schedule()
+            //{
+            //    Id = "5",
+            //    BusId = "3",
+            //    Day = DayOfWeek.Friday,
 
-            },
-            new Schedule()
-            {
-                Id = "6",
-                BusId = "3",
-                Day = DayOfWeek.Saturday,
+            //},
+            //new Schedule()
+            //{
+            //    Id = "6",
+            //    BusId = "3",
+            //    Day = DayOfWeek.Saturday,
 
-            });
+            //});
+
+            //modelBuilder.Entity<WayPointsSchedule>().HasData(
+            //new WayPointsSchedule()
+            //{
+            //    Id = "1",
+            //    BusId = "3",
+            //    CityId = "2",
+            //    Sequence = 1,
+            //    Time = DateTime.Now
+            //},
+            //new WayPointsSchedule()
+            //{
+            //    Id = "2",
+            //    BusId = "3",
+            //    CityId ="1",
+            //    Sequence = 2,
+            //    Time = DateTime.Now
+            //},         
+            //new WayPointsSchedule()
+            //{
+            //    Id = "3",
+            //    BusId = "3",
+            //    CityId = "3",
+            //    Sequence = 3,
+            //    Time = DateTime.Now
+            //},
+            // new WayPointsSchedule()
+            // {
+            //     Id = "4",
+            //     BusId = "2",
+            //     CityId = "3",
+            //     Sequence = 1,
+            //     Time = DateTime.Now
+            // },
+            //new WayPointsSchedule()
+            //{
+            //    Id = "5",
+            //    BusId = "2",
+            //    CityId = "2",
+            //    Sequence = 2,
+            //    Time = DateTime.Now
+            //},
+            // new WayPointsSchedule()
+            // {
+            //     Id = "6",
+            //     BusId = "1",
+            //     CityId = "1",
+            //     Sequence = 1,
+            //     Time = DateTime.Now
+            // },
+            //new WayPointsSchedule()
+            //{
+            //    Id = "7",
+            //    BusId = "1",
+            //    CityId = "3",
+            //    Sequence = 2,
+            //    Time = DateTime.Now
+            //});
+
+            //List<Path> paths = new List<Path>();
             
-            modelBuilder.Entity<WayPointsSchedule>().HasData(new WayPointsSchedule()
-            {
-                Id = "1",
-                BusId = "3",
-                CityId ="1",
-                Sequence = 1,
-                Time = DateTime.Now
-            });
-
-            List<Path> paths = new List<Path>();
             
-            
-            paths.AddRange(GetWayBetweenCities("1", new List<string>() { "Kyiv", "Svitlovodsk" }));
-            paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
-            paths.AddRange(GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
+            //paths.AddRange(GetWayBetweenCities("1", new List<string>() { "Kyiv", "Svitlovodsk" }));
+            //paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
+            //paths.AddRange(GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
 
-            modelBuilder.Entity<Path>().HasData(paths);
+            //modelBuilder.Entity<Path>().HasData(paths);
 
             //modelBuilder.Entity<Path>().HasData(,await GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
             //modelBuilder.Entity<Path>().HasData(GetWayToCity("3", new List<string>() { "Kharkiv" , "Kyiv", "Svitlovodsk",}));
