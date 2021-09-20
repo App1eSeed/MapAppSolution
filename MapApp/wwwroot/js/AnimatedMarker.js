@@ -44,7 +44,11 @@
     chunkedLatLngs.push(latlngs[len-1]);
 
     return chunkedLatLngs;
-  },
+    },
+
+   getLatlangs: function () {
+        return this.latlngs;
+   },
 
   onAdd: function (map) {
     L.Marker.prototype.onAdd.call(this, map);
@@ -52,7 +56,7 @@
     // Start animating when added to the map
     if (this.options.autoStart) {
       this.start();
-    }
+      }
   },
 
   animate: function() {
@@ -87,7 +91,7 @@
 
   // Start the animation
     start: function () {
-
+        
       this.animate();
       
   },

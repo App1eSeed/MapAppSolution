@@ -25,8 +25,8 @@ namespace MapApp.Models.EF
         }
         public MapAppContext()
         {
-           // Database.EnsureDeleted();
-           // Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
 
@@ -35,6 +35,7 @@ namespace MapApp.Models.EF
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<WayPointsSchedule> WayPointsSchedules { get; set; }
         public DbSet<Path> Paths { get; set; }
+        public DbSet<Coords> Coords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,10 +48,10 @@ namespace MapApp.Models.EF
 
 
 
-        public List<Path> GetWayBetweenCities(string busId, List<string> cities)
+        public List<Coords> GetWayBetweenCities(string pathId, string cityFrom, string cityTo)
         {
-            List<Path> coordinates = new List<Path>();
-            RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(cities);
+            List<Coords> coordinates = new List<Coords>();
+            RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(new List<string>() { cityFrom , cityTo });
 
             //string jsonString = JsonSerializer.Serialize<RoutingRequest>(routingRequest);
             //var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
@@ -63,10 +64,10 @@ namespace MapApp.Models.EF
 
             for (int i = 0; i < responseModel._Route._Shape.ShapePoints.Length; i += 2)
             {
-                coordinates.Add(new Path()
+                coordinates.Add(new Coords()
                 {
-                    Id= autoIncId,
-                    BusId = busId,
+                    Id = autoIncId,
+                    PathId = pathId,
                     Longtitude = responseModel._Route._Shape.ShapePoints[i],
                     Latitude = responseModel._Route._Shape.ShapePoints[i + 1]
                 });
@@ -133,7 +134,8 @@ namespace MapApp.Models.EF
                 GetCityCoords("19", "Dnipropetrovsk")
             );
             //modelBuilder.Entity<Bus>().HasData(
-            //new Bus(){
+            //new Bus()
+            //{
             //    Id = "1",
             //    Operator = "Ivan",
 
@@ -155,7 +157,7 @@ namespace MapApp.Models.EF
             //    Id  = "1",
             //    BusId = "1",
             //    Day = DayOfWeek.Monday,
-                
+
             //},
             //new Schedule()
             //{
@@ -198,7 +200,7 @@ namespace MapApp.Models.EF
             //{
             //    Id = "1",
             //    BusId = "3",
-            //    CityId = "2",
+            //    PathId = "1",
             //    Sequence = 1,
             //    Time = DateTime.Now
             //},
@@ -206,63 +208,54 @@ namespace MapApp.Models.EF
             //{
             //    Id = "2",
             //    BusId = "3",
-            //    CityId ="1",
+            //    PathId = "2",
             //    Sequence = 2,
-            //    Time = DateTime.Now
-            //},         
-            //new WayPointsSchedule()
-            //{
-            //    Id = "3",
-            //    BusId = "3",
-            //    CityId = "3",
-            //    Sequence = 3,
             //    Time = DateTime.Now
             //},
             // new WayPointsSchedule()
             // {
-            //     Id = "4",
+            //     Id = "3",
             //     BusId = "2",
-            //     CityId = "3",
+            //     PathId = "3",
             //     Sequence = 1,
             //     Time = DateTime.Now
             // },
             //new WayPointsSchedule()
             //{
-            //    Id = "5",
-            //    BusId = "2",
-            //    CityId = "2",
-            //    Sequence = 2,
-            //    Time = DateTime.Now
-            //},
-            // new WayPointsSchedule()
-            // {
-            //     Id = "6",
-            //     BusId = "1",
-            //     CityId = "1",
-            //     Sequence = 1,
-            //     Time = DateTime.Now
-            // },
-            //new WayPointsSchedule()
-            //{
-            //    Id = "7",
+            //    Id = "4",
             //    BusId = "1",
-            //    CityId = "3",
-            //    Sequence = 2,
+            //    PathId = "2",
+            //    Sequence = 1,
             //    Time = DateTime.Now
             //});
 
-            //List<Path> paths = new List<Path>();
-            
-            
-            //paths.AddRange(GetWayBetweenCities("1", new List<string>() { "Kyiv", "Svitlovodsk" }));
-            //paths.AddRange(GetWayBetweenCities("3", new List<string>() { "Kharkiv", "Kyiv", "Svitlovodsk" }));
-            //paths.AddRange(GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
+            //modelBuilder.Entity<Path>().HasData(
+            //new Path(){
+            //    Id = "1",
+            //    CityFromId = "2",
+            //    CityToId ="1"
+            //},
+            //new Path()
+            //{
+            //    Id = "2",
+            //    CityFromId = "1",
+            //    CityToId = "3"
+            //},
+            //new Path()
+            //{
+            //    Id = "3",
+            //    CityFromId = "3",
+            //    CityToId = "2"
+            //});
 
-            //modelBuilder.Entity<Path>().HasData(paths);
+            //List<Coords> coords = new List<Coords>();
 
-            //modelBuilder.Entity<Path>().HasData(,await GetWayBetweenCities("2", new List<string>() { "Svitlovodsk", "Kharkiv" }));
-            //modelBuilder.Entity<Path>().HasData(GetWayToCity("3", new List<string>() { "Kharkiv" , "Kyiv", "Svitlovodsk",}));
-            //await GetWayToCity();
+            //coords.AddRange(GetWayBetweenCities("1", "Kharkiv", "Kyiv"));
+            //coords.AddRange(GetWayBetweenCities("2", "Kyiv", "Svitlovodsk"));
+            //coords.AddRange(GetWayBetweenCities("3", "Svitlovodsk", "Kharkiv"));
+
+            //modelBuilder.Entity<Coords>().HasData(coords);
+
         }
     }
 }

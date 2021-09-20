@@ -15,10 +15,10 @@ namespace MapApp.Models.EF.Entities
         public string Name { get; set; }
         public float Longtitude { get; set; }
         public float Latitude { get; set; }
-        public List<WayPointsSchedule> TransportationSchedule { get; set; }
-        public City()
-        {
-            TransportationSchedule = new List<WayPointsSchedule>();
-        }
+        //public List<Path> Paths { get; set; }
+        //public City()
+        //{
+        //    Paths = new List<Path>();
+        //}
     }
 }

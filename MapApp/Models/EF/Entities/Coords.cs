@@ -7,17 +7,14 @@ using System.Threading.Tasks;
 
 namespace MapApp.Models.EF.Entities
 {
-    public class WayPointsSchedule
+    public class Coords
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
-        public string BusId { get; set; }
-        public Bus Bus { get; set; }
+        public int Id { get; set; }
         public string PathId { get; set; }
         public Path Path { get; set; }
-        public int Sequence { get; set; }
-        [DataType(DataType.Time)]
-        public DateTime Time { get; set; }
+        public float Longtitude { get; set; }
+        public float Latitude { get; set; }
     }
 }

@@ -11,10 +11,17 @@ namespace MapApp.Models.EF.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string BusId { get; set; }
-        public Bus Bus { get; set; }
-        public float Longtitude { get; set; }
-        public float Latitude { get; set; }
+        public string Id { get; set; }
+        public string CityFromId { get; set; }
+        public City CityFrom { get; set; }
+        public string CityToId { get; set; }
+        public City CityTo { get; set; }
+        public List<Coords> Coords { get; set; }
+        public List<WayPointsSchedule> WayPointsSchedules { get; set; }
+        public Path()
+        {
+            Coords = new List<Coords>();
+            WayPointsSchedules = new List<WayPointsSchedule>();
+        }
     }
 }

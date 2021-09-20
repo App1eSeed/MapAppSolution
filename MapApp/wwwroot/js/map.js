@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 //const { ajax } = require("jquery");
 
-	L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J', { attribution: 'OSM' })
+	L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J', { attribution: 'OSM' }) //https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J
 		.addTo(map);
 
 	map.on('zoomstart', function (e) {
@@ -13,7 +13,7 @@ $(document).ready(function () {
 	});
 	function updateMap() {
 		var geo = map.getCenter();
-		console.log(map.getZoom());
+
 		if (true) {
 			$.each(markers, function (i, marker) {
 				$('.my-custom-pin').fadeOut(0);
@@ -22,7 +22,7 @@ $(document).ready(function () {
 				setTimeout(function () {
 					$('.my-custom-pin').fadeIn(0);
 					map.addLayer(polyBusWayLine);
-				}, 500);
+				}, 1000);
 
 				marker.setLatLng(marker._latlng);
 				marker.addTo(map);
@@ -79,7 +79,8 @@ $(document).ready(function () {
 				$.each(result[i], function (j, routeLine) {
 					tempArr[i].push([routeLine.longtitude, routeLine.latitude]);
 				});
-				
+
+
 				routeLines.push(L.polyline(tempArr[i]));
 				let myCustomColour = colourForBus(result[i][0].city);
 
@@ -136,7 +137,7 @@ $(document).ready(function () {
 		}
 	});
 
-	
+	console.log(markers);
 
 	$.ajax({
 		type: "Get",//Post???
@@ -175,9 +176,10 @@ $(document).ready(function () {
 
 
 	function markerOnClick(e) {
-		var customId = this.options.customId;
+		//var customId = this.options.customId;
 		var color = this.options.icon.options.color;
-		drawWay(customId,color);
+		openInfoPanel();
+		drawWay(color,e);
 	}
 
 	function colourForBus(city){
@@ -185,32 +187,34 @@ $(document).ready(function () {
 			case "Kyiv":
 				return "#189C6E";
 			case "Kharkiv":
-				return "#F66F89";
+				return "#E93724";
 			case "Svitlovodsk":
 				return "#FFC540";
 			default:
-				return "#E93724";
+				return "#F66F89";
         }
 		
 	}
 
-	function drawWay(busId,color) {
+	function drawWay(color,marker) {
 
-		$.post("/Home/GetWay", { busId: busId }, function (result) {
-
-			map.removeLayer(polyBusWayLine);
-			busWay.length = 0;
-			$.each(result, function (i, coordinate) {
-				busWay.push([coordinate.longtitude, coordinate.latitude]);
-			});
-
-			polyBusWayLine = L.polyline(busWay).addTo(map);
-			polyBusWayLine.setStyle({
-				color: color,
-				opacity: 0.6,
-				weigth: 2
-			});
+		map.removeLayer(polyBusWayLine);
+		polyBusWayLine = L.polyline(marker.sourceTarget._latlngs).addTo(map);
+		polyBusWayLine.setStyle({
+			color: color,
+			opacity: 0.6,
+			weigth: 2
 		});
+		//$.post("/Home/GetWay", { busId: busId }, function (result) {
+
+		//	map.removeLayer(polyBusWayLine);
+		//	busWay.length = 0;
+		//	$.each(result, function (i, coordinate) {
+		//		busWay.push([coordinate.longtitude, coordinate.latitude]);
+		//	});
+
+			
+		//});
 	}
 
 	

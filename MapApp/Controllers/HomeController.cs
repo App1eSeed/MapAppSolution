@@ -19,55 +19,40 @@ namespace MapApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        //private MapAppContext context;
         private static readonly HttpClient client = new HttpClient();
-        public HomeController(ILogger<HomeController> logger/*, MapAppContext mapAppContext*/)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-           // context = mapAppContext;
         }
 
         public IActionResult Index()
-        {
-
-            //var paths = context.Set<Path>().ToList();
-            //var routes = context.Set<Bus>().ToList();
-            //var wayPointSchedules = context.Set<WayPointsSchedule>().ToList();
-            //var cities = context.Set<City>().ToList();
-            //var schedules = context.Set<Schedule>().ToList();
-            //foreach (var route in routes)
-            //{
-            //    var path = route.Path;
-            //    var wayPoints = route.WayPointsSchedule;
-            //}
-            //ViewBag.Routes = routes;
+        {         
             //GenerateDB();
-            return View();
-            
+            return View();     
         }
 
-        
+
         public JsonResult GetAllPaths()
         {
             using (var context = new MapAppContext())
             {
-                var routes = (from bus in context.Buses
-                              join path in context.Paths on bus.Id equals path.BusId
-                              //join city in context.Cities on bus.FromCityId equals city.Id
-                              select new { BusId = bus.Id, city = "test",
-                                  path.Longtitude, path.Latitude }).ToList().GroupBy(g => new { g.BusId, g.city });
-
-                //select new { BusId = bus.Id, city = city.Name, path.Longtitude, path.Latitude }).ToList().GroupBy(g => new { g.BusId, g.city });
+                var routes = (from bus in context.Buses 
+                join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                join path in context.Paths on waypoint.PathId equals path.Id
+                join city in context.Cities on path.CityFromId equals city.Id
+                join coord in context.Coords on path.Id equals coord.PathId
+                select new
+                {
+                    BusId = bus.Id,
+                    Sequence = waypoint.Sequence,
+                    city = city.Name,
+                    coord.Longtitude,
+                    coord.Latitude
+                }).ToList().OrderBy(r => r.Sequence).GroupBy(g => new { g.BusId });
 
 
                 return Json(routes);
             }
-            //var routes = context.Paths.ToList().GroupBy(p => p.BusId);
-
-            //(from innerWayPoint in context.WayPointsSchedules
-            // join innerCity in context.Cities on innerWayPoint.CityId equals innerCity.Id
-            // where innerWayPoint.BusId == bus.Id && innerWayPoint.Sequence == 1
-            // select new { innerCity.Name }).FirstOrDefault().Name
         }
 
         public JsonResult GetAllCities()
@@ -85,99 +70,183 @@ namespace MapApp.Controllers
         {
             using (var context = new MapAppContext())
             {
-                var route = context.Paths.Where(p => p.BusId == busId).ToList().OrderBy(p => p.Id);
+                dynamic route;
+                try
+                {
+                     route = (from waypoint in context.WayPointsSchedules
+                                 join path in context.Paths on waypoint.PathId equals path.Id
+                                 join city in context.Cities on path.CityFromId equals city.Id
+                                 join coord in context.Coords on path.Id equals coord.PathId
+                                 where waypoint.BusId == busId
+                                 select new
+                                 {
+                                     Sequence = waypoint.Sequence,
+                                     city = city.Name,
+                                     coord.Longtitude,
+                                     coord.Latitude
+                                 }).ToList().OrderBy(r => r.Sequence);
+                }
+                catch (Exception)
+                {
+                    route = new { };
+                }
+
                 return Json(route);
+
             }
         }
 
         public void GenerateDB()
         {
             Random r = new Random();
-            int n = 8;
+            int n = 19;
             using (var context = new MapAppContext())
             {
-                var Paths = new List<Path>();
+                List<Coords> coords = new List<Coords>();
+               
+      
 
                 int lastInsertedId;
-                if (context.Paths.OrderBy(p => p.Id).LastOrDefault() != null)
+                if (context.Coords.OrderBy(p => p.Id).LastOrDefault() != null)
                 {
-                    lastInsertedId = context.Paths.OrderBy(p => p.Id).LastOrDefault().Id;
+                    lastInsertedId = context.Coords.OrderBy(p => p.Id).LastOrDefault().Id;
                 }
                 else
                 {
                     lastInsertedId = 1;
                 }
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 15; i++)
                 {
                     Bus instBus = new Bus()
                     {
                         Operator = "Rand " + i,
-                        //                    FromCityId = r.Next(1, 9).ToString()
                     };
                     context.Buses.Add(instBus);
-                    var wayPointsList = new List<string>();
-                    var test12 = new Dictionary<int, string>();
-                    for (int j = 0; j < 4; j++)
+
+                    int rand1 = r.Next(1, n);
+                    int rand2 = r.Next(1, n);
+                    City city1 = context.Cities.Where(c => c.Id == rand1.ToString()).FirstOrDefault();
+                    City city2 = context.Cities.Where(c => c.Id == rand2.ToString()).FirstOrDefault();
+                    for (int j = 0; j < r.Next(2,6); j++)
                     {
-                        int rand = r.Next(1, n);
-                        while (context.Cities.Where(c => wayPointsList.Contains(c.Name)).Select(c => c.Id).ToList().Contains(rand.ToString()))
+                        Path path = new Path();
+                        List<Path> paths = new List<Path>();
+
+                        if (j % 2 == 0)
                         {
-                            rand = r.Next(1, n);
+                            rand2 = r.Next(1, n);
+                            city2 = context.Cities.Where(c => c.Id == rand2.ToString()).FirstOrDefault();
+                            while (paths.Where(p => p.CityToId == rand2.ToString() 
+                                || p.CityFromId == rand2.ToString()).FirstOrDefault() != null 
+                            || rand1 == rand2
+                            || Math.Abs((city2.Latitude+city2.Longtitude)-(city1.Latitude+city1.Longtitude))> 7)
+                            {
+                                rand2 = r.Next(1, n);
+                                city2 = context.Cities.Where(c => c.Id == rand2.ToString()).FirstOrDefault();
+                            }
+
+                            var check = context.Paths.Where(p => p.CityFromId == rand1.ToString() && p.CityToId == rand2.ToString()).FirstOrDefault();
+
+                            if (check != null)
+                            {
+                                paths.Add(check);
+                                path = check;
+                            }
+                            else
+                            {
+                                context.Paths.Add(path = new Path()
+                                {
+                                    CityFromId = rand1.ToString(),
+                                    CityToId = rand2.ToString()
+                                });
+                                coords.AddRange(GetWayBetweenCities
+                                    (path.Id,
+                                    context.Cities.Where(c => c.Id == path.CityFromId).FirstOrDefault().Name,
+                                    context.Cities.Where(c => c.Id == path.CityToId).FirstOrDefault().Name,
+                                    lastInsertedId
+                                    ));
+                                
+                                lastInsertedId = lastInsertedId + coords.Count;
+                                paths.Add(path);
+                            }
+
                         }
+                        else
+                        {
+                            rand1 = r.Next(1, n);
+                            city1 = context.Cities.Where(c => c.Id == rand1.ToString()).FirstOrDefault();
+                            while (paths.Where(p => p.CityFromId == rand1.ToString()
+                               || p.CityToId == rand1.ToString()).FirstOrDefault() != null
+                            || rand1 == rand2
+                            || Math.Abs((city2.Latitude + city2.Longtitude) - (city1.Latitude + city1.Longtitude)) > 7)
+                            {
+                                rand1 = r.Next(1, n);
+                                city1 = context.Cities.Where(c => c.Id == rand1.ToString()).FirstOrDefault();
+                            }
+
+                            var check = context.Paths.Where(p => p.CityFromId == rand2.ToString() && p.CityToId == rand1.ToString()).FirstOrDefault();
+
+                            if (check != null)
+                            {
+                                paths.Add(check);
+                                path = check;
+                            }
+                            else
+                            {
+                                context.Paths.Add(path = new Path()
+                                {
+                                    CityFromId = rand2.ToString(),
+                                    CityToId = rand1.ToString(),
+                                });
+                                coords.AddRange(GetWayBetweenCities
+                                    (path.Id,
+                                    context.Cities.Where(c => c.Id == path.CityFromId).FirstOrDefault().Name,
+                                    context.Cities.Where(c => c.Id == path.CityToId).FirstOrDefault().Name, 
+                                    lastInsertedId
+                                    ));
+                                lastInsertedId = lastInsertedId + coords.Count;
+                                paths.Add(path);
+                            }
+
+                        }
+    
                         context.WayPointsSchedules.Add(new WayPointsSchedule()
                         {
                             BusId = instBus.Id,
                             Sequence = j + 1,
-                            CityId = rand.ToString()
+                            PathId = path.Id
                         });
-                        wayPointsList.Add(context.Cities.Where(c => c.Id == rand.ToString()).FirstOrDefault().Name);
-                        test12.Add(j + 1, context.Cities.Where(c => c.Id == rand.ToString()).FirstOrDefault().Name);
                     }
 
-                    //var query = (from city in context.Cities
-                    //            join wayPoint in context.WayPointsSchedules on city.Id equals wayPoint.CityId
-                    //            where wayPoint.BusId == instBus.Id 
-                    //            select new {wayPoint.Sequence,city.Name}).OrderBy(wp => wp.Sequence).ToList();
-                    //var wayPoints = new List<string>();
-                    //foreach (var wayPoint in query)
-                    //{
-                    //    wayPoints.Add(wayPoint.Name);
-                    //}
-                    
-                    
-
-                    Paths.AddRange(GetWayBetweenCities(instBus.Id, wayPointsList, lastInsertedId));
-                    lastInsertedId = lastInsertedId + Paths.Count;
                 }
-
-                context.Paths.AddRange(Paths.OrderBy(p => p.BusId));
+                context.Coords.AddRange(coords);
                 context.Database.OpenConnection();
                 try
                 {
-                    context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Paths ON;");
+                    context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Coords ON;");
                     context.SaveChanges();
-                    context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Paths OFF;");
+                    context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.Coords OFF;");
                 }
                 finally
                 {
                     context.Database.CloseConnection();
                 }
-                
 
             }
 
 
 
+            
 
 
-            List<Path> GetWayBetweenCities(string busId, List<string> cities, int lastInsertedId)
+            List<Coords> GetWayBetweenCities(string pathId, string cityFrom, string cityTo, int lastInsertedId)
             {
-                List<Path> coordinates = new List<Path>();
-                RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(cities);
+                List<Coords> coordinates = new List<Coords>();
+                RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(new List<string>() { cityFrom, cityTo });
 
                 //string jsonString = JsonSerializer.Serialize<RoutingRequest>(routingRequest);
-                //var httpContent = new StringContent(jsonString, Encoding.UTF8");, "application/json
+                //var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = client.PostAsJsonAsync(
                     "http://open.mapquestapi.com/directions/v2/route?key=iVOoDHSx5Ykdj4sIKnWbkmO2SgjbCOBI", routingRequest).Result;
@@ -187,13 +256,14 @@ namespace MapApp.Controllers
 
                 for (int i = 0; i < responseModel._Route._Shape.ShapePoints.Length; i += 2)
                 {
-                    coordinates.Add(new Path()
+                    coordinates.Add(new Coords()
                     {
                         Id = lastInsertedId + i/2 + 1,
-                        BusId = busId,
+                        PathId = pathId,
                         Longtitude = responseModel._Route._Shape.ShapePoints[i],
                         Latitude = responseModel._Route._Shape.ShapePoints[i + 1]
                     });
+
                 }
 
 
