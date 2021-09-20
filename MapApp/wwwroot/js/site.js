@@ -5,7 +5,7 @@
     const speed = 80;
 var scale = 1;
 
-    var infoPanelHeight = "20rem";
+    var infoPanelHeight = "17rem";
     
     //Footer menu
     
@@ -125,7 +125,7 @@ var scale = 1;
         });
 }
 
-function openInfoPanel() {
+function openInfoPanel(marker) {
 
     
     document.getElementById("InfoPanel").style.display = "block";

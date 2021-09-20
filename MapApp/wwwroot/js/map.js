@@ -59,6 +59,7 @@ $(document).ready(function () {
 	var icons = [];
 	var busWay = [];
 	var polyBusWayLine = L.polyline(busWay).addTo(map);
+	var cityMarkers = [];
 
 
     //$.post("/Home/GetAllPaths", function (result) {
@@ -86,6 +87,7 @@ $(document).ready(function () {
 
 				const markerHtmlStyles = `
 				  background-color: ${myCustomColour};
+					z-index:49;
 				  width: 0.6rem;
 				  height: 0.6rem;
 				  display: block;
@@ -135,9 +137,11 @@ $(document).ready(function () {
 		error: function (error) {
 			alert("There was an error posting the data to the server: " + error.responseText);
 		}
+
+
 	});
 
-	console.log(markers);
+	
 
 	$.ajax({
 		type: "Get",//Post???
@@ -161,11 +165,14 @@ $(document).ready(function () {
 
 				let marker = new L.marker([city.latitude, city.longtitude], {
 					icon: L.divIcon({
+						cityId: city.Id,
 						className: "my-custom-pin",
 						color: "#E93724",
 						html: `<span style="${markerHtmlStyles}" />`
 					})
 				}).addTo(map);
+
+				cityMarkers.push(marker);
 			});
 		},
 		error: function (error) {
@@ -173,12 +180,54 @@ $(document).ready(function () {
 		}
 	});
 
-
+	var prevMarker;
+	var prevMarkerColor;
 
 	function markerOnClick(e) {
 		//var customId = this.options.customId;
 		var color = this.options.icon.options.color;
-		openInfoPanel();
+
+		if (prevMarker != null) {
+			prevMarker.style = `
+				  background-color: ${prevMarkerColor};
+					z-index:49;
+				  width: 0.6rem;
+				  height: 0.6rem;
+				  display: block;
+				  position: relative;
+				  border-radius: 1rem 1rem 1rem 1rem ;
+				  transform: rotate(45deg);
+				  border: 1px solid #000000;
+				-webkit-transition: .1s ease-in-out,max-height .1s ease-in-out;
+				-moz-transition:.1s ease-in-out,max-height .1s ease-in-out;
+				-o-transition:  .1s ease-in-out,max-height .1s ease-in-out;
+				transition:  .1s ease-in-out,max-height .1s ease-in-out;`;
+			prevMarker = e.sourceTarget._icon.children[0];
+			prevMarkerColor = color;
+		}
+        else {
+			prevMarker = e.sourceTarget._icon.children[0];
+			prevMarkerColor = color;
+        }
+
+
+		
+		console.log(e.sourceTarget._icon.children[0]);
+		e.sourceTarget._icon.children[0].style = `
+				  background-color: ${color};
+					z-index:48;
+				  width: 1rem;
+				  height: 1rem;
+				  display: block;
+				  position: relative;
+				  border-radius: 1rem 1rem 1rem 1rem ;
+				  transform: rotate(45deg);
+				  border: 2px solid #000000;
+				-webkit-transition: .1s ease-in-out,max-height .1s ease-in-out;
+				-moz-transition:.1s ease-in-out,max-height .1s ease-in-out;
+				-o-transition:  .1s ease-in-out,max-height .1s ease-in-out;
+				transition:  .1s ease-in-out,max-height .1s ease-in-out;`;
+		openInfoPanel(e);
 		drawWay(color,e);
 	}
 
@@ -202,7 +251,6 @@ $(document).ready(function () {
 		polyBusWayLine = L.polyline(marker.sourceTarget._latlngs).addTo(map);
 		polyBusWayLine.setStyle({
 			color: color,
-			opacity: 0.6,
 			weigth: 2
 		});
 		//$.post("/Home/GetWay", { busId: busId }, function (result) {

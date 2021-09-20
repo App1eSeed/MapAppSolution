@@ -132,7 +132,7 @@ namespace MapApp.Controllers
                     {
                         Path path = new Path();
                         List<Path> paths = new List<Path>();
-
+                        int syclesCount = 0;
                         if (j % 2 == 0)
                         {
                             rand2 = r.Next(1, n);
@@ -140,10 +140,21 @@ namespace MapApp.Controllers
                             while (paths.Where(p => p.CityToId == rand2.ToString() 
                                 || p.CityFromId == rand2.ToString()).FirstOrDefault() != null 
                             || rand1 == rand2
-                            || Math.Abs((city2.Latitude+city2.Longtitude)-(city1.Latitude+city1.Longtitude))> 7)
+                            || Math.Abs((city2.Latitude+city2.Longtitude)-(city1.Latitude+city1.Longtitude))> 5)
                             {
                                 rand2 = r.Next(1, n);
                                 city2 = context.Cities.Where(c => c.Id == rand2.ToString()).FirstOrDefault();
+
+                                syclesCount++;
+                                if (syclesCount > 1000)
+                                {
+                                    break;
+                                }
+                            }
+
+                            if (syclesCount > 1000)
+                            {
+                                break;
                             }
 
                             var check = context.Paths.Where(p => p.CityFromId == rand1.ToString() && p.CityToId == rand2.ToString()).FirstOrDefault();
@@ -162,9 +173,10 @@ namespace MapApp.Controllers
                                 });
                                 coords.AddRange(GetWayBetweenCities
                                     (path.Id,
-                                    context.Cities.Where(c => c.Id == path.CityFromId).FirstOrDefault().Name,
-                                    context.Cities.Where(c => c.Id == path.CityToId).FirstOrDefault().Name,
-                                    lastInsertedId
+                                    context.Cities.Where(c => c.Id == path.CityFromId).FirstOrDefault(),
+                                    context.Cities.Where(c => c.Id == path.CityToId).FirstOrDefault(),
+                                    lastInsertedId,
+                                    context
                                     ));
                                 
                                 lastInsertedId = lastInsertedId + coords.Count;
@@ -179,10 +191,21 @@ namespace MapApp.Controllers
                             while (paths.Where(p => p.CityFromId == rand1.ToString()
                                || p.CityToId == rand1.ToString()).FirstOrDefault() != null
                             || rand1 == rand2
-                            || Math.Abs((city2.Latitude + city2.Longtitude) - (city1.Latitude + city1.Longtitude)) > 7)
+                            || Math.Abs((city2.Latitude + city2.Longtitude) - (city1.Latitude + city1.Longtitude)) > 5)
                             {
                                 rand1 = r.Next(1, n);
                                 city1 = context.Cities.Where(c => c.Id == rand1.ToString()).FirstOrDefault();
+
+                                syclesCount++;
+                                if (syclesCount > 1000)
+                                {
+                                    break;
+                                }
+                            }
+
+                            if (syclesCount > 1000)
+                            {
+                                break;
                             }
 
                             var check = context.Paths.Where(p => p.CityFromId == rand2.ToString() && p.CityToId == rand1.ToString()).FirstOrDefault();
@@ -201,9 +224,10 @@ namespace MapApp.Controllers
                                 });
                                 coords.AddRange(GetWayBetweenCities
                                     (path.Id,
-                                    context.Cities.Where(c => c.Id == path.CityFromId).FirstOrDefault().Name,
-                                    context.Cities.Where(c => c.Id == path.CityToId).FirstOrDefault().Name, 
-                                    lastInsertedId
+                                    context.Cities.Where(c => c.Id == path.CityFromId).FirstOrDefault(),
+                                    context.Cities.Where(c => c.Id == path.CityToId).FirstOrDefault(), 
+                                    lastInsertedId,
+                                    context
                                     ));
                                 lastInsertedId = lastInsertedId + coords.Count;
                                 paths.Add(path);
@@ -240,10 +264,10 @@ namespace MapApp.Controllers
             
 
 
-            List<Coords> GetWayBetweenCities(string pathId, string cityFrom, string cityTo, int lastInsertedId)
+            List<Coords> GetWayBetweenCities(string pathId, City cityFrom, City cityTo, int lastInsertedId, MapAppContext context)
             {
                 List<Coords> coordinates = new List<Coords>();
-                RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(new List<string>() { cityFrom, cityTo });
+                RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(new List<string>() { cityFrom.Name, cityTo.Name });
 
                 //string jsonString = JsonSerializer.Serialize<RoutingRequest>(routingRequest);
                 //var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
@@ -265,7 +289,15 @@ namespace MapApp.Controllers
                     });
 
                 }
+                coordinates = coordinates.OrderBy(c => c.Id).ToList();
 
+                cityFrom.Longtitude = coordinates.First().Latitude;
+                cityFrom.Latitude = coordinates.First().Longtitude;
+
+                cityTo.Longtitude = coordinates.Last().Latitude;
+                cityTo.Latitude = coordinates.Last().Longtitude;
+
+                context.Cities.UpdateRange(cityFrom,cityTo);
 
                 //string testjson = await response.Content.ReadAsStringAsync();
 
