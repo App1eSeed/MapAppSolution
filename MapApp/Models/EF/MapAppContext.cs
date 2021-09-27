@@ -36,6 +36,7 @@ namespace MapApp.Models.EF
         public DbSet<WayPointsSchedule> WayPointsSchedules { get; set; }
         public DbSet<Path> Paths { get; set; }
         public DbSet<Coords> Coords { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -84,7 +85,7 @@ namespace MapApp.Models.EF
 
         }
 
-        public City GetCityCoords(string id, string city)
+        public City GetCityCoords(string id, string city, string countryId)
         {
             GeocodeApiRequestModel geocodeRequest = new GeocodeApiRequestModel(city);
             HttpResponseMessage response = client.PostAsJsonAsync(
@@ -97,7 +98,8 @@ namespace MapApp.Models.EF
                 Id = id,
                 Name = city,
                 Longtitude = responseModel.Results[0].Locations[0].LatLng.Lng,
-                Latitude = responseModel.Results[0].Locations[0].LatLng.Lat
+                Latitude = responseModel.Results[0].Locations[0].LatLng.Lat,
+                CountryId = countryId
             };
 
         }
@@ -105,33 +107,57 @@ namespace MapApp.Models.EF
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
- 
-        
+            modelBuilder.Entity<Country>().HasData(new Country()
+            {
+                Id = "1",
+                Name ="Ukraine"
+            },
+            new Country()
+            {
+                Id = "2",
+                Name = "Russia"
+            },
+            new Country()
+            {
+                Id = "3",
+                Name = "Poland"
+            });
+
         //var test = GetCityCoords("Kyiv");
         //var t1 = test.Item1;
         //var t2 = test.Item2;
-        modelBuilder.Entity<City>().HasData(
-                GetCityCoords("1","Kyiv"), 
-                GetCityCoords("2", "Kharkiv"), 
-                GetCityCoords("3", "Svitlovodsk"),
-                GetCityCoords("4", "Lutsk"),
-                GetCityCoords("5", "Lviv"),
-                GetCityCoords("6", "Ternopil"),
-                GetCityCoords("7", "Sumy"),
-                GetCityCoords("8", "Poltava"),
-                GetCityCoords("9", "Kremenchuk"),
+            modelBuilder.Entity<City>().HasData(
+                GetCityCoords("1","Kyiv","1"), 
+                GetCityCoords("2", "Kharkiv", "1"), 
+                GetCityCoords("3", "Svitlovodsk", "1"),
+                GetCityCoords("4", "Lutsk", "1"),
+                GetCityCoords("5", "Lviv", "1"),
+                GetCityCoords("6", "Ternopil", "1"),
+                GetCityCoords("7", "Sumy", "1"),
+                GetCityCoords("8", "Poltava", "1"),
+                GetCityCoords("9", "Kremenchuk", "1"),
+                GetCityCoords("19", "Dnipropetrovsk", "1"),
 
-                GetCityCoords("10", "Moscow"),
-                GetCityCoords("11", "Belgorod"),
-                GetCityCoords("12", "Tula"),
-                GetCityCoords("13", "Tambov"),
-                GetCityCoords("14", "Penza"),
-                GetCityCoords("15", "Smolensk"),
-                GetCityCoords("16", "Bryansk"),
-                GetCityCoords("17", "Ryazan"),
-                GetCityCoords("18", "Tver"),
+                GetCityCoords("10", "Moscow", "2"),
+                GetCityCoords("11", "Belgorod", "2"),
+                GetCityCoords("12", "Tula", "2"),
+                GetCityCoords("13", "Tambov", "2"),
+                GetCityCoords("14", "Penza", "2"),
+                GetCityCoords("15", "Smolensk", "2"),
+                GetCityCoords("16", "Bryansk", "2"),
+                GetCityCoords("17", "Ryazan", "2"),
+                GetCityCoords("18", "Tver", "2"),
 
-                GetCityCoords("19", "Dnipropetrovsk")
+                GetCityCoords("20", "Krakow", "3"),
+                GetCityCoords("21", "Wroclaw", "3"),
+                GetCityCoords("22", "Bydgoszcz", "3"),
+                GetCityCoords("23", "Bialystok", "3"),
+                GetCityCoords("24", "Rzeszow", "3"),
+                GetCityCoords("25", "Poznan", "3"),
+                GetCityCoords("26", "Plock", "3"),
+                GetCityCoords("27", "Radom", "3"),
+                GetCityCoords("28", "Kielce", "3"),
+                GetCityCoords("29", "Lublin", "3")
             );
             //modelBuilder.Entity<Bus>().HasData(
             //new Bus()

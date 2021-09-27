@@ -12,6 +12,8 @@ namespace MapApp.Models.EF.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        public string CountryId { get; set; }
+        public Country Country { get; set; }
         public string Name { get; set; }
         public float Longtitude { get; set; }
         public float Latitude { get; set; }

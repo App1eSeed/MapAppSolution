@@ -42,7 +42,7 @@ var scale = 1;
             timeBlock.innerHTML = current.toLocaleTimeString();                      
         }, 1000);
 
-        $.each(markers, function (i, marker) {
+        $.each(map._layers, function (i, marker) {
             marker.options.distance = speed * scale;
         });
 
@@ -65,7 +65,7 @@ var scale = 1;
                 timeBlock.innerHTML = current.toLocaleTimeString();                      
             }, 1000);
 
-            $.each(markers, function (i, marker) {
+            $.each(map._layers, function (i, marker) {
                 marker.options.distance = speed * scale;
                 
             });
@@ -90,7 +90,7 @@ var scale = 1;
             timeBlock.innerHTML = current.toLocaleTimeString();                      
         }, 1000);
 
-        $.each(markers, function (i, marker) {
+        $.each(map._layers, function (i, marker) {
             marker.options.distance = speed * scale;
         });
     };
@@ -110,7 +110,7 @@ var scale = 1;
             timeBlock.innerHTML = current.toLocaleTimeString();                      
         }, 1000);
 
-        $.each(markers, function (i, marker) {
+        $.each(map._layers, function (i, marker) {
             marker.start();
         });
     }
@@ -120,12 +120,12 @@ var scale = 1;
         document.getElementById("StartButton").style.display = "flex";
         scaleLable.innerHTML = "0x";
         setTimeout(clearInterval(localClock), 0);
-        $.each(markers, function (i, marker) {
+        $.each(map._layers, function (i, marker) {
             marker.stop();
         });
 }
 
-function openInfoPanel(marker) {
+function openInfoPanel(marker, info) {
 
     
     document.getElementById("InfoPanel").style.display = "block";
@@ -138,6 +138,7 @@ function openInfoPanel(marker) {
 
 function closeInfoPanel() {
     document.getElementById("InfoPanel").style.height = "0rem";
+    resizeMarker(null, null);
 
     setTimeout(function () {
         document.getElementById("InfoPanel").style.display = "none";
