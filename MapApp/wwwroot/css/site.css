@@ -82,7 +82,7 @@ input:nth-child(1) {
     filter: invert(100%);
 }
 
-.testSpanMarker {
+#InfoPanelMarker {
     display: block;
     position: relative;
     min-width: 30px;
@@ -241,4 +241,28 @@ border: 2px solid #000000;
 -moz-transition:.1s ease-in-out, max-height .1s ease-in-out;
 -o-transition: .1s ease-in-out, max-height .1s ease-in-out;
 transition: .1s ease-in-out, max-height .1s ease-in-out;
+}
+
+#loader {
+    border: 6px solid #999;
+    border-top: 6px solid rgba(31, 41, 55,1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    z-index: 50;
+    animation: spin 2s linear infinite;
+    display: none;
+    position: absolute;
+    right: 50%;
+    top: 40%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

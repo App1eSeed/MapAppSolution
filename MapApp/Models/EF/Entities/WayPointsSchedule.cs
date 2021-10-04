@@ -18,8 +18,9 @@ namespace MapApp.Models.EF.Entities
         public Path Path { get; set; }
         public int Sequence { get; set; }
 
-        [DataType(DataType.Time)]
-        [Column(TypeName = "date")]
-        public DateTime Time { get; set; }
+
+        public TimeSpan? CityFromDepartTime { get; set; }
+
+        public TimeSpan? CityToArrivalTime { get; set; }
     }
 }

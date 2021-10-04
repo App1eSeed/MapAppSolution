@@ -1,73 +1,7 @@
 ﻿<div id="map" style="height: 100vh;z-index: 40;"></div>
 
 <div id="InfoPanel" class=" absolute bottom-10 bg-gray-700 bg-opacity-60 z-50 w-full">
-    <div id="Top" class="">
-        <div class="Marker testSpanMarker"></div>
-        <div class="Info font-bold text-lg text-white leading-none mt-3">
-            <div class="p-0 ">Current waypoint name</div>
-            <div class="p-0 text-base leading-none">Bus <span class=" font-light text-base leading-none">Operation: monday, wednesday, friday</span></div>
-            <div class="p-0 text-base leading-none">Operator <span class=" font-light text-base leading-none">Operator name</span></div>
-        </div>
-        <div class="absolute top-0 left-0 w-full h-10 ">
-            <div onclick="showLessPanel()" id="ShowLessButton" class="InfoIcon bg-gray-700 bg-opacity-40 hover:bg-opacity-90">
-                <img class=" z-50" style=" background-color: transparent; max-width: 15px;" src="~/images/hide.png" alt="">
-            </div>
-            <div onclick="showMorePanel()" id="ShowMoreButton" class="InfoIcon bg-gray-700 bg-opacity-40 hover:bg-opacity-90">
-                <img class=" z-50" style=" background-color: transparent; max-width: 15px;" src="~/images/show.png" alt="">
-            </div>
-        </div>
-
-        <div onclick="closeInfoPanel()" id="CloseButton" class="InfoIcon bg-gray-700 bg-opacity-40 hover:bg-opacity-90">
-            <img src="~/images/close.png" style=" background-color: transparent; max-width: 20px;" alt="">
-        </div>
-
-    </div>
-    <div id="Bottom" class="">
-        <ul>
-            <li class="Waypoint">
-                <span class="Time  text-sm text-gray-300 leading-none">
-                    <span class="DepTime">21:00</span>
-                </span>
-                <span class="WaypointMarker"></span>
-                <span class="TimeLine"></span>
-                <span class="Location text-sm text-gray-300 leading-none">Waypoint Name</span>
-            </li>
-            <li class="Waypoint">
-                <span class="Time  text-sm text-gray-300 leading-none">
-                    <span class="ArriveTime">21:00</span>
-                    <span class="DepTime">22:00</span>
-                </span>
-                <span class="WaypointMarker"></span>
-                <span class="TimeLine"></span>
-                <span class="Location text-sm text-gray-300 leading-none">Waypoint Name1</span>
-            </li>
-            <li class="Waypoint">
-                <span class="Time  text-sm text-gray-300 leading-none">
-                    <span class="ArriveTime">22:00</span>
-                    <span class="DepTime">23:00</span>
-                </span>
-                <span class="WaypointMarker"></span>
-                <span class="TimeLine"></span>
-                <span class="Location text-sm text-gray-300 leading-none">Waypoint Name2</span>
-            </li>
-            <li class="Waypoint">
-                <span class="Time  text-sm text-gray-300 leading-none">
-                    <span class="ArriveTime">23:00</span>
-                    <span class="DepTime">00:00</span>
-                </span>
-                <span class="WaypointMarker"></span>
-                <span class="TimeLine"></span>
-                <span class="Location text-sm text-gray-300 leading-none">Waypoint Name3</span>
-            </li>
-            <li class="Waypoint">
-                <span class="Time  text-sm text-gray-300 leading-none">
-                    <span class="ArriveTime">00:00</span>
-
-                </span>
-                <span class="WaypointMarker"></span>
-                <span class="TimeLine"></span>
-                <span class="Location text-sm text-gray-300 leading-none">Waypoint Name4</span>
-            </li>
-        </ul>
-    </div>
+    <div id="loader"></div>
+    <div id="Top" class=""></div>
+    <div id="Bottom"></div>
 </div>

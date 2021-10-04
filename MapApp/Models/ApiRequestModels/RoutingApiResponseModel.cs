@@ -14,6 +14,12 @@ namespace MapApp.Models.ApiRequestModels
         {
             [JsonPropertyName("shape")]
             public Shape _Shape { get; set; }
+
+            [JsonPropertyName("distance")]
+            public float Distance { get; set; }
+
+            [JsonPropertyName("time")]
+            public int Time { get; set; }
             public class Shape
             {
                 [JsonPropertyName("shapePoints")]

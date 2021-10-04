@@ -59,7 +59,7 @@ namespace MapApp.Models.ApiRequestModels
                 RouteType = "fastest";
                 TimeType = 1;
                 Locale = "en_US";
-                Unit = "m";
+                Unit = "k";
                 EnhancedNarrative = false;
                 DrivingStyle = 2;
                 HighwayEfficiency = 21.0;

@@ -15,5 +15,6 @@ namespace MapApp.Models.EF.Entities
         public string BusId { get; set; }
         public Bus Bus { get; set; }
         public DayOfWeek Day { get; set; }
+
     }
 }

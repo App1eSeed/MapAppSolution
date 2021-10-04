@@ -7,11 +7,20 @@ namespace MapApp.Models
 {
     public class PathQuery
     {
-        public string BusId { get; set; }
-        public int Sequence { get; set; }
-        public string Country { get; set; }
-        public string City { get; set; }
         public string PathId { get; set; }
+        public string CountryFrom { get; set; }
+        public string CountryTo { get; set; }
+        public string CityFrom { get; set; }
+        public string CityTo { get; set; }
+        public float Distance { get; set; }
+        public int Time { get; set; }
+        public float Speed { get; set; }
+        public string NextDepartTime { get; set; }
+        public List<float[]> PathCoords { get; set; }
+        public PathQuery()
+        {
+            PathCoords = new List<float[]>();
+        }
         //public float Longtitude { get; set; }
         //public float Latitude { get; set; }
     }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MapApp.Models.QueryModels
 {
-    public class IdGrouping
+    public class DayOfWeekCheck
     {
-        public string BusId { get; set; }
+        public DayOfWeek Day { get; set; }
     }
 }

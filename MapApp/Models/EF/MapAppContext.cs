@@ -19,7 +19,7 @@ namespace MapApp.Models.EF
         private static readonly HttpClient client = new HttpClient();
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
-            // Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             //Database.EnsureCreated();
 
         }
@@ -89,9 +89,9 @@ namespace MapApp.Models.EF
         {
             GeocodeApiRequestModel geocodeRequest = new GeocodeApiRequestModel(city);
             HttpResponseMessage response = client.PostAsJsonAsync(
-                "http://www.mapquestapi.com/geocoding/v1/address?key=iVOoDHSx5Ykdj4sIKnWbkmO2SgjbCOBI", geocodeRequest).Result;
+                "http://www.mapquestapi.com/geocoding/v1/address?key=S0B3YTkcDSAWJx7JPKAdw0vw43A67nvH", geocodeRequest).Result;
 
-            GeocodeApiResponseModel responseModel = response.Content.ReadFromJsonAsync< GeocodeApiResponseModel>().Result;
+            GeocodeApiResponseModel responseModel = response.Content.ReadFromJsonAsync<GeocodeApiResponseModel>().Result;
 
             return new City()
             {
@@ -107,58 +107,61 @@ namespace MapApp.Models.EF
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Country>().HasData(new Country()
-            {
-                Id = "1",
-                Name ="Ukraine"
-            },
-            new Country()
-            {
-                Id = "2",
-                Name = "Russia"
-            },
-            new Country()
-            {
-                Id = "3",
-                Name = "Poland"
-            });
+            modelBuilder.Entity<WayPointsSchedule>().Property(p => p.CityToArrivalTime).IsRequired(false).HasColumnType("Time");
+            modelBuilder.Entity<WayPointsSchedule>().Property(p => p.CityFromDepartTime).IsRequired(false).HasColumnType("Time");
 
-        //var test = GetCityCoords("Kyiv");
-        //var t1 = test.Item1;
-        //var t2 = test.Item2;
-            modelBuilder.Entity<City>().HasData(
-                GetCityCoords("1","Kyiv","1"), 
-                GetCityCoords("2", "Kharkiv", "1"), 
-                GetCityCoords("3", "Svitlovodsk", "1"),
-                GetCityCoords("4", "Lutsk", "1"),
-                GetCityCoords("5", "Lviv", "1"),
-                GetCityCoords("6", "Ternopil", "1"),
-                GetCityCoords("7", "Sumy", "1"),
-                GetCityCoords("8", "Poltava", "1"),
-                GetCityCoords("9", "Kremenchuk", "1"),
-                GetCityCoords("19", "Dnipropetrovsk", "1"),
+        //    modelBuilder.Entity<Country>().HasData(new Country()
+        //    {
+        //        Id = "1",
+        //        Name ="Ukraine"
+        //    },
+        //    new Country()
+        //    {
+        //        Id = "2",
+        //        Name = "Russia"
+        //    },
+        //    new Country()
+        //    {
+        //        Id = "3",
+        //        Name = "Poland"
+        //    });
 
-                GetCityCoords("10", "Moscow", "2"),
-                GetCityCoords("11", "Belgorod", "2"),
-                GetCityCoords("12", "Tula", "2"),
-                GetCityCoords("13", "Tambov", "2"),
-                GetCityCoords("14", "Penza", "2"),
-                GetCityCoords("15", "Smolensk", "2"),
-                GetCityCoords("16", "Bryansk", "2"),
-                GetCityCoords("17", "Ryazan", "2"),
-                GetCityCoords("18", "Tver", "2"),
+        ////var test = GetCityCoords("Kyiv");
+        ////var t1 = test.Item1;
+        ////var t2 = test.Item2;
+        //    modelBuilder.Entity<City>().HasData(
+        //        GetCityCoords("1","Kyiv","1"), 
+        //        GetCityCoords("2", "Kharkiv", "1"), 
+        //        GetCityCoords("3", "Svitlovodsk", "1"),
+        //        GetCityCoords("4", "Lutsk", "1"),
+        //        GetCityCoords("5", "Lviv", "1"),
+        //        GetCityCoords("6", "Ternopil", "1"),
+        //        GetCityCoords("7", "Sumy", "1"),
+        //        GetCityCoords("8", "Poltava", "1"),
+        //        GetCityCoords("9", "Kremenchuk", "1"),
+        //        GetCityCoords("19", "Dnipropetrovsk", "1"),
 
-                GetCityCoords("20", "Krakow", "3"),
-                GetCityCoords("21", "Wroclaw", "3"),
-                GetCityCoords("22", "Bydgoszcz", "3"),
-                GetCityCoords("23", "Bialystok", "3"),
-                GetCityCoords("24", "Rzeszow", "3"),
-                GetCityCoords("25", "Poznan", "3"),
-                GetCityCoords("26", "Plock", "3"),
-                GetCityCoords("27", "Radom", "3"),
-                GetCityCoords("28", "Kielce", "3"),
-                GetCityCoords("29", "Lublin", "3")
-            );
+        //        GetCityCoords("10", "Moscow", "2"),
+        //        GetCityCoords("11", "Belgorod", "2"),
+        //        GetCityCoords("12", "Tula", "2"),
+        //        GetCityCoords("13", "Tambov", "2"),
+        //        GetCityCoords("14", "Penza", "2"),
+        //        GetCityCoords("15", "Smolensk", "2"),
+        //        GetCityCoords("16", "Bryansk", "2"),
+        //        GetCityCoords("17", "Ryazan", "2"),
+        //        GetCityCoords("18", "Tver", "2"),
+
+        //        GetCityCoords("20", "Krakow", "3"),
+        //        GetCityCoords("21", "Wroclaw", "3"),
+        //        GetCityCoords("22", "Bydgoszcz", "3"),
+        //        GetCityCoords("23", "Bialystok", "3"),
+        //        GetCityCoords("24", "Rzeszow", "3"),
+        //        GetCityCoords("25", "Poznan", "3"),
+        //        GetCityCoords("26", "Plock", "3"),
+        //        GetCityCoords("27", "Radom", "3"),
+        //        GetCityCoords("28", "Kielce", "3"),
+        //        GetCityCoords("29", "Lublin", "3")
+        //    );
             //modelBuilder.Entity<Bus>().HasData(
             //new Bus()
             //{

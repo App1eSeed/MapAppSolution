@@ -16,6 +16,8 @@ namespace MapApp.Models.EF.Entities
         public City CityFrom { get; set; }
         public string CityToId { get; set; }
         public City CityTo { get; set; }
+        public float Distance { get; set; }
+        public int Time { get; set; }
         public List<Coords> Coords { get; set; }
         public List<WayPointsSchedule> WayPointsSchedules { get; set; }
         public Path()

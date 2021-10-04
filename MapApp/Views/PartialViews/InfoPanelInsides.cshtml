@@ -1,0 +1,51 @@
+﻿<div id="loader"></div>
+<div id="Top" class="">
+    
+    <div id="InfoPanelMarker" class="Marker testSpanMarker"></div>
+    <div class="Info font-bold text-lg text-white leading-none mt-3">
+        <div class="p-0 ">Current waypoint name</div>
+        <div class="p-0 text-base leading-none">Bus <span class=" font-light text-base leading-none">Operation:@ViewBag.BusSchedule.Schedule </span></div>
+        <div class="p-0 text-base leading-none">Operator <span class=" font-light text-base leading-none">@ViewBag.BusSchedule.Operator</span></div>
+    </div>
+    <div class="absolute top-0 left-0 w-full h-10 ">
+        <div onclick="showLessPanel()" id="ShowLessButton" class="InfoIcon bg-gray-700 bg-opacity-40 hover:bg-opacity-90">
+            <img class=" z-50" style=" background-color: transparent; max-width: 15px;" src="~/images/hide.png" alt="">
+        </div>
+        <div onclick="showMorePanel()" id="ShowMoreButton" class="InfoIcon bg-gray-700 bg-opacity-40 hover:bg-opacity-90">
+            <img class=" z-50" style=" background-color: transparent; max-width: 15px;" src="~/images/show.png" alt="">
+        </div>
+    </div>
+
+    <div onclick="closeInfoPanel()" id="CloseButton" class="InfoIcon bg-gray-700 bg-opacity-40 hover:bg-opacity-90">
+        <img src="~/images/close.png" style=" background-color: transparent; max-width: 20px;" alt="">
+    </div>
+
+</div>
+<div id="Bottom" class="">
+    <ul>
+        @for (int i = 0; i < ViewBag.WaypointInfo.Count; i++)
+        {
+            <li class="Waypoint">
+                <span class="Time  text-sm text-gray-300 leading-none">
+                    @if (i != 0)
+                    {
+                        
+                    <span class="ArriveTime">@ViewBag.WaypointInfo[i - 1].CityToArrivalTime</span>
+                        
+                    }
+
+                    @if (i != ViewBag.WaypointInfo.Count - 1)
+                    {
+                        
+
+                        <span class="DepTime">@ViewBag.WaypointInfo[i].CityFromDepartTime</span>
+                    }
+                </span>
+                <span class="WaypointMarker"></span>
+                <span class="TimeLine"></span>
+                <span class="Location text-sm text-gray-300 leading-none">@ViewBag.WaypointInfo[i].City</span>
+            </li>
+        }
+
+    </ul>
+</div>
