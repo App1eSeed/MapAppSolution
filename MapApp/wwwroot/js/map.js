@@ -75,8 +75,8 @@ function setMarkersByBounds(bounds) {
 		existingRoutes: existingRoutes
 	},
 	function (result) {
-		//console.log("Result");
-		//console.log(result);
+		console.log("Result");
+		console.log(result);
 
 
 		//console.log("existingRoutes");
@@ -85,64 +85,71 @@ function setMarkersByBounds(bounds) {
 
 			$.each(result, function (i, route) {
 				$.post("/Home/GetPath", { busId: route.busId, busDepartTime: route.departTime, sequence: route.sequence }, function (pathResult) {
-					existingRoutes.push(route.busId);
+					if (pathResult.pathCoords.length > 0) {
 
-					let routeLine = L.polyline(pathResult.pathCoords)
-					markerColour = colourForBus(route.country);
+                    
+						existingRoutes.push(route.busId);
+
+						let routeLine = L.polyline(pathResult.pathCoords)// Test
+						markerColour = colourForBus(route.country);
 						
-					let markerHtmlStyles = `
-						background-color: ${markerColour};
-						z-index: 49;
-						width: 0.6rem;
-						height: 0.6rem;
-						display: block;
-						position: relative;
-						border-radius: 1rem 1rem 1rem 1rem ;
-						transform: rotate(45deg);
-						border: 1px solid #000000`;
+						let markerHtmlStyles = `
+							background-color: ${markerColour};
+							z-index: 49;
+							width: 0.6rem;
+							height: 0.6rem;
+							display: block;
+							position: relative;
+							border-radius: 1rem 1rem 1rem 1rem ;
+							transform: rotate(45deg);
+							border: 1px solid #000000`;
 
-					let icon = L.divIcon({
-						className: "my-custom-pin",
-						color: markerColour,
-						html: `<span style="${markerHtmlStyles}" />`
-					});	
+						let icon = L.divIcon({
+							className: "my-custom-pin",
+							color: markerColour,
+							html: `<span style="${markerHtmlStyles}" />`
+						});	
 
-					var marker = L.animatedMarker(routeLine.getLatLngs(), {
-						customId: route.busId,
-						sequenceForNext: route.sequence + 1,
-						distance: pathResult.speed * scaleArr[scaleIndex],
-						interval: 1000,
-						currentSpeed: pathResult.speed,
-						nextDepartTime: pathResult.nextDepartTime,
+						var marker = L.animatedMarker(routeLine.getLatLngs(), {
+							customId: route.busId,
+							sequenceForNext: route.sequence + 1,
+							distance: pathResult.speed * scaleArr[scaleIndex],
+							interval: 1000,
+							currentSpeed: pathResult.speed,
+							nextDepartTime: pathResult.nextDepartTime,
 
-						icon: icon,
-						autoStart: false,
-						onEnd: function () {
-							let busId = route.busId;
+							icon: icon,
+							autoStart: false,
+							onEnd: function () {
+								let busId = route.busId;
 
-							$.post("/Home/GetPath", { busId: busId , sequence: this.options.sequenceForNext }, function (result)
-							{						
-								getWayToNextCity(result, busId);
-							});
-						}
-					}).on('click', markerOnClick);
-					buses.addLayer(marker).addTo(map);
-					busMarkers[route.busId] = marker;
+								$.post("/Home/GetPath", { busId: busId , sequence: this.options.sequenceForNext }, function (result)
+								{
+									console.log(result);
+									getWayToNextCity(result, busId);
+								});
+							}
+						}).on('click', markerOnClick);
+						buses.addLayer(marker).addTo(map);
+						busMarkers[route.busId] = marker;
 
-					let depTimeInSec = getSecondsByTime(route.departTime);
-					let currentTimeInSec = getSecondsByTime(current.toLocaleTimeString());
+						let depTimeInSec = getSecondsByTime(route.departTime);
+						let currentTimeInSec = getSecondsByTime(current.toLocaleTimeString());
 
-					setTimeout(function () {
+						setTimeout(function () {
 
-						marker.start();
-					}, (depTimeInSec - currentTimeInSec) * 1000);
+							marker.start();
+						
+						}, (depTimeInSec - currentTimeInSec) * 1000);//Test
+					}
 				});
 					
 					
 					
 			});				
 		}
-	});
+		});
+	console.log(map);
 }
 
 
@@ -189,7 +196,7 @@ $.ajax({
 function markerOnClick(e) {
 	var busId = this.options.customId;
 	var color = this.options.icon.options.color;
-
+	console.log(e);
 	let loader = document.getElementById("loader");
 	let top = document.getElementById("Top");
 	let bot = document.getElementById("Bottom")
@@ -303,9 +310,9 @@ function drawWay(color,busId) {
 
 function getWayToNextCity(pathResult, busId) {
 	let marker = busMarkers[busId];
-
-
 	console.log(pathResult);
+	if (pathResult.pathCoords.length > 0) {
+	
 
 
 	var currentTimeInSec = getSecondsByTime(current.toLocaleTimeString());
@@ -323,7 +330,7 @@ function getWayToNextCity(pathResult, busId) {
 			: (departTimeInSec + 300 - currentTimeInSec) * 1000
 		: (departTimeInSec - currentTimeInSec) * 1000);
 
-	if (pathResult.pathCoords.length > 0) {
+	
 		marker.stop();
 		marker.options.sequenceForNext = marker.options.sequenceForNext + 1;
 		marker.options.nextDepartTime = pathResult.nextDepartTime;
@@ -350,6 +357,8 @@ function getWayToNextCity(pathResult, busId) {
 				existingRoutes.splice(index, 1);
 			};
 		});
+		closeInfoPanel();
+		
 	}
 }
 

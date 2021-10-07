@@ -34,75 +34,93 @@ namespace MapApp.Controllers
             //GenerateDB();
             return View();
         }
-
         public JsonResult GetFullRoute(string busId)
         {
             PathQuery fullRoute = new PathQuery();
-
-            Dictionary<string, PathQuery> cacheResult = (Dictionary<string, PathQuery>)cache.Get("Paths") ?? new Dictionary<string, PathQuery>();
-
             using (var context = new MapAppContext())
             {
-                var routes = (from bus in context.Buses
-                              join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                              where bus.Id == busId
-                              orderby waypoint.Sequence
-                              select new
-                              {
-                                  waypoint.PathId
-                              }).ToList();
-
-                foreach (var route in routes)
-                {
-                    if (cacheResult.ContainsKey(route.PathId))
-                    {
-
-                        fullRoute.PathCoords.AddRange(cacheResult[route.PathId].PathCoords);
-                    }
-                    else
-                    {
-
-                        PathQuery partialRoute = (from bus in context.Buses
-                                       join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                                       join path in context.Paths on waypoint.PathId equals path.Id
-                                       join coords in context.Coords on path.Id equals coords.PathId
-                                       where waypoint.BusId == busId && waypoint.PathId == route.PathId
-                                       orderby waypoint.Sequence, coords.Id
-                                       select new PathQuery()
-                                       {
-                                           PathId = path.Id,
-                                           Distance = path.Distance,
-                                           Time = path.Time
-
-                                       }).First();
-
-                         partialRoute.PathCoords = (from bus in context.Buses
-                                            join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                                            join path in context.Paths on waypoint.PathId equals path.Id
-                                            join coords in context.Coords on path.Id equals coords.PathId
-                                            where path.Id == route.PathId
-                                            orderby coords.Id
-                                            select new float[2]
-                                            {
-                                                coords.Longtitude,
-                                                coords.Latitude
-                                            }).ToList();
-
-                        fullRoute.PathCoords.AddRange(partialRoute.PathCoords);
-
-                        cacheResult.Add(route.PathId, partialRoute);
-
-                        cache.Set("Paths", cacheResult, new MemoryCacheEntryOptions
-                        {
-                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(100)
-                        });
-                    }
-                }
-
+                fullRoute.PathCoords = (from bus in context.Buses
+                                        join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                                        join path in context.Paths on waypoint.PathId equals path.Id
+                                        join coords in context.Coords on path.Id equals coords.PathId
+                                        where bus.Id == busId
+                                        orderby waypoint.Sequence, coords.Id
+                                        select new float[2]
+                                        {
+                                             coords.Longtitude,
+                                             coords.Latitude
+                                        }).ToList();
             }
-
             return Json(fullRoute);
         }
+
+        //public JsonResult GetFullRoute(string busId)
+        //{
+        //    PathQuery fullRoute = new PathQuery();
+
+        //    Dictionary<string, PathQuery> cacheResult = (Dictionary<string, PathQuery>)cache.Get("Paths") ?? new Dictionary<string, PathQuery>();
+
+        //    using (var context = new MapAppContext())
+        //    {
+        //        var routes = (from bus in context.Buses
+        //                      join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+        //                      where bus.Id == busId
+        //                      orderby waypoint.Sequence
+        //                      select new
+        //                      {
+        //                          waypoint.PathId
+        //                      }).ToList();
+
+        //        foreach (var route in routes)
+        //        {
+        //            if (cacheResult.ContainsKey(route.PathId))
+        //            {
+
+        //                fullRoute.PathCoords.AddRange(cacheResult[route.PathId].PathCoords);
+        //            }
+        //            else
+        //            {
+
+        //                PathQuery partialRoute = (from bus in context.Buses
+        //                               join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+        //                               join path in context.Paths on waypoint.PathId equals path.Id
+        //                               //join coords in context.Coords on path.Id equals coords.PathId
+        //                               where bus.Id == busId && waypoint.PathId == route.PathId
+        //                               select new PathQuery()
+        //                               {
+        //                                   PathId = path.Id,
+        //                                   Distance = path.Distance,
+        //                                   Time = path.Time
+
+        //                               }).First();
+
+        //                 partialRoute.PathCoords = (from bus in context.Buses
+        //                                    join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+        //                                    join path in context.Paths on waypoint.PathId equals path.Id
+        //                                    join coords in context.Coords on path.Id equals coords.PathId
+        //                                    where path.Id == route.PathId
+        //                                    orderby coords.Id
+        //                                    select new float[2]
+        //                                    {
+        //                                        coords.Longtitude,
+        //                                        coords.Latitude
+        //                                    }).ToList();
+
+        //                fullRoute.PathCoords.AddRange(partialRoute.PathCoords);
+
+        //                cacheResult.Add(route.PathId, partialRoute);
+
+        //                cache.Set("Paths", cacheResult, new MemoryCacheEntryOptions
+        //                {
+        //                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(100)
+        //                });
+        //            }
+        //        }
+
+        //    }
+
+        //    return Json(fullRoute);
+        //}
         public JsonResult GetWayToNextCity(string busId, int sequence)
         {
             using (var context = new MapAppContext())
@@ -125,29 +143,28 @@ namespace MapApp.Controllers
         }
         public JsonResult GetPath(string busId, TimeSpan? busDepartTime, int sequence = 1 )
         {
-            PathQuery busPath = new PathQuery();
+            PathQuery busPath;
             dynamic nextWaypoint;
             Dictionary<string, PathQuery> cacheResult = (Dictionary<string, PathQuery>)cache.Get("Paths") ?? new Dictionary<string, PathQuery>();
 
             using (var context = new MapAppContext())
             {
-                string? pathTest = (from bus in context.Buses
+                var pathTest = (from bus in context.Buses
                               join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                               join path in context.Paths on waypoint.PathId equals path.Id
-                              where waypoint.BusId == busId && waypoint.Sequence == sequence
+                              where bus.Id == busId && waypoint.Sequence == sequence
                               select new 
                               {
                                   path.Id
-                              }).First().Id;
-
-                if (cacheResult.ContainsKey(pathTest))
+                              }).ToList().FirstOrDefault();
+                if (pathTest == null)
                 {
-
-                    busPath = cacheResult[pathTest];
+                    return Json(new PathQuery());
                 }
-                else if (pathTest == null) 
+                if (pathTest != null && cacheResult.ContainsKey(pathTest.Id))
                 {
-                    return Json(busPath);
+
+                    busPath = cacheResult[pathTest.Id];
                 }
                 else
                 {
@@ -155,31 +172,30 @@ namespace MapApp.Controllers
                     busPath = (from bus in context.Buses
                                     join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                                     join path in context.Paths on waypoint.PathId equals path.Id
-                                    join coords in context.Coords on path.Id equals coords.PathId
-                                    where waypoint.BusId == busId && waypoint.Sequence == sequence
-                                    orderby waypoint.Sequence, coords.Id
+                                    where bus.Id == busId && waypoint.Sequence == sequence
                                     select new PathQuery()
                                     {
                                         PathId = path.Id,
                                         Distance = path.Distance,
                                         Time = path.Time
                                         
-                                    }).First();
-
+                                    }).FirstOrDefault();
+                    
                     busPath.PathCoords = (from bus in context.Buses
                                           join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                                           join path in context.Paths on waypoint.PathId equals path.Id
                                           join coords in context.Coords on path.Id equals coords.PathId
-                                          where waypoint.BusId == busId && waypoint.Sequence == sequence
-                                          orderby waypoint.Sequence, coords.Id
+                                          where bus.Id == busId && waypoint.Sequence == sequence
+                                          orderby coords.Id
                                           select new float[2]
                                           {
                                             coords.Longtitude,
                                             coords.Latitude
                                           }).ToList();
-
-                    cacheResult.Add(busPath.PathId, busPath);
-
+                    if (!cacheResult.ContainsKey(busPath.PathId))
+                    {
+                        cacheResult.Add(busPath.PathId, busPath);
+                    }
                     cache.Set("Paths", cacheResult, new MemoryCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(100)
@@ -241,7 +257,7 @@ namespace MapApp.Controllers
                         Time = busPath.Time,
                         Speed = speed - 5,
                         PathCoords = points,
-                        NextDepartTime = nextWaypoint.CityFromDepartTime.ToString(@"hh\:mm\:ss")//fix
+                        NextDepartTime = nextWaypoint.CityFromDepartTime.ToString(@"hh\:mm\:ss")
 
                     };
                 }
@@ -296,7 +312,7 @@ namespace MapApp.Controllers
                 return Json(waypoints);
             }
         }
-        public JsonResult GetVisibleRoutes(float topLat, float topLong, float botLat, float botLong, TimeSpan time, List<string> existingRoutes)
+        public JsonResult GetVisibleRoutes(float topLat, float topLong, float botLat, float botLong, TimeSpan time, HashSet<string> existingRoutes)
         {
 
             int correction = 0;
@@ -306,7 +322,7 @@ namespace MapApp.Controllers
 
                 var currentDay = (int)DateTime.Now.DayOfWeek;
                 int currentTimeInSeconds = (int)time.TotalSeconds;
-
+                //Add TimeInSeconds column for waypoints
                 var routes = (from bus in context.Buses
                               join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                               join path in context.Paths on waypoint.PathId equals path.Id
@@ -340,7 +356,7 @@ namespace MapApp.Controllers
                                              join innerPath in context.Paths on innerWaypoint.PathId equals innerPath.Id
                                              join innerCity in context.Cities on innerPath.CityFromId equals innerCity.Id
                                              join innerCountry in context.Countries on innerCity.CountryId equals innerCountry.Id
-                                             where innerWaypoint.Sequence == 1 && innerBus.Id == bus.Id
+                                             where innerWaypoint.Sequence == 1 && innerWaypoint.BusId == bus.Id
                                              select new
                                              {
                                                  innerCountry.Name
@@ -419,7 +435,7 @@ namespace MapApp.Controllers
 
                 List<Path> allPaths = new List<Path>();
 
-                for (int i = 0; i < 1; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     Bus instBus = new Bus()
                     {
@@ -553,13 +569,14 @@ namespace MapApp.Controllers
                         if (wayPoints.Count == 0)
                         {
                             var departTime = new TimeSpan(r.Next(6, 19), departMinutes[r.Next(0, 4)], 0);
+                            var arrivalTime = 
                             context.WayPointsSchedules.Add(wayPoint = new WayPointsSchedule()
                             {
                                 BusId = instBus.Id,
                                 Sequence = j + 1,
                                 PathId = path.Id,
                                 CityFromDepartTime = departTime,
-                                CityToArrivalTime = departTime + TimeSpan.FromSeconds(path.Time)
+                                CityToArrivalTime = new TimeSpan((departTime + TimeSpan.FromSeconds(path.Time)).Hours, (departTime + TimeSpan.FromSeconds(path.Time)).Minutes,0) 
                             });
                         }
                         //else if (j == pathCount - 1)
@@ -586,7 +603,7 @@ namespace MapApp.Controllers
                                 Sequence = j + 1,
                                 PathId = path.Id,
                                 CityFromDepartTime = new TimeSpan(departTime.Hours, departTime.Minutes , 0),
-                                CityToArrivalTime = new TimeSpan(arrivalTime.Hours, arrivalTime.Minutes + 1, 0),
+                                CityToArrivalTime = new TimeSpan(arrivalTime.Hours, arrivalTime.Minutes, 0),
                                
 
                             });
@@ -599,7 +616,7 @@ namespace MapApp.Controllers
 
                     var days = new List<DayOfWeek>();
                     DayOfWeek newDay = (DayOfWeek)r.Next(0, 7);
-                    while (days.Count < 4)
+                    while (days.Count < 3)
                     {
                         if (!days.Contains(newDay))
                         {
