@@ -7,6 +7,7 @@ namespace MapApp.Models.QueryModels
 {
     public class DayOfWeekCheck
     {
+        public string Id { get; set; }
         public DayOfWeek Day { get; set; }
     }
 }

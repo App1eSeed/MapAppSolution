@@ -14,13 +14,11 @@ namespace MapApp.Models.EF.Entities
         public string Id { get; set; }
         public string Operator { get; set; }
 
-        public List<Schedule> Schedule { get; set; }
         public List<WayPointsSchedule> WayPointsSchedule { get; set; }
 
         public Bus()
         {
             WayPointsSchedule = new List<WayPointsSchedule>();
-            Schedule = new List<Schedule>();
         }
     }
 }

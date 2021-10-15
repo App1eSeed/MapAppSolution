@@ -25,8 +25,8 @@ namespace MapApp.Models.EF
         }
         public MapAppContext()
         {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
         }
 
 
@@ -37,6 +37,7 @@ namespace MapApp.Models.EF
         public DbSet<Path> Paths { get; set; }
         public DbSet<Coords> Coords { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,44 +47,7 @@ namespace MapApp.Models.EF
                 optionsBuilder.UseSqlServer("Server=DESKTOP-UJK1CNS;Database=MapAppDB;Trusted_Connection=True;");
             }
         }
-
-
-
-        public List<Coords> GetWayBetweenCities(string pathId, string cityFrom, string cityTo)
-        {
-            List<Coords> coordinates = new List<Coords>();
-            RoutingApiRequestModel routingRequest = new RoutingApiRequestModel(new List<string>() { cityFrom , cityTo });
-
-            //string jsonString = JsonSerializer.Serialize<RoutingRequest>(routingRequest);
-            //var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
-          
-            HttpResponseMessage response =  client.PostAsJsonAsync(
-                "http://open.mapquestapi.com/directions/v2/route?key=iVOoDHSx5Ykdj4sIKnWbkmO2SgjbCOBI", routingRequest).Result;
-
-            RoutingApiResponseModel responseModel =  response.Content.ReadFromJsonAsync<RoutingApiResponseModel>().Result;
-
-
-            for (int i = 0; i < responseModel._Route._Shape.ShapePoints.Length; i += 2)
-            {
-                coordinates.Add(new Coords()
-                {
-                    Id = autoIncId,
-                    PathId = pathId,
-                    Longtitude = responseModel._Route._Shape.ShapePoints[i],
-                    Latitude = responseModel._Route._Shape.ShapePoints[i + 1]
-                });
-                autoIncId++;
-            }
-
-
-            //string testjson = await response.Content.ReadAsStringAsync();
-
-           // response.EnsureSuccessStatusCode();
-           // var test = response.Headers.Location;
-            
-            return coordinates;
-
-        }
+       
 
         public City GetCityCoords(string id, string city, string countryId)
         {
@@ -99,7 +63,7 @@ namespace MapApp.Models.EF
                 Name = city,
                 Longtitude = responseModel.Results[0].Locations[0].LatLng.Lng,
                 Latitude = responseModel.Results[0].Locations[0].LatLng.Lat,
-                CountryId = countryId
+               // CountryId = countryId
             };
 
         }
@@ -107,61 +71,156 @@ namespace MapApp.Models.EF
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<WayPointsSchedule>().Property(p => p.CityToArrivalTime).IsRequired(false).HasColumnType("Time");
-            modelBuilder.Entity<WayPointsSchedule>().Property(p => p.CityFromDepartTime).IsRequired(false).HasColumnType("Time");
+            
+            //modelBuilder.Entity<Country>().HasData(new Country()
+            //{
+            //    Id = "804",
+            //    Name = "Ukraine",
+            //    CountryCode = "UA"
+            //},
+            //new Country()
+            //{
+            //    Id = "643",
+            //    Name = "Russia"
+            //    CountryCode = "RU"
+            //},
+            //new Country()
+            //{
+            //    Id = "616",
+            //    Name = "Poland"
+            //    CountryCode = "PL"
+            //},
+            //new Country()
+            //{
+            //    Id = "112",
+            //    Name = "Belarus"
+            //    CountryCode = "BY"
+            //},
+            //new Country()
+            //{
+            //    Id = "642",
+            //    Name = "Romania"
+            //    CountryCode = "RO"
+            //},
+            //new Country()
+            //{
+            //    Id = "100",
+            //    Name = "Bulgaria"
+            //    CountryCode = "BG"
+            //},
+            //new Country()
+            //{
+            //    Id = "276",
+            //    Name = "Germany"
+            //    CountryCode = "DE"
+            //});
 
-        //    modelBuilder.Entity<Country>().HasData(new Country()
-        //    {
-        //        Id = "1",
-        //        Name ="Ukraine"
-        //    },
-        //    new Country()
-        //    {
-        //        Id = "2",
-        //        Name = "Russia"
-        //    },
-        //    new Country()
-        //    {
-        //        Id = "3",
-        //        Name = "Poland"
-        //    });
+            ////var test = GetCityCoords("Kyiv");
+            ////var t1 = test.Item1;
+            ////var t2 = test.Item2;
+            //modelBuilder.Entity<City>().HasData(
+            //    GetCityCoords("1", "Kyiv", "1"),
+            //    GetCityCoords("2", "Kharkiv", "1"),
+            //    GetCityCoords("3", "Svitlovodsk", "1"),
+            //    GetCityCoords("4", "Lutsk", "1"),
+            //    GetCityCoords("5", "Lviv", "1"),
+            //    GetCityCoords("6", "Ternopil", "1"),
+            //    GetCityCoords("7", "Sumy", "1"),
+            //    GetCityCoords("8", "Poltava", "1"),
+            //    GetCityCoords("9", "Kremenchuk", "1"),
+            //    GetCityCoords("19", "Dnipropetrovsk", "1"),
 
-        ////var test = GetCityCoords("Kyiv");
-        ////var t1 = test.Item1;
-        ////var t2 = test.Item2;
-        //    modelBuilder.Entity<City>().HasData(
-        //        GetCityCoords("1","Kyiv","1"), 
-        //        GetCityCoords("2", "Kharkiv", "1"), 
-        //        GetCityCoords("3", "Svitlovodsk", "1"),
-        //        GetCityCoords("4", "Lutsk", "1"),
-        //        GetCityCoords("5", "Lviv", "1"),
-        //        GetCityCoords("6", "Ternopil", "1"),
-        //        GetCityCoords("7", "Sumy", "1"),
-        //        GetCityCoords("8", "Poltava", "1"),
-        //        GetCityCoords("9", "Kremenchuk", "1"),
-        //        GetCityCoords("19", "Dnipropetrovsk", "1"),
+            //    GetCityCoords("10", "Moscow", "2"),
+            //    GetCityCoords("11", "Belgorod", "2"),
+            //    GetCityCoords("12", "Tula", "2"),
+            //    GetCityCoords("13", "Tambov", "2"),
+            //    GetCityCoords("14", "Penza", "2"),
+            //    GetCityCoords("15", "Smolensk", "2"),
+            //    GetCityCoords("16", "Bryansk", "2"),
+            //    GetCityCoords("17", "Ryazan", "2"),
+            //    GetCityCoords("18", "Tver", "2"),
 
-        //        GetCityCoords("10", "Moscow", "2"),
-        //        GetCityCoords("11", "Belgorod", "2"),
-        //        GetCityCoords("12", "Tula", "2"),
-        //        GetCityCoords("13", "Tambov", "2"),
-        //        GetCityCoords("14", "Penza", "2"),
-        //        GetCityCoords("15", "Smolensk", "2"),
-        //        GetCityCoords("16", "Bryansk", "2"),
-        //        GetCityCoords("17", "Ryazan", "2"),
-        //        GetCityCoords("18", "Tver", "2"),
+            //    GetCityCoords("20", "Krakow", "3"),
+            //    GetCityCoords("21", "Wroclaw", "3"),
+            //    GetCityCoords("22", "Bydgoszcz", "3"),
+            //    GetCityCoords("23", "Bialystok", "3"),
+            //    GetCityCoords("24", "Rzeszow", "3"),
+            //    GetCityCoords("25", "Poznan", "3"),
+            //    GetCityCoords("26", "Plock", "3"),
+            //    GetCityCoords("27", "Radom", "3"),
+            //    GetCityCoords("28", "Kielce", "3"),
+            //    GetCityCoords("29", "Lublin", "3"),
 
-        //        GetCityCoords("20", "Krakow", "3"),
-        //        GetCityCoords("21", "Wroclaw", "3"),
-        //        GetCityCoords("22", "Bydgoszcz", "3"),
-        //        GetCityCoords("23", "Bialystok", "3"),
-        //        GetCityCoords("24", "Rzeszow", "3"),
-        //        GetCityCoords("25", "Poznan", "3"),
-        //        GetCityCoords("26", "Plock", "3"),
-        //        GetCityCoords("27", "Radom", "3"),
-        //        GetCityCoords("28", "Kielce", "3"),
-        //        GetCityCoords("29", "Lublin", "3")
-        //    );
+            //    GetCityCoords("30", "Zaporizhia", "1"),
+            //    GetCityCoords("31", "Donetsk", "1"),
+            //    GetCityCoords("32", "Mariupol", "1"),
+            //    GetCityCoords("33", "Melitopol", "1"),
+            //    GetCityCoords("34", "Kherson", "1"),
+            //    GetCityCoords("35", "Mykolaiv", "1"),
+            //    GetCityCoords("36", "Odesa", "1"),
+            //    GetCityCoords("37", "Kropyvnytskyi", "1"),
+            //    GetCityCoords("38", "Kryvyi Rih", "1"),
+            //    GetCityCoords("39", "Vinnytsia", "1"),
+
+            //    GetCityCoords("40", "Minsk", "4"),
+            //    GetCityCoords("41", "Brest", "4"),
+            //    GetCityCoords("42", "Mahilyow", "4"),
+            //    GetCityCoords("43", "Homyel", "4"),
+            //    GetCityCoords("44", "Orsha", "4"),
+            //    GetCityCoords("45", "Vitebsk", "4"),
+            //    GetCityCoords("46", "Hrodna", "4"),
+            //    GetCityCoords("47", "Babruysk", "4"),
+            //    GetCityCoords("48", "Lahuny", "4"),
+            //    GetCityCoords("49", "Kobryn", "4"),
+
+            //    GetCityCoords("50", "Bucharest", "5"),
+            //    GetCityCoords("51", "Constanta", "5"),
+            //    GetCityCoords("52", "Craiova", "5"),
+            //    GetCityCoords("53", "Brasov", "5"),
+            //    GetCityCoords("54", "Timisoara", "5"),
+            //    GetCityCoords("55", "Cluj-Napoca", "5"),
+            //    GetCityCoords("56", "Galati", "5"),
+            //    GetCityCoords("57", "Bacau", "5"),
+            //    GetCityCoords("58", "Satu Mare", "5"),
+            //    GetCityCoords("59", "Oradea", "5"),
+
+            //    GetCityCoords("60", "Sofia", "6"),
+            //    GetCityCoords("61", "Plovdiv", "6"),
+            //    GetCityCoords("62", "Stara Zagora", "6"),
+            //    GetCityCoords("63", "Varna", "6"),
+            //    GetCityCoords("64", "Burgas", "6"),
+            //    GetCityCoords("65", "Ruse", "6"),
+            //    GetCityCoords("66", "Pleven", "6"),
+            //    GetCityCoords("67", "Slavotin", "6"),
+            //    GetCityCoords("68", "Vidin", "6"),
+            //    GetCityCoords("69", "Shumen", "6"),
+
+
+
+
+            //    GetCityCoords("70", "Berlin", "7"),
+            //    GetCityCoords("71", "Hamburg", "7"),
+            //    GetCityCoords("72", "Munich", "7"),
+            //    GetCityCoords("73", "Cologne", "7"),
+            //    GetCityCoords("74", "Dresden", "7"),
+            //    GetCityCoords("75", "Leipzig", "7"),
+            //    GetCityCoords("76", "Hanover", "7"),
+            //    GetCityCoords("77", "Bremen", "7"),
+            //    GetCityCoords("78", "Kiel", "7"),
+            //    GetCityCoords("79", "Rostock", "7"),
+            //    GetCityCoords("80", "Oldenburg", "7"),
+            //    GetCityCoords("81", "Bielefeld", "7"),
+            //    GetCityCoords("82", "Erfurt", "7"),
+            //    GetCityCoords("83", "Nuremberg", "7"),
+            //    GetCityCoords("84", "Augsburg", "7"),
+            //    GetCityCoords("85", "Stuttgart", "7"),
+            //    GetCityCoords("86", "Wiesbaden", "7"),
+            //    GetCityCoords("87", "Bonn", "7"),
+            //    GetCityCoords("88", "Essen", "7"),
+            //    GetCityCoords("89", "Dortmund", "7")
+
+
+            //);
             //modelBuilder.Entity<Bus>().HasData(
             //new Bus()
             //{

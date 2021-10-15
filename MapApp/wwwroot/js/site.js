@@ -82,7 +82,7 @@ function Start(){
     localClock = setInterval(() => {
             localTime.setSeconds(localTime.getSeconds() + 1);
             localTimeBlock.innerHTML ="Local time: "+ localTime.toLocaleTimeString();
-    }, 1000/scale);
+    }, 1000 / scaleArr[scaleIndex]);
 
     setTimeout(clearInterval(normalClock),0);
     normalClock = setInterval(()=>{

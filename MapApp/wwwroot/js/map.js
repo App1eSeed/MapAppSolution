@@ -8,7 +8,7 @@ const map = L.map('map', {
 }).setView([49.047968403958926, 33.22724770404179], 7);
 	
 
-	L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J', { attribution: 'OSM' }) //https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J
+L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }) //https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J
 		.addTo(map);
 
 map.on('zoomstart', function (e) {
@@ -197,6 +197,13 @@ function markerOnClick(e) {
 	var busId = this.options.customId;
 	var color = this.options.icon.options.color;
 	console.log(e);
+	
+	fillInfoPanel(busId,color);
+	resizeMarker(e,color)		
+	drawWay(color,busId);
+}
+
+function fillInfoPanel(busId,color) {
 	let loader = document.getElementById("loader");
 	let top = document.getElementById("Top");
 	let bot = document.getElementById("Bottom")
@@ -204,32 +211,29 @@ function markerOnClick(e) {
 		openInfoPanel();
 	}
 
-	$.post("/Home/FillInfoPanel", { busId: busId }, function (result) {
-		loader.style.display = "block";
-		top.style.display = "none";
-		bot.style.display = "none";
-		setTimeout(function () {
 
+	loader.style.display = "block";
+	top.style.display = "none";
+	bot.style.display = "none";
+	setTimeout(function () {
+		loader.style.display = "none";
+		top.style.display = "block";
+		bot.style.display = "block";
+		if (isShowLessMode) {
+			showLessPanel();
+		}
+		else {
+			showMorePanel();
+		}
+	}, 1000);
+
+	$.post("/Home/FillInfoPanel", { busId: busId }, function (result) {
+		setTimeout(function () {
 			$("#InfoPanel").html(result);
 			document.getElementById("InfoPanelMarker").style.backgroundColor = color;
-			loader.style.display = "none";
-			top.style.display = "block";
-			bot.style.display = "block";
-			if (isShowLessMode) {
-				showLessPanel();
-			}
-            else {
-				showMorePanel();
-            }
-		}, 500)
-			
+		}, 200);
 	});
-		
-	resizeMarker(e,color)		
-	drawWay(color,busId);
 }
-
-
 
 var prevMarker;
 var prevMarkerColor;
@@ -288,6 +292,14 @@ function colourForBus(country){
 			return "#F66F89";
 		case "Poland":
 			return "#FFC540";
+		case "Belarus":
+			return "#3a62eb";
+		case "Romania":
+			return "#e46cca";
+		case "Bulgaria":
+			return "#9f5e34";
+		case "Germany":
+			return "#5f228a";
 		default:
 			return "#E93724";
     }
@@ -302,7 +314,8 @@ function drawWay(color,busId) {
 		polyBusWayLine = L.polyline(result.pathCoords).addTo(map);
 		polyBusWayLine.setStyle({
 			color: color,
-			weigth: 2
+			weigth: 2,
+			offset: -1
 		});
 			
 	});
@@ -318,12 +331,11 @@ function getWayToNextCity(pathResult, busId) {
 	var currentTimeInSec = getSecondsByTime(current.toLocaleTimeString());
 	console.log("currentTimeInSec");
 	console.log(currentTimeInSec);
-	console.log(pathResult.currentDepartTime);
 	console.log(current.toLocaleTimeString());
 
 	var departTimeInSec = getSecondsByTime(marker.options.nextDepartTime);
-	console.log("departTimeInSec");
-	console.log(departTimeInSec);
+	console.log("nextDepartTime");
+	console.log(marker.options.nextDepartTime);
 	console.log("Compare");
 	console.log(currentTimeInSec > departTimeInSec ? (currentTimeInSec - departTimeInSec > 75000)
 			? (departTimeInSec + 86400 - currentTimeInSec) * 1000
