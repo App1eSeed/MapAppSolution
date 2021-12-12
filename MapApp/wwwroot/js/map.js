@@ -2,14 +2,15 @@
 var buses = L.layerGroup(),
 	cities = L.layerGroup();
 
+
 const map = L.map('map', {
 	layers: [cities, buses]
-
 }).setView([49.047968403958926, 33.22724770404179], 7);
-	
+
 
 L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }) //https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=Wz0I5fVrU6CoXb3ZCY4J
-		.addTo(map);
+	.addTo(map);
+
 
 map.on('zoomstart', function (e) {
 	updateMap(map.getBounds());
@@ -21,7 +22,9 @@ map.on('moveend', throttle(function (e) {
 		setMarkersByBounds(map.getBounds());
 },2000));
 
-
+map.on('tileload', function (e) {
+	console.log(e);
+});
 function updateMap(bounds) {
 
 	if (true) {
@@ -111,6 +114,7 @@ function setMarkersByBounds(bounds) {
 						});	
 
 						var marker = L.animatedMarker(routeLine.getLatLngs(), {
+							
 							customId: route.busId,
 							sequenceForNext: route.sequence + 1,
 							distance: pathResult.speed * scaleArr[scaleIndex],
@@ -153,44 +157,79 @@ function setMarkersByBounds(bounds) {
 }
 
 
-$.ajax({
-	type: "Get",
-	url: "/Home/GetAllCities",
-	dataType: "json",
-	success: function (result) {
 
-		$.each(result, function (i, city) {
 
-			//let myCustomColour = colourForBus(city.name);
-			let markerColour = colourForBus(null);
-			let markerHtmlStyles = `
-						background-color: ${markerColour};
-						z-index: 47;
-						width: 0.3rem;
-						height: 0.3rem;
-						display: block;
-						position: relative;
-						border-radius: 1rem 1rem 1rem 1rem ;
-						transform: rotate(45deg);
-						border: 1px solid #000000`;
+//$.ajax({
+//	type: "Get",
+//	url: "/Home/GetAllCities",
+//	dataType: "json",
+//	success: function (result) {
 
-			let marker = new L.marker([city.latitude, city.longtitude], {
-				icon: L.divIcon({
-					cityId: city.Id,
-					className: "my-custom-pin",
-					color: "#E93724",
-					html: `<span style="${markerHtmlStyles}" />`
-				})
-			});
-			cities.addLayer(marker).addTo(map);
-			cityMarkers[city.Id] = marker;
+//		console.log(result);
+//		L.geoJSON(result, {
+//			pointToLayer: function (feature, latlng) {
+//				let markerColour = colourForBus(null);
+//				let markerHtmlStyles = `
+//						background-color: ${markerColour};
+//						z-index: 47;
+//						width: 0.3rem;
+//						height: 0.3rem;
+//						display: block;
+//						position: relative;
+//						border-radius: 1rem 1rem 1rem 1rem ;
+//						transform: rotate(45deg);
+//						border: 1px solid #000000`;
 
-		});
-	},
-	error: function (error) {
-		alert("There was an error posting the data to the server: " + error.responseText);
-	}
-});
+//				return L.marker(latlng, {
+//					icon: L.divIcon({
+//						//cityId: city.Id,
+//						className: "my-custom-pin",
+//						color: "#E93724",
+//						html: `<span style="${markerHtmlStyles}" />`
+//					})
+//				});
+//			},
+//			renderer: L.canvas()
+//		});
+//			//.addTo(map);
+
+//		//$.each(result, function (i, city) {
+
+//		//	//let myCustomColour = colourForBus(city.name);
+//		//	let markerColour = colourForBus(null);
+//		//	let markerHtmlStyles = `
+//		//				background-color: ${markerColour};
+//		//				z-index: 47;
+//		//				width: 0.3rem;
+//		//				height: 0.3rem;
+//		//				display: block;
+//		//				position: relative;
+//		//				border-radius: 1rem 1rem 1rem 1rem ;
+//		//				transform: rotate(45deg);
+//		//				border: 1px solid #000000`;
+
+//		//	let marker = new L.marker([city.latitude, city.longtitude], {
+//		//		icon: L.divIcon({
+//		//			cityId: city.Id,
+//		//			className: "my-custom-pin",
+//		//			color: "#E93724",
+//		//			html: `<span style="${markerHtmlStyles}" />`
+//		//		})
+//		//	});
+//		//	//marker.addTo(map);
+
+//		//	//cities.addLayer(marker).addTo(cities);
+//		//	cityMarkers[city.Id] = marker;
+
+//		//});
+
+		
+
+//	},
+//	error: function (error) {
+//		alert("There was an error posting the data to the server: " + error.responseText);
+//	}
+//});
 
 
 function markerOnClick(e) {

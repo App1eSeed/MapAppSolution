@@ -25,8 +25,8 @@ namespace MapApp.Models.EF
         }
         public MapAppContext()
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
 
@@ -71,7 +71,23 @@ namespace MapApp.Models.EF
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<BusType>().HasData(new Country()
+            {
+                Id = "1",
+                Name = "CityBus"
+            },
+            new Country()
+            {
+                Id = "2",
+                Name = "CountryBus"
+
+            },
+            new Country()
+            {
+                Id = "3",
+                Name = "InternationalBus"
+            });
+
             //modelBuilder.Entity<Country>().HasData(new Country()
             //{
             //    Id = "804",

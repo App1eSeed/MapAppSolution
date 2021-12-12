@@ -16,6 +16,7 @@ namespace MapApp.Models
         public int Time { get; set; }
         public float Speed { get; set; }
         public string NextDepartTime { get; set; }
+        public float[] CurrentLatLng { get; set; }
         public List<float[]> PathCoords { get; set; }
         public PathQuery()
         {

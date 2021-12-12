@@ -6,21 +6,28 @@ using System.Threading.Tasks;
 
 namespace MapApp.Models.ApiRequestModels
 {
+    
+    public class Locations
+    {
+        public LatLng latLng { get; set; }
+    }
     public class RoutingApiRequestModel
     {
         [JsonPropertyName("locations")]
-        public List<string> Locations { get; set; }
+        public List<Locations> Locations { get; set; }
         [JsonPropertyName("options")]
         public Options Option { get; set; }
-        public RoutingApiRequestModel(List<string> locations)
+        public RoutingApiRequestModel(List<Locations> locations)
         {
-            Locations = new List<string>();
+            Locations = new List<Locations>();
             foreach (var location in locations)
             {
                 Locations.Add(location);
             }
             Option = new Options();
         }
+
+       
         public class Options
         {
 

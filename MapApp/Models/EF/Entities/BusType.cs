@@ -7,18 +7,16 @@ using System.Threading.Tasks;
 
 namespace MapApp.Models.EF.Entities
 {
-    public class Bus
+    public class BusType
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        public string Operator { get; set; }
-        public BusType BusType { get; set; }
-        public List<WayPointsSchedule> WayPointsSchedule { get; set; }
-        public int MyProperty { get; set; }
-        public Bus()
+        public string Name { get; set; }
+        public List<Bus> Buses { get; set; }
+        public BusType()
         {
-            WayPointsSchedule = new List<WayPointsSchedule>();
+            Buses = new List<Bus>();
         }
     }
 }
