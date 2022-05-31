@@ -4,21 +4,99 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MapApp</title>
-    <link href="~/css/site.css" rel="stylesheet" />
-    <link href="https://unpkg.com/tailwindcss@2.2.9/dist/tailwind.min.css" rel="stylesheet">
+    <link href="~/css/header.css" rel="stylesheet" />
+    <link href="~/css/registration.css" rel="stylesheet" />
+
+  @*  <link href="https://unpkg.com/tailwindcss@2.2.9/dist/tailwind.min.css" rel="stylesheet">*@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin="" />
 
+    <script src="https://kit.fontawesome.com/e3cd8d35d3.js" crossorigin="anonymous"></script>
 
-
-    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+   @* <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>*@
+@*    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />*@
 
 </head>
 <body>
+    <header class="MenuBar ">
+        <div class="Menu"   >  
+            <div class="MenuLogo font-bold tracking-widest text-xl"><a href="/Home/Index"><img src="~/images/logo.png" height="30" alt="">Haron</a></div>
+            <div class="MenuText">Visualisation Client</div>
+            <div >
+                <a  class ="HeaderLink" href="/Home/RoutesOffers">Map</a>
+            </div>
+            <div >
+                <a  class ="HeaderLink" href="/Home/TripOptions">Test1</a>
+            </div>
+            <div >
+                <a  class ="HeaderLink" href="/Home/PassengerDetails">Test2</a>
+            </div>
+            <div >
+                <a  class ="HeaderLink" href="/Home/ReviewAndPay">Test3</a>
+            </div>
 
-    <header class="fixed flex z-50 bg-gray-700 w-full bg-opacity-80 h-10 space-x-4 items-center text-white px-5">
+            <div class="MenuRegistrationBlock">
+                 @if(!User.Identity.IsAuthenticated)
+                {
+                     <div><a class ="HeaderLink" onclick="OpneLogForm()" >Sign in</a></div>
+                    <div><a class="HeaderLink" onclick="OpneRegForm()" >Create an account</a></div>
+                }
+                else{
+                    <div class="MenuRegistrationBlockUser">
+                    <div class="UserBookingsLink">
+                        <a class="HeaderLink" href="#" >Your bookings</a>
+                    </div>
+                    <div class="MenuRegistrationBlockUserInfo">
+
+                        <div class="sec-center"> 	
+                            <input class="dropdown" type="checkbox" id="dropdown" name="dropdown"/>
+                            <label class="for-dropdown HeaderLink" for="dropdown">
+                                @User.Identities.FirstOrDefault()?.Claims.Where(c => c.Type == "name").FirstOrDefault()?.Value
+                                <div class="MenuRegistrationBlockUserImg">
+                                    <span class="circle">
+                                        <i class="fa-solid fa-user"></i>
+                                    </span>
+                                </div>
+                            </label>
+                           
+                            <div class="section-dropdown"> 
+                                <a href="#">
+                                    <div>
+                                        <i class="fa-solid fa-user"></i> 
+                                        Passenger details
+                                    </div>                               
+                                </a>
+                                <!-- <input class="dropdown-sub" type="checkbox" id="dropdown-sub" name="dropdown-sub"/>
+                                <label class="for-dropdown-sub" for="dropdown-sub">Dropdown Sub <i class="uil uil-plus"></i></label>
+                                <div class="section-dropdown-sub"> 
+                                    <a href="#">Dropdown Link <i class="uil uil-arrow-right"></i></a>
+                                    <a href="#">Dropdown Link <i class="uil uil-arrow-right"></i></a>
+                                </div> -->
+                                <a href="#">
+                                    <div>
+                                        <i class="fa-solid fa-ticket"></i>
+                                        Your bookings
+                                    </div>                               
+                                </a>
+                                <a href="/Account/Logout">
+                                    <div>
+                                        <i class="fa-solid fa-right-from-bracket"></i>
+                                        Sign out
+                                    </div>    
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>                  
+                    
+                }
+               
+            </div>
+        </div>     
+    </header>
+    @*<header class="fixed flex z-50 bg-gray-700 w-full bg-opacity-80 h-10 space-x-4 items-center text-white px-5">
         <div class="font-bold tracking-widest text-xl">MapApp</div>
         <div class="">Visualisation Client</div>
         <div class="flex pl-4 h-full content-center">
@@ -30,12 +108,12 @@
                 <a href="">About Us</a>
             </div>
         </div>
-    </header>
-    <div class="container max-w-full max-h-full max-h-screen z-40">
+    </header>*@
+   
         @RenderBody()
-    </div>
+    
 
-    <footer class="absolute bottom-0 flex z-50 bg-gray-800 w-full h-10 space-x-4 items-center text-white px-5">
+    @*<footer class="absolute bottom-0 flex z-50 bg-gray-800 w-full h-10 space-x-4 items-center text-white px-5">
         <div id="currentTime" class="font-bold tracking-widest text-xl"></div>
         <div id="currentLocalTime" class="font-bold tracking-widest text-base"></div>
 
@@ -59,7 +137,109 @@
                 <p id="ScaleInfo" class="font-bold text-base">1x</p>
             </div>
         </div>
-    </footer>
+    </footer>*@
+
+
+    <div id="RegForm" class="modal">
+       
+        <form class="modal-content animate RegistrationForm" asp-action="Register" asp-controller="Account" method="post">
+           
+            
+            <div class="ModalContainer">
+                <div class="RegistrationFormHeader">
+                    <h3 class="inlineLeft">Account creation</h3>
+                    <span onclick="document.getElementById('RegForm').style.display='none'" class="close inlineRight" title="Close Modal">×</span>
+                </div>
+
+                <div class="RegistrationFormMain">
+
+
+                    <div class="ModalCol ModalBorder">
+                        <div class="login-label"><b>Social Identity Login</b></div>
+                        <ul class="login-list">
+                            <li id="google">
+                                <a href="/login/google?returnUrl=/">Continue with Google</a>
+                            </li>                      
+                            <li id="okta">
+                                <a href="/login/okta?returnUrl=/">Continue with Okta</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ModalCol">
+
+                        <label><b>Email</b></label>
+                        <input type="text" placeholder="Enter Email" name="Email" required>
+
+                        <label><b>First name</b></label>
+                        <input type="text" placeholder="Enter First name" name="FirstName" required>
+         
+                        <label><b>Last name</b></label>
+                        <input type="text" placeholder="Enter Last name" name="LastName" required>
+         
+                        <label><b>Phone</b></label>
+                        <input type="text" placeholder="Enter Phone" name="PhoneNumber" required>
+         
+         
+                        <label><b>Password</b></label>
+                        <input type="Password" placeholder="Enter Password" name="psw" required>
+         
+                        <label><b>Repeat Password</b></label>
+                        <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+                        <input type="checkbox"> Remember me
+                        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+         
+                        <div class="clearfix">         
+                            <button type="submit" class="ModalSubmitButton">Sign Up</button>
+                        </div>
+                    </div>
+
+                   
+                </div>
+               
+            </div>
+        </form>
+    </div>
+
+    <div id="LogForm" class="modal">
+       
+        <form class="modal-content animate RegistrationForm" asp-action="Login" asp-controller="Account">
+           
+            
+            <div class="ModalContainer">
+                <div class="RegistrationFormHeader">
+                    <h3>Sign in</h3>
+                    <span onclick="document.getElementById('LogForm').style.display='none'" class="close" title="Close Modal">×</span>
+                </div>
+                <div class="RegistrationFormMain">
+                    <div class="ModalCol ModalBorder">
+                        <div class="login-label"><b>Social Identity Login</b></div>
+                        <ul class="login-list">
+                            <li id="google">
+                                <a href="/login/google?returnUrl=/home/index">Login with Google</a>
+                            </li>                      
+                            <li id="okta">
+                                <a href="/login/okta?returnUrl=/home/index"> Login with Okta</a>
+                            </li>
+                        </ul>
+                    </div>    
+                    <div class="ModalCol">
+                        
+                        <label><b>Email</b></label>
+                        <input type="text" placeholder="Enter Email" name="email" required>
+         
+                        <label><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" name="psw" required>
+         
+                        <div class="clearfix">         
+                            <button type="submit" class="ModalSubmitButton">Sign In</button>
+                        </div>
+                    </div>
+                </div>
+               
+               
+            </div>
+        </form>
+      </div>
 
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
@@ -69,19 +249,21 @@
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.10/pixi.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.10/pixi.min.js"></script>*@
 
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-pixi-overlay@1.8.2/L.PixiOverlay.min.js"></script>
-    <script src="~/js/BoundaryCanvas.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/leaflet-pixi-overlay@1.8.2/L.PixiOverlay.min.js"></script>*@
+    @*<script src="~/js/BoundaryCanvas.js"></script>*@
 
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
-    <script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script>
+    @*<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>*@
+    @*<script src="https://unpkg.com/leaflet-canvas-marker@0.2.0"></script>*@
 
 
-    <script src="~/js/AnimatedMarker.js"></script>
 
-    <script src="~/js/site.js"></script>
-    <script src="~/js/map1.js" asp-append-version="true"></script>
+    <script src="~/js/RegAuth.js"></script>
+    
+    @*<script src="~/js/AnimatedMarker.js"></script>*@
+    @*<script src="~/js/site.js"></script>*@
+    @*<script src="~/js/map.js" asp-append-version="true"></script>*@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

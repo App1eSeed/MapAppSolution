@@ -1,0 +1,234 @@
+
+.MenuBar{
+    background-color: rgb(89, 95, 108) !important;
+}
+
+.UndeHeader {
+    margin-top: 92px;
+    height: 50px;
+    width: 100%;
+    -webkit-box-shadow: 0px 14px 15px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 14px 15px 0px rgba(0,0,0,0.2);
+    position: fixed;
+    z-index: 50;
+}
+
+form {
+    width: 100%;
+    padding: 20px;
+    height: 45px;
+    margin: 0 0;
+    border-top: 0.5px solid rgba(178, 178, 178, 0.4);
+    background: rgb(83, 95, 113);
+}
+    input, select, textarea {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+
+    }
+    input[type = "text"] {
+    width: calc(100% - 10px);
+    padding: 6px 5px;
+    }
+    input[type = "date"] {
+        width: calc(100% - 10px);
+        padding: 5px 5px;
+        }
+
+    .RouteFormCityInput:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+    color:  #9672D3;
+    }
+    .RouteFormCityInput input:hover, .item select:hover, .item textarea:hover {
+    border: 1px solid transparent;
+    box-shadow: 0 0 3px 0  #9672D3;
+    color: #9672D3;
+    }
+
+    .RouteForm {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    padding-left: 15.5%;
+    }
+
+    .RouteFormCityInput{
+        width:15%;
+        padding: 5px;
+    }
+
+    .RouteFormDateInput{
+        width:10%;
+        padding: 5px;
+    }
+    
+
+
+    /* .btn-block {
+    margin-top: 10px;
+    text-align: center;
+    } */
+    .submButton {
+    width: 150px;
+    padding: 10px;
+    margin-left: 5px;
+    border: none;
+    border-radius: 5px; 
+    background:  rgba(55,65,81);
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    }
+    .submButton:hover {
+    background:   rgb(41, 49, 61);
+    color: #f1f2f6;
+    }
+
+
+
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    background-color: rgb(65, 77, 97) !important;
+    color: rgb(221, 221, 221) !important;
+    opacity: 0.8;
+}
+
+    .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover {
+        background-color: rgb(50, 59, 73) !important;
+        color: white !important;
+        opacity: 0.8;
+    }
+
+
+#map{
+    position: fixed !important;
+    top: 166px;
+    left: 55%;
+    
+    width: 30%;
+    height: 77vh;
+}
+
+
+.RouteBlock{
+    position: relative;
+    display:flex;
+    flex-direction: column;
+    width: 38%;
+    padding-top: 23vh;
+    margin-left: 15.5%;
+   }
+
+.Route{
+    display: block;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 9px;
+    height: 150px;
+    box-shadow: rgb(19 41 104 / 20%) 0px 2px 5px 0px;
+    transition: 0.3s;
+}
+
+.Route:hover{
+    background-color: rgb(252, 252, 252);
+    display: block;
+}
+.RoutesHeader{
+    margin-left: 5px;
+}
+.HeaderText{
+    color: #3b3958;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 10px 0;
+    
+}
+.RouteUnderHeaderText{
+    color: #3b3958;
+    font-size: 11px;
+    font-weight: 700;
+    margin: 5px 0;
+}
+
+.RouteResult{
+    color: #2F086D;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.RouteOperator{
+    color: #3b3958;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.RouteData{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.RouteData > *{
+    display: flex;
+}
+
+.Time{
+    color: #3b3958;
+    font-size: 22px;
+    font-weight: 700;
+
+}
+
+.Duration{
+    color: #a1a9c3;
+    font-size: 17px;
+    font-weight: 700;
+    justify-content: center;
+    align-items: center;
+}
+
+.RouteDataDirection{
+    display: flex;
+}
+.RouteDataDirection > *{
+display: flex;
+}
+
+.TimeLine {
+    height: 1px;
+    padding: 1px 17px ;
+    margin: auto 16px;
+    background-color: #a1a9c3;
+    -webkit-box-flex: 2;
+    -ms-flex-positive: 2;
+    flex-grow: 2;
+    
+   
+    border-radius: 1px;
+  
+}
+
+.DestinationPoint{
+    display: flex;
+    flex-direction: column;
+}
+
+.DestinationPointText{
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.PriceBlock{
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px ;
+}
+
+.Price{
+    color: #3b3958;
+    font-size: 25px;
+    font-weight: 700;
+}

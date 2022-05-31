@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "Routes offers";
+}
+
+
+    <link href="~/css/header.css" rel="stylesheet">
+    <link href="~/css/RoutesOffers.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+<div class="UndeHeader">
+
+      <div class="FormContainerForm">
+         <form class="RouteForm" action="/">
+               
+               <div class="RouteFormCityInput">
+                 <input id="fromCity" type="text" name="fromCity"  placeholder="From: city"/>
+               </div>
+               <div class="RouteFormCityInput">
+                 <input id="toCIty" type="text" name="toCIty" placeholder="To: city" required/>
+               </div>
+               <div class="RouteFormDateInput">
+                 <input id="depDate" type="date" name="depDate" required/>
+               </div>
+               <div class="RouteFormDateInput">
+                 <input id="arrDate" type="text" name="arrDate" placeholder="+ Add return"  onblur="(this.type='text')" onfocus="(this.type='date')" required/>
+               </div>
+               <div class="RouteFormDateInput btn-block">
+                 <button class="submButton" type="submit" href="/">Serch</button>
+               </div>
+     
+    
+           </form>
+     </div> 
+
+  </div>
+  <div id="map">
+
+  </div>
+    
+    <div class="RouteBlock InnerOffset">
+        <div class="RoutesHeader">
+          <p class="HeaderText">Select outbound</p>
+          <p class="RouteUnderHeaderText">Sorted by</p>
+          <p class="RouteUnderHeaderText">Cheap and fast dd</p>
+        </div>
+        <div class="Route">
+            <div class="RouteResult">CHEAPEST, FASTEST</div>
+            <div class="RouteOperator">Route operator1</div>
+            <div class="RouteData">
+              <div class="RouteDataDirection">
+                <div class="DestinationPoint">
+                  <div class="Time">18:30</div>
+                  <div class="DestinationPointText">London stanced Station</div>
+                </div>
+                <span class="TimeLine"></span>
+                <div class="Duration">1h30m</div>
+                <span class="TimeLine"></span>
+                <div class="DestinationPoint">
+                  <div class="Time">20:00</div>
+                  <div class="DestinationPointText">London stanced Station</div>
+                </div>
+                
+                <div class="PriceBlock">
+                  <div class="Price">$23</div>
+                </div>
+              </div>
+              <div class="RouteDataPrice">
+
+              </div>
+            </div>
+            <div class=""></div>
+        </div>
+        <div class="Route">
+          <div class="RouteResult">CHEAPEST, FASTEST</div>
+          <div class="RouteOperator">Route operator1</div>
+          <div class="RouteData">
+            <div class="RouteDataDirection">
+              <div class="DestinationPoint">
+                <div class="Time">18:30</div>
+                <div class="DestinationPointText">London stanced Station</div>
+              </div>
+              <span class="TimeLine"></span>
+              <div class="Duration">1h30m</div>
+              <span class="TimeLine"></span>
+              <div class="DestinationPoint">
+                <div class="Time">20:00</div>
+                <div class="DestinationPointText">London stanced Station</div>
+              </div>
+              
+              <div class="PriceBlock">
+                <div class="Price">23$</div>
+              </div>
+            </div>
+            <div class="RouteDataPrice">
+
+            </div>
+          </div>
+          <div class=""></div>
+      </div>
+      <div class="Route">
+        <div class="RouteResult">CHEAPEST, FASTEST</div>
+        <div class="RouteOperator">Route operator1</div>
+        <div class="RouteData">
+          <div class="RouteDataDirection">
+            <div class="DestinationPoint">
+              <div class="Time">18:30</div>
+              <div class="DestinationPointText">London stanced Station</div>
+            </div>
+            <span class="TimeLine"></span>
+            <div class="Duration">1h30m</div>
+            <span class="TimeLine"></span>
+            <div class="DestinationPoint">
+              <div class="Time">20:00</div>
+              <div class="DestinationPointText">London stanced Station</div>
+            </div>
+            
+            <div class="PriceBlock">
+              <div class="Price">23$</div>
+            </div>
+          </div>
+          <div class="RouteDataPrice">
+
+          </div>
+        </div>
+        <div class=""></div>
+    </div>
+    <div class="Route">
+      <div class="RouteResult">CHEAPEST, FASTEST</div>
+      <div class="RouteOperator">Route operator1</div>
+      <div class="RouteData">
+        <div class="RouteDataDirection">
+          <div class="DestinationPoint">
+            <div class="Time">18:30</div>
+            <div class="DestinationPointText">London stanced Station</div>
+          </div>
+          <span class="TimeLine"></span>
+          <div class="Duration">1h30m</div>
+          <span class="TimeLine"></span>
+          <div class="DestinationPoint">
+            <div class="Time">20:00</div>
+            <div class="DestinationPointText">London stanced Station</div>
+          </div>
+          
+          <div class="PriceBlock">
+            <div class="Price">23$</div>
+          </div>
+        </div>
+        <div class="RouteDataPrice">
+
+        </div>
+      </div>
+      <div class=""></div>
+  </div>
+    </div>
+    
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+
+<script src="~/js/rouesOffers.js"></script>

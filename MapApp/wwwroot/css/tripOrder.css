@@ -1,0 +1,268 @@
+.UndeHeader {
+    border-top: 0.5px solid rgba(178, 178, 178, 0.4);
+    height: 35px;
+    width: 100%;
+    -webkit-box-shadow: 0px 14px 15px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 14px 15px 0px rgba(0,0,0,0.1);
+    background-color: #9672D3;
+    padding: 10px;
+    margin-top: 92px;
+}
+
+.UnderHeaderContent{
+   
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items: center;
+    padding-left: 15%;
+}
+
+.UnderHeaderContent > div{
+    color: rgb(214, 210, 210);
+    font-size: 12pt;
+    font-weight: 700;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.UnderHeaderContentArrows{
+    margin-top: 5px;
+    width: 20px;
+    height: 20px;
+}
+
+.UnderHeaderContentCurrent{
+    color: rgb(255, 255, 255) !important;
+}
+
+.MainContent{
+    margin-top: 40px;
+    margin-left: 16.5%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3%;
+}
+    .Info{
+        width: 49%;
+        height: 100%;
+    }
+    .Content{
+        height: 100%;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: rgb(19 41 104 / 20%) 0px 2px 5px 0px;
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+        .ContentHeader{
+           
+            padding: 15px;
+           
+            padding-left: 15px;
+            border-bottom: 0.5px solid rgba(178, 178, 178, 0.4);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ContentHeaderText{
+            color:  #2F086D;
+            font-size: 16pt;
+            font-weight: 700;
+        }
+
+        .ContentHeaderPrefix{
+            color:  #6b617c;
+            font-size: 11pt;
+            font-weight: 500;
+            margin-left: auto;
+        }
+
+        .ContantMainPart{
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .ContantMainPart:last-child{
+            padding-bottom: 5px;
+          }
+          
+          .ContantMainPartItem{
+            display: flex;
+            flex-direction: row;
+            padding-bottom: 5px;
+          }
+
+  
+
+    .ToNextStage{
+        margin-top: 40px;
+    }
+
+    .ToNextStageButton{
+        width: 50%;
+        height: 50px;
+        background-color: rgba(55,65,81);
+        border-radius: 8px;
+        color: rgb(231, 230, 230);
+        font-size: 12pt;
+        font-weight: 600;
+    }
+
+    .ToNextStageButton:hover{
+        background-color: rgb(48, 56, 71);
+        color: rgb(255, 255, 255);
+    }
+
+    .CheckSum{
+        width: 30%;
+        height: 100%;
+        margin-left: 5%;
+        display: flex;
+        flex-direction: column;
+    }
+        .RoutesInfo{
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: rgba(32, 104, 19, 0.2) 0px 2px 5px 0px;
+            padding: 20px;
+            padding-bottom: 0px;
+        }
+        
+            .RouteOutbandInfo{                
+                display: flex;
+                flex-direction: row;
+                padding-bottom: 0px;
+                border-bottom: 0.5px solid rgba(178, 178, 178, 0.4);
+            }
+            .RouteReturnInfo{                
+                display: flex;
+                flex-direction: row;
+                padding-bottom: 0px;
+                padding-top: 15px;       
+            }
+
+                .RouteInfoContent{
+                    display: flex;
+                    flex-direction: column;
+                    padding-bottom: 15px;                
+                }
+
+                    .RouteInfoHeader{
+                        display: flex;
+                        flex-direction: row;
+                        color:  #4112cea4;
+                        font-size: 12pt;
+                        font-weight: 600;
+                        padding-bottom:10px ;
+                    }
+                        .RouteInfoHeader > i{
+                            padding-right: 5px;
+                        }
+
+                    .RouteInfoMain{
+                        display: flex;
+                        flex-direction: column;
+                        padding-bottom:15px ;
+                    }
+
+                        .RouteInfoMainDate{
+                            color:  #2F086D;
+                            font-size: 12pt;
+                            font-weight: 600;
+                            padding-bottom: 5px;
+                        }
+
+                        .RouteInfoMainContent{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                        }
+
+
+                            .RouteInfoMainContent > span{                            
+                                margin-right: 15px;
+                            }
+
+                            .RouteInfoMainContent > *{
+                                color:   #4112cea4;
+                                font-size: 11pt;
+                                font-weight: 600;
+                                line-height: 20px;
+                    
+                            }
+
+                    .RouteInfoTime{
+                        margin-left: auto;
+                        font-size: 10pt;
+                        font-weight: 500;
+                        color:  #7b7585;
+                    }
+
+            .RouteInfoDropDown{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 5px;
+            }
+
+                .RouteInfoDropDown > i{
+                    color: #8d8993b2;
+                }
+
+        .Busket{
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: rgba(32, 104, 19, 0.2) 0px 2px 5px 0px;
+            padding: 20px;
+        
+            display: flex;
+            flex-direction: column;
+        }
+
+            .BusketItems{
+                display: flex;
+                flex-direction: column;
+            }
+
+                .BusketItem{
+                    display: flex;
+                    flex-direction: row;
+                    padding-bottom: 10px;
+                    font-size: 14px;
+                    color: rgb(97, 66, 134);
+                }
+
+                    .BusketItemDescription{
+
+                    }
+
+                    .BusketItemPrice{
+                        margin-left: auto;
+                    }
+
+            .BusketTotal{
+                display: flex;
+                flex-direction: row;
+                color: rgb(19, 41, 104);
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+                .BusketTotalDescription{
+
+                }
+
+                .BusketTotalPrice{
+                    margin-left: auto;
+                }
+
+              
+
+        

@@ -1,0 +1,158 @@
+.ColumnMargin{
+    margin-left: 3%;
+}
+
+.ContantMainPartItem {
+    margin: 7px 0px;
+}
+.ContantMainPartItem input{
+    appearance: none;
+    box-sizing: border-box;
+    display: block;
+
+    color: rgb(66, 84, 134);
+    background-color: rgb(241, 242, 246);
+    border-radius: 8px;
+    border: 1px solid transparent;
+    height: 48px;
+    padding: 0px 16px;
+    font-size: 16px;
+    line-height: 24px;
+    transition: all 300ms ease 0s;
+}
+
+.ContantMainPartItem label{
+    margin: 0px;
+    padding: 0px;
+    text-align: left;
+    line-height: 24px;
+    color: rgb(66, 84, 134);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: default;
+}
+    .ContantMainPartItemFull{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+    }
+    .ContantMainPartItemCol{
+        display: flex;
+        flex-direction: column;
+        width: 50%;      
+    }
+
+    .ContantMainPartItemRow{
+        display: flex;
+        flex-direction: column;
+        width: 100%;  
+        
+    }
+    
+        .ContantMainDate{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+            .ContantMainDate > *{
+                margin-left: 5px;
+            }
+
+            .ContantMainDate span{
+                font-size: 14pt;
+                font-weight: 500;
+            }
+
+            .Month{
+                width: 25%;
+                margin-left: 0px;
+            }
+
+            .Day{
+                width: 25%;
+            }
+
+            .Year{
+                width: 50%;
+            }
+
+.ExternalLogin{
+    height: 100%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: rgb(19 41 104 / 20%) 0px 2px 5px 0px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+   
+    .ExternalLoginBlock{
+        display: flex;
+        flex-direction: row;
+    }
+        .ExternalLoginBlockDescription{
+            display: flex;
+            flex-direction: column;
+            width:70%;
+        }
+            .ExternalLoginBlockDescriptionHeader{
+                color:  #2F086D;
+                font-size: 16pt;
+                font-weight: 700;
+                padding-bottom: 5px;
+            }
+
+        .ExternalLoginBlockImg{
+            width: 30%;           
+        }
+            .ExternalLoginBlockImg img{
+                height: 80px;
+                width: 150px;
+  
+            }
+
+    .ExternalLoginButtons{
+
+        margin-top: 10px;
+        
+    }
+
+        .ExternalLoginButton{
+            border: 0.8px solid rgba(142, 121, 176, 0.4);
+            display: flex;
+            flex-direction: row;
+            width: 45%;           
+            padding: 15px 10px;
+            border-radius: 8px;          
+            color:  #390a85;
+            transition: 0.2s;
+        }
+
+            .ExternalLoginButton div{           
+                display: flex;
+                
+                font-size: 12pt;
+                font-weight: 600;  
+                align-items: center;          
+            }
+
+            .ExternalLoginButton:hover{
+                color: #2F086D;
+                background-color: rgb(244, 244, 244);
+            }
+
+            .ExternalLoginButtonLeft, .ExternalLoginButtonRight{
+                flex: 1;
+         
+            }
+
+          
+
+    
+
+
+        

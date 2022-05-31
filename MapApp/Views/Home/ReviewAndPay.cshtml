@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "Review and pay";
+}
+
+<link href="~/css/header.css" rel="stylesheet">
+<link href="~/css/tripOrder.css" rel="stylesheet">
+<link href="~/css/reviewAndPay.css" rel="stylesheet">
+<script src="https://kit.fontawesome.com/e3cd8d35d3.js" crossorigin="anonymous"></script>
+
+<div class="UndeHeader">
+
+        <div class="UnderHeaderContent">
+
+            <div  class="UnderHeaderContentCurrent"> Additional baggage</div>
+            <div><img src="~/images/RightArrow.png" alt="" class="UnderHeaderContentArrows"></div>
+            <div  class="UnderHeaderContentCurrent">Passenger details</div>
+            <div><img src="~/images/RightArrow.png" alt="" class="UnderHeaderContentArrows"></div>
+            <div  class="UnderHeaderContentCurrent">Review and pay</div> 
+        </div> 
+    </div> 
+    <div class="MainContent">
+        <div class="Info">
+            <div class="Content PassengerDetails">
+                <div class="ContentHeader">
+                    <div class="ContentHeaderText">Passenger details</div>
+                    <div class="ContentHeaderPrefix"></div>
+                </div>
+                <div class="ContantMainPart">
+                    <div class="PassengerData">
+                        <div class="UserName">Ilia Baliuk</div>
+                        <div class="ContentHeaderPrefix">Adult</div>
+                    </div>
+                    <div class="TicketAddress">
+                        <i class="fa-solid fa-ticket"></i>
+                        <div>Your ticket will be sen to ilia.baliuk@gmail.com</div>
+                    </div>
+                </div>     
+            </div>
+
+            <div class="Content">
+                <div class="ContentHeader">
+                    <div class="ContentHeaderText">Select payment method</div>
+                    <div class="ContentHeaderPrefix"></div>
+                </div>
+                <div class="ContantMainPart">
+                    <form class="ContantMainPart" action="">
+                        
+                        <div class="ContantMainPartItem">
+                            <div class="ContantMainPartItemFull"> 
+                                <label for="">Name on card</label>
+                                <input type="text">
+                            </div>
+                        
+                        </div>
+
+                        <div class="ContantMainPartItem">
+                            <div class="ContantMainPartItemFull"> 
+                                <label for="">Card number</label>
+                                <input type="text">
+                            </div>
+                        
+                        </div>
+
+
+                        <div class="ContantMainPartItem">
+                            <div class="ContantMainPartItemCol">
+                                <div class="ContantMainPartItemRow">
+                                    <label for="">Expiration date</label>
+                                    <input type="text">
+                                </div>
+                            </div>
+                            <div class="ContantMainPartItemCol ColumnMargin">
+                                <div class="ContantMainPartItemRow">
+                                    <label for="">CVV</label>
+                                    <input type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>    
+                </div>     
+            </div>
+            <div class="ToNextStage">
+                <button class="ToNextStageButton">Pay</button>
+            </div>
+        </div>
+       
+        <div class="CheckSum">
+            <div class="RoutesInfo">
+                <div class="RouteOutbandInfo">
+                    <div class="RouteInfoContent">
+                        <div class="RouteInfoHeader">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>Outbount</div>
+                        </div>
+                        <div class="RouteInfoMain">
+                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div class="RouteInfoMainContent">
+                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <span> — </span>
+                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                            </div>
+                        </div>
+                        <div class="RouteInfoTime">
+                            <div>2h15m • 0 transfers</div>
+                        </div>
+                    </div>
+                    <div class="RouteInfoDropDown">
+                        <i class="fa-solid fa-angle-down"></i>
+                        
+                    </div>
+                </div>
+    
+                <div class="RouteReturnInfo">
+                    <div class="RouteInfoContent">
+                        <div class="RouteInfoHeader">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>Return</div>
+                        </div>
+                        <div class="RouteInfoMain">
+                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div class="RouteInfoMainContent">
+                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <span> — </span>
+                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                            </div>
+                        </div>
+                        <div class="RouteInfoTime">
+                            <div>2h15m • 0 transfers</div>
+                        </div>
+                    </div>
+                    <div class="RouteInfoDropDown">
+                        <i class="fa-solid fa-angle-down"></i>
+                        
+                    </div>
+                </div>
+            </div>
+           <div class="Busket">
+               <div class="BusketItems">
+                    <div class="BusketItem">
+                        <div class="BusketItemDescription">Ticket(1 passanger)</div>
+                        <div class="BusketItemPrice">$12.40</div>
+                    </div>
+                    <div class="BusketItem">
+                        <div class="BusketItemDescription">Baggade upgrade</div>
+                        <div class="BusketItemPrice">$9.60</div>
+                    </div>
+               </div>
+               
+               <div class="BusketTotal">
+                   <div class="BusketTotalDescription">Total</div>
+                   <div class="BusketTotalPrice">$22</div>
+               </div>
+           </div>        
+        </div>
+
+        
+    </div>

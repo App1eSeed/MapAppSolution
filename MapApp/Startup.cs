@@ -1,6 +1,9 @@
 using MapApp.Models.EF;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -32,7 +37,49 @@ namespace MapApp
             services.AddDbContext<MapAppContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                // options.DefaultChallengeScheme = "okta";
 
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+            options =>
+            {
+                //Open Modal
+                options.LoginPath = "/Account/LoginReroute";
+                options.AccessDeniedPath = "/Home/Index";
+                
+            })
+            .AddOpenIdConnect("okta", options =>
+            {
+                options.Authority = "https://dev-6385717.okta.com";
+                options.ClientId = "0oa55awb7kjSH5Ysu5d7";
+                options.ClientSecret = "qd0CBl6x2VnJzv3KcVsrxVswpSIcWO-DvD-vA0Rj";
+                options.CallbackPath = "/okta-Auth";
+
+//                options.SignedOutCallbackPath = new PathString("http://localhost:44349");
+                options.ResponseType = "code";
+
+                options.GetClaimsFromUserInfoEndpoint = true;//!!
+
+
+
+                //options.SaveTokens = false;
+                //options.Scope.Add("openid");
+                //options.Scope.Add("profile");
+                //options.Events = new OpenIdConnectEvents()
+                //{
+                //    OnRedirectToIdentityProvider = async (context) =>
+                //    {
+                //        var redirectUri = context.ProtocolMessage.RedirectUri;
+                //        await Task.CompletedTask;
+                //    }
+                //};
+            });
+            
             services.AddMemoryCache();
         }
 
@@ -53,7 +100,7 @@ namespace MapApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

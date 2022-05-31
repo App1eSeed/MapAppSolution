@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Trip options";
+}
+
+<link href="~/css/header.css" rel="stylesheet">
+<link href="~/css/tripOrder.css" rel="stylesheet">
+<link href="~/css/tripOptions.css" rel="stylesheet">
+
+
+<div class="UndeHeader">
+
+        <div class="UnderHeaderContent">
+
+            <div class="UnderHeaderContentCurrent"> Additional baggage</div>
+            <div><img src="~/images/RightArrow.png" alt="" class="UnderHeaderContentArrows"></div>
+            <div>Passenger details</div>
+            <div><img src="~/images/RightArrow.png" alt="" class="UnderHeaderContentArrows"></div>
+            <div>Review and pay</div> 
+        </div> 
+    </div> 
+    <div class="MainContent">
+        <div class="Info">
+            <div class="Content">
+                <div class="ContentHeader">
+                    <div class="ContentHeaderText">Additional baggage</div>
+                </div>
+                <div class="Baggage">
+                    <form class="AdditionalBaggageForm" action="">
+                        <div class="AdditionalBaggageFormItem">
+                            <label class="AdditionalBaggageFormItemLabel" for="Animals">Animals, birds</label>
+                            <input name ="Animals"  type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox">
+                        </div>
+                        <div class="AdditionalBaggageFormItem">
+                            <label class="AdditionalBaggageFormItemLabel" for="Apparatus">Apparatus</label>
+                            <input name ="Apparatus"  type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox">
+                        </div>
+                        <div class="AdditionalBaggageFormItem">
+                            <label class="AdditionalBaggageFormItemLabel" for="ExcessOfStuff">Excess of stuff (more than 1 suitcase)</label>
+                            <input name ="ExcessOfStuff" type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox">
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+            <div class="ToNextStage">
+                <button class="ToNextStageButton">Go to passenger details</button>
+            </div>
+        </div>
+       
+        <div class="CheckSum">
+            <div class="RoutesInfo">
+                <div class="RouteOutbandInfo">
+                    <div class="RouteInfoContent">
+                        <div class="RouteInfoHeader">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>Outbount</div>
+                        </div>
+                        <div class="RouteInfoMain">
+                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div class="RouteInfoMainContent">
+                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <span> — </span>
+                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                            </div>
+                        </div>
+                        <div class="RouteInfoTime">
+                            <div>2h15m • 0 transfers</div>
+                        </div>
+                    </div>
+                    <div class="RouteInfoDropDown">
+                        <i class="fa-solid fa-angle-down"></i>
+                        
+                    </div>
+                </div>
+    
+                <div class="RouteReturnInfo">
+                    <div class="RouteInfoContent">
+                        <div class="RouteInfoHeader">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>Return</div>
+                        </div>
+                        <div class="RouteInfoMain">
+                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div class="RouteInfoMainContent">
+                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <span> — </span>
+                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                            </div>
+                        </div>
+                        <div class="RouteInfoTime">
+                            <div>2h15m • 0 transfers</div>
+                        </div>
+                    </div>
+                    <div class="RouteInfoDropDown">
+                        <i class="fa-solid fa-angle-down"></i>
+                        
+                    </div>
+                </div>
+            </div>
+           <div class="Busket">
+               <div class="BusketItems">
+                    <div class="BusketItem">
+                        <div class="BusketItemDescription">Ticket(1 passanger)</div>
+                        <div class="BusketItemPrice">$12.40</div>
+                    </div>
+                    <div class="BusketItem">
+                        <div class="BusketItemDescription">Baggade upgrade</div>
+                        <div class="BusketItemPrice">$9.60</div>
+                    </div>
+               </div>
+               
+               <div class="BusketTotal">
+                   <div class="BusketTotalDescription">Total</div>
+                   <div class="BusketTotalPrice">$22</div>
+               </div>
+           </div>        
+        </div>
+
+        
+    </div>

@@ -1,7 +1,62 @@
-﻿<div id="map" style="height: 100vh;z-index: 40;"></div>
+﻿
 
-<div id="InfoPanel" class=" absolute bottom-10 bg-gray-700 bg-opacity-60 z-50 w-full">
-    <div id="loader"></div>
-    <div id="Top" class=""></div>
-    <div id="Bottom"></div>
-</div>
+<link href="~/css/site.css" rel="stylesheet" />
+
+
+ <div class="FormContainer">
+        <div class="FormContainerImage">
+            <img src="~/images/pt_header_arrowgon_1920x700.jpg" class="img-fluid FormContainerImageT" alt="...">
+        </div>
+        <div class="FormContainerForm">
+            <form action="/">
+               
+                <div class="colums">
+                  <div class="item">
+
+                    <input id="fromCity" type="text" name="fromCity"  placeholder="From: city"/>
+                  </div>
+                  <div class="item">
+  
+                    <input id="toCIty" type="text" name="toCIty" placeholder="To: city" required/>
+                  </div>
+                  <div class="item">
+                    <input id="depDate" type="date" name="depDate" required/>
+                  </div>
+                  <div class="item">
+
+                    <input id="arrDate" type="text" name="arrDate" placeholder="+ Add return"  onblur="(this.type='text')" onfocus="(this.type='date')" required/>
+                  </div>
+                </div>
+                
+       
+                <div class="btn-block">
+                  <button class="submButton" type="submit" href="/Home/RoutesOffers">Serch</button>
+                </div>
+              </form>
+        </div>
+    </div>
+    
+    <div>
+        <div class="Main BlockOffset">
+            <div class="NewsBlock">
+
+                <div class="Article">
+                    <p class=" ArticleHeader">Article name</p>
+                    <img src="~/images/News.jpg" class="ArticleImg" alt="...">
+                    <p class="ArticleText">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore, tenetur expedita fugit ullam, mollitia nam perspiciatis corporis nesciunt adipisci dolor incidunt debitis modi a ex asperiores consequatur dolorem, nostrum vel.</p>
+                </div>
+                <div class="Article">
+                    <p class="ArticleHeader">Article name</p>
+                    <img src="~/images/News.jpg" class="ArticleImg" alt="...">
+                    <p class="ArticleText">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore, tenetur expedita fugit ullam, mollitia nam perspiciatis corporis nesciunt adipisci dolor incidunt debitis modi a ex asperiores consequatur dolorem, nostrum vel.</p>
+                </div>
+                 <div class="Article">
+                    <p class=" ArticleHeader">Article name</p>
+                    <img src="~/images/News.jpg" class="ArticleImg" alt="...">
+                    <p class="ArticleText">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore, tenetur expedita fugit ullam, mollitia nam perspiciatis corporis nesciunt adipisci dolor incidunt debitis modi a ex asperiores consequatur dolorem, nostrum vel.</p>
+                </div>
+            </div>
+            
+    
+        </div>
+    </div>

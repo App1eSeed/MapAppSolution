@@ -1,0 +1,179 @@
+.RegistrationForm {
+}
+
+    .RegistrationForm p {
+        margin: 0px;
+        font-size: 11pt;
+    }
+
+
+.RegistrationFormHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+    .RegistrationFormHeader > * {
+    }
+
+
+/*add full-width input fields*/
+.RegistrationForm input[type=text],
+input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 2px solid #ccc;
+    box-sizing: border-box;
+}
+/* set a style for all buttons*/
+button {
+    background-color: green;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    cursor: pointer;
+    width: 100%;
+}
+/*set styles for the cancel button*/
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #FF2E00;
+}
+/*float cancel and signup buttons and add an equal width*/
+.cancelbtn,
+.signupbtn {
+    float: left;
+    width: 50%
+}
+/*add padding to container elements*/
+.container {
+    padding: 16px;
+    padding-top: 0;
+}
+/*define the modal’s background*/
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+/*define the modal-content background*/
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto;
+    border: 1px solid #888;
+    width: 40%;
+}
+/*define the close button*/
+
+.close {
+    margin-left: auto;
+    color: #000;
+    font-size: 40px;
+    font-weight: bold;
+}
+    /*define the close hover and focus effects*/
+
+    .close:hover,
+    .close:focus {
+        color: red;
+        cursor: pointer;
+    }
+
+.ModalSubmitButton {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(55,65,81);
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .ModalSubmitButton:hover {
+        background: rgb(41, 49, 61);
+        color: #f1f2f6;
+    }
+
+
+.ModalContainer {
+    padding: 16px;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.RegistrationFormMain {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.ModalCol {
+    width: 50%;
+}
+
+.ModalBorder {
+    margin-right: 15px;
+    border-right: 0.5px solid rgba(82, 58, 90, 0.492);
+    padding-right: 15px;
+}
+
+#google {
+    background-color: #dd4b3c;
+}
+
+#facebook {
+    background-color: #3c5899;
+}
+
+#microsoft {
+    background-color: #044185;
+}
+
+#okta {
+    background-color: #1f7fb3;
+}
+
+.login-label {
+}
+
+.ModalContainer ul {
+    padding: 0;
+    margin: 8px 0;
+}
+
+    .ModalContainer ul > li {
+        list-style: none;
+        padding: 13px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        -webkit-box-shadow: -2px 4px 29px 9px rgba(0,0,0,0.05);
+        box-shadow: -2px 4px 29px 9px rgba(0,0,0,0.05);
+        cursor: pointer;
+    }
+
+        .ModalContainer ul > li a {
+            text-decoration: none;
+            color: rgb(236, 236, 236);
+        }
+
+        .ModalContainer ul > li:hover a {
+            color: rgb(255, 255, 255);
+        }
+
+

@@ -20,16 +20,21 @@ namespace MapApp.Models.EF
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
             //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
 
         }
         public MapAppContext()
         {
             //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
-
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<Transportation> Transportations { get; set; }
+        public DbSet<TransportationBusSeats> TransportationBusSeats { get; set; }
         public DbSet<Bus> Buses { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
@@ -44,7 +49,7 @@ namespace MapApp.Models.EF
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=DESKTOP-UJK1CNS;Database=MapAppDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-C6NQKSU;Database=MapAppDB;Trusted_Connection=True;");
             }
         }
        
@@ -71,22 +76,29 @@ namespace MapApp.Models.EF
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BusType>().HasData(new Country()
+            modelBuilder.Entity<BusType>().HasData(new BusType()
             {
                 Id = "1",
                 Name = "CityBus"
             },
-            new Country()
+            new BusType()
             {
                 Id = "2",
                 Name = "CountryBus"
 
             },
-            new Country()
+            new BusType()
             {
                 Id = "3",
                 Name = "InternationalBus"
             });
+
+            modelBuilder.Entity<UserRole>().HasData(new UserRole()
+            {
+                Id = "1",
+                Name = "User"
+            });
+
 
             //modelBuilder.Entity<Country>().HasData(new Country()
             //{
