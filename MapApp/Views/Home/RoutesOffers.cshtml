@@ -1,5 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Routes offers";
+    var test = ViewBag.RoutesOffers;
+    var test1 = ViewBag.RoutesOffers;
 }
 
 
@@ -8,24 +10,26 @@
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
+
+     
 <div class="UndeHeader">
 
       <div class="FormContainerForm">
-         <form class="RouteForm" action="/">
+         <form class="RouteForm" action="/Home/RoutesOffers">
                
                <div class="RouteFormCityInput">
-                 <input id="fromCity" type="text" name="fromCity"  placeholder="From: city"/>
+                 <input id="fromCity" type="text" name="fromCity"  placeholder="From: city" required/>
                </div>
                <div class="RouteFormCityInput">
-                 <input id="toCIty" type="text" name="toCIty" placeholder="To: city" required/>
+                 <input id="toCIty" type="text" name="toCity" placeholder="To: city" required/>
                </div>
                <div class="RouteFormDateInput">
-                 <input id="depDate" type="date" name="depDate" required/>
+                 <input id="depDate" type="date" name="departDate" required/>
                </div>
                <div class="RouteFormDateInput">
-                 <input id="arrDate" type="text" name="arrDate" placeholder="+ Add return"  onblur="(this.type='text')" onfocus="(this.type='date')" required/>
+                 <input id="arrDate" type="text" name="arrDate" placeholder="+ Add return"  onblur="(this.type='text')" onfocus="(this.type='date')" />
                </div>
-               <div class="RouteFormDateInput btn-block">
+               <div class=" btn-block">
                  <button class="submButton" type="submit" href="/">Serch</button>
                </div>
      
@@ -44,119 +48,44 @@
           <p class="RouteUnderHeaderText">Sorted by</p>
           <p class="RouteUnderHeaderText">Cheap and fast dd</p>
         </div>
-        <div class="Route">
+        @foreach(List<Route> routes in ViewBag.RoutesOffers)
+        {
+         
+        <div class="Route" id="@routes[0].BusId">
             <div class="RouteResult">CHEAPEST, FASTEST</div>
             <div class="RouteOperator">Route operator1</div>
             <div class="RouteData">
               <div class="RouteDataDirection">
                 <div class="DestinationPoint">
-                  <div class="Time">18:30</div>
-                  <div class="DestinationPointText">London stanced Station</div>
+                  <div class="Time">@routes[0].DepartTime.ToString(@"hh\:mm")</div>
+                  <div class="DestinationPointText">@routes[0].CityFrom</div>
                 </div>
                 <span class="TimeLine"></span>
-                <div class="Duration">1h30m</div>
-                <span class="TimeLine"></span>
+                <div class="Duration">@(routes[0].DepartTime < @routes[routes.Count-1].ArrivalTime? @routes[routes.Count-1].ArrivalTime - routes[0].DepartTime:routes[0].DepartTime -  @routes[routes.Count-1].ArrivalTime)</div>
+                  <span class="TimeLine"></span>
                 <div class="DestinationPoint">
-                  <div class="Time">20:00</div>
-                  <div class="DestinationPointText">London stanced Station</div>
+                  <div class="Time">@routes[routes.Count-1].ArrivalTime.ToString(@"hh\:mm")</div>
+                  <div class="DestinationPointText">@routes[routes.Count-1].CityTo</div>
                 </div>
                 
                 <div class="PriceBlock">
-                  <div class="Price">$23</div>
+                  <div class="Price">@routes.Sum(r => r.Price).ToString() Грн.</div>
                 </div>
               </div>
-              <div class="RouteDataPrice">
-
-              </div>
+              
             </div>
             <div class=""></div>
         </div>
-        <div class="Route">
-          <div class="RouteResult">CHEAPEST, FASTEST</div>
-          <div class="RouteOperator">Route operator1</div>
-          <div class="RouteData">
-            <div class="RouteDataDirection">
-              <div class="DestinationPoint">
-                <div class="Time">18:30</div>
-                <div class="DestinationPointText">London stanced Station</div>
-              </div>
-              <span class="TimeLine"></span>
-              <div class="Duration">1h30m</div>
-              <span class="TimeLine"></span>
-              <div class="DestinationPoint">
-                <div class="Time">20:00</div>
-                <div class="DestinationPointText">London stanced Station</div>
-              </div>
-              
-              <div class="PriceBlock">
-                <div class="Price">23$</div>
-              </div>
-            </div>
-            <div class="RouteDataPrice">
 
-            </div>
-          </div>
-          <div class=""></div>
-      </div>
-      <div class="Route">
-        <div class="RouteResult">CHEAPEST, FASTEST</div>
-        <div class="RouteOperator">Route operator1</div>
-        <div class="RouteData">
-          <div class="RouteDataDirection">
-            <div class="DestinationPoint">
-              <div class="Time">18:30</div>
-              <div class="DestinationPointText">London stanced Station</div>
-            </div>
-            <span class="TimeLine"></span>
-            <div class="Duration">1h30m</div>
-            <span class="TimeLine"></span>
-            <div class="DestinationPoint">
-              <div class="Time">20:00</div>
-              <div class="DestinationPointText">London stanced Station</div>
-            </div>
-            
-            <div class="PriceBlock">
-              <div class="Price">23$</div>
-            </div>
-          </div>
-          <div class="RouteDataPrice">
-
-          </div>
-        </div>
-        <div class=""></div>
+        }
+       
     </div>
-    <div class="Route">
-      <div class="RouteResult">CHEAPEST, FASTEST</div>
-      <div class="RouteOperator">Route operator1</div>
-      <div class="RouteData">
-        <div class="RouteDataDirection">
-          <div class="DestinationPoint">
-            <div class="Time">18:30</div>
-            <div class="DestinationPointText">London stanced Station</div>
-          </div>
-          <span class="TimeLine"></span>
-          <div class="Duration">1h30m</div>
-          <span class="TimeLine"></span>
-          <div class="DestinationPoint">
-            <div class="Time">20:00</div>
-            <div class="DestinationPointText">London stanced Station</div>
-          </div>
-          
-          <div class="PriceBlock">
-            <div class="Price">23$</div>
-          </div>
-        </div>
-        <div class="RouteDataPrice">
-
-        </div>
-      </div>
-      <div class=""></div>
-  </div>
-    </div>
-    
-
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-crossorigin=""></script>
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="~/js/rouesOffers.js"></script>
+   
 
-<script src="~/js/rouesOffers.js"></script>

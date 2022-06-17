@@ -19,6 +19,7 @@ map.on('zoomstart', function (e) {
 });
 
 map.on('moveend', throttle(function (e) {
+	console.log(map.getBounds());
 		setMarkersByBounds(map.getBounds());
 },2000));
 
@@ -69,7 +70,7 @@ var existingRoutes = [];
 function setMarkersByBounds(bounds) {
 
 
-	$.post("/Home/GetVisibleRoutes", {
+	$.post("/Map/GetVisibleRoutes", {
 		topLat: bounds._northEast.lat,
 		topLong: bounds._northEast.lng,
 		botLat: bounds._southWest.lat,
@@ -87,7 +88,7 @@ function setMarkersByBounds(bounds) {
 		if (result.length > 0) {
 
 			$.each(result, function (i, route) {
-				$.post("/Home/GetPath", { busId: route.busId, busDepartTime: route.departTime, sequence: route.sequence }, function (pathResult) {
+				$.post("/Map/GetPath", { busId: route.busId, busDepartTime: route.departTime, sequence: route.sequence }, function (pathResult) {
 					if (pathResult.pathCoords.length > 0) {
 
                     
@@ -127,7 +128,7 @@ function setMarkersByBounds(bounds) {
 							onEnd: function () {
 								let busId = route.busId;
 
-								$.post("/Home/GetPath", { busId: busId , sequence: this.options.sequenceForNext }, function (result)
+								$.post("/Map/GetPath", { busId: busId , sequence: this.options.sequenceForNext }, function (result)
 								{
 									console.log(result);
 									getWayToNextCity(result, busId);
@@ -161,7 +162,7 @@ function setMarkersByBounds(bounds) {
 
 //$.ajax({
 //	type: "Get",
-//	url: "/Home/GetAllCities",
+//	url: "/Map/GetAllCities",
 //	dataType: "json",
 //	success: function (result) {
 
@@ -266,7 +267,7 @@ function fillInfoPanel(busId,color) {
 		}
 	}, 1000);
 
-	$.post("/Home/FillInfoPanel", { busId: busId }, function (result) {
+	$.post("/Map/FillInfoPanel", { busId: busId }, function (result) {
 		setTimeout(function () {
 			$("#InfoPanel").html(result);
 			document.getElementById("InfoPanelMarker").style.backgroundColor = color;
@@ -346,7 +347,7 @@ function colourForBus(country){
 }
 
 function drawWay(color,busId) {
-	$.post("/Home/GetFullRoute", { busId: busId }, function (result) {
+	$.post("/Map/GetFullRoute", { busId: busId }, function (result) {
 
 		map.removeLayer(polyBusWayLine);
 			

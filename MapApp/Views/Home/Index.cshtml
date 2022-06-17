@@ -8,29 +8,29 @@
             <img src="~/images/pt_header_arrowgon_1920x700.jpg" class="img-fluid FormContainerImageT" alt="...">
         </div>
         <div class="FormContainerForm">
-            <form action="/">
+            <form action="/Home/RoutesOffers">
                
                 <div class="colums">
                   <div class="item">
 
-                    <input id="fromCity" type="text" name="fromCity"  placeholder="From: city"/>
+                    <input id="fromCity" type="text" name="fromCity"  placeholder="From: city" required/>
                   </div>
                   <div class="item">
   
                     <input id="toCIty" type="text" name="toCIty" placeholder="To: city" required/>
                   </div>
                   <div class="item">
-                    <input id="depDate" type="date" name="depDate" required/>
+                    <input id="departDate" type="date" name="departDate" required/>
                   </div>
                   <div class="item">
 
-                    <input id="arrDate" type="text" name="arrDate" placeholder="+ Add return"  onblur="(this.type='text')" onfocus="(this.type='date')" required/>
+                    <input id="arrDate" type="text" name="arrDate" placeholder="+ Add return"  onblur="(this.type='text')" onfocus="(this.type='date')" />
                   </div>
                 </div>
                 
        
                 <div class="btn-block">
-                  <button class="submButton" type="submit" href="/Home/RoutesOffers">Serch</button>
+                  <button class="submButton" type="submit">Serch</button>
                 </div>
               </form>
         </div>

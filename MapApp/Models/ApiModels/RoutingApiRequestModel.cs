@@ -9,7 +9,9 @@ namespace MapApp.Models.ApiRequestModels
     
     public class Locations
     {
+        //для поиска по координатам 
         public LatLng latLng { get; set; }
+        
     }
     public class RoutingApiRequestModel
     {

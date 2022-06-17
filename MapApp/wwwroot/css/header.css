@@ -91,7 +91,7 @@ a {
 
 .MenuRegistrationBlock > div {
     margin-right: 15px;
-    padding: 15px;
+   
 }
 
 .MenuRegistrationBlockUser {
@@ -142,7 +142,7 @@ a {
     position: relative;
     max-width: 100%;
     text-align: center;
-    z-index: 200;
+    z-index: 1200;
 }
 
     .sec-center [type="checkbox"]:checked,
@@ -306,7 +306,7 @@ a {
 .section-dropdown {
     position: fixed;
     background-color: white;
-    top: 100px;
+    top: 70px;
     right: 210px;
     width: 300px;
     border-radius: 4px;

@@ -20,13 +20,13 @@ namespace MapApp.Models.EF
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
 
         }
         public MapAppContext()
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public DbSet<UserRole> UserRoles { get; set; }
@@ -34,8 +34,10 @@ namespace MapApp.Models.EF
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Transportation> Transportations { get; set; }
-        public DbSet<TransportationBusSeats> TransportationBusSeats { get; set; }
+        public DbSet<TransportationWaypoint> TransportationWaypoints { get; set; }
+        public DbSet<TransportationWaipointSeat> TransportationBusSeats { get; set; }
         public DbSet<Bus> Buses { get; set; }
+        public DbSet<BusType> BusTypes{ get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<WayPointsSchedule> WayPointsSchedules { get; set; }
@@ -43,6 +45,7 @@ namespace MapApp.Models.EF
         public DbSet<Coords> Coords { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<News> News { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -79,18 +82,22 @@ namespace MapApp.Models.EF
             modelBuilder.Entity<BusType>().HasData(new BusType()
             {
                 Id = "1",
-                Name = "CityBus"
+                Name = "CityBus",
+                SeatsCount = 23
+                
             },
             new BusType()
             {
                 Id = "2",
-                Name = "CountryBus"
+                Name = "CountryBus",
+                SeatsCount = 33
 
             },
             new BusType()
             {
                 Id = "3",
-                Name = "InternationalBus"
+                Name = "InternationalBus",
+                SeatsCount = 50
             });
 
             modelBuilder.Entity<UserRole>().HasData(new UserRole()

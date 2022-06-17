@@ -6,8 +6,6 @@ namespace MapApp.Models.EF.Entities
     public class Order
     {
         public string Id { get; set; }
-        public string TransportationId { get; set; }
-        public Transportation Transportation { get; set; }
         public string OrderStatusId { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string UserEmail { get; set; }
@@ -22,5 +20,12 @@ namespace MapApp.Models.EF.Entities
         public bool ExcuseOfStuff { get; set; }
         public bool Apparatus { get; set; }
         public float TotalPrice { get; set; }
+
+        public List<TransportationWaipointSeat> TransportationWaipointSeats { get; set; }
+        public Order()
+        {
+            TransportationWaipointSeats = new List<TransportationWaipointSeat>();
+
+        }
     }
 }

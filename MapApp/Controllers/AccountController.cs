@@ -69,11 +69,7 @@ namespace MapApp.Controllers
             return new ChallengeResult(provider, authenticationProperties);
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)

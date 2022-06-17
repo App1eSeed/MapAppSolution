@@ -13,11 +13,15 @@ namespace MapApp.Models.EF.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string Operator { get; set; }
+        public string BusTypeId { get; set; }
         public BusType BusType { get; set; }
         public List<WayPointsSchedule> WayPointsSchedule { get; set; }
-        public int MyProperty { get; set; }
+        public string FromCity { get; set; }
+        public string ToCity { get; set; }
+        public List<Transportation> Transportations { get; set; }
         public Bus()
         {
+            Transportations = new List<Transportation>();
             WayPointsSchedule = new List<WayPointsSchedule>();
         }
     }

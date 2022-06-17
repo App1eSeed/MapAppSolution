@@ -28,5 +28,11 @@ namespace MapApp.Models.EF.Entities
         public float Latitude { get; set; }
         public int Population { get; set; }
         public Capital Capital { get; set; }
+
+        public City()
+        {
+            Capital = Capital.admin;
+            Population = 0;
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace MapApp.Models.EF.Entities
         public string PathId { get; set; }
         public Path Path { get; set; }
         public int Sequence { get; set; }
+        public decimal Price { get; set; }
         public TimeSpan CityFromDepartTime { get; set; }
         public int CityFromDepartTimeInSec { get; set; }
         public TimeSpan CityToArrivalTime { get; set; }
