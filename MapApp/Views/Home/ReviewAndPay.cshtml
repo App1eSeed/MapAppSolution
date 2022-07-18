@@ -32,7 +32,7 @@
                     </div>
                     <div class="TicketAddress">
                         <i class="fa-solid fa-ticket"></i>
-                        <div>Your ticket will be sen to ilia.baliuk@gmail.com</div>
+                        <div>Your ticket will be send to ilia.baliuk@gmail.com</div>
                     </div>
                 </div>     
             </div>
@@ -42,46 +42,68 @@
                     <div class="ContentHeaderText">Select payment method</div>
                     <div class="ContentHeaderPrefix"></div>
                 </div>
-                <div class="ContantMainPart">
-                    <form class="ContantMainPart" action="">
+                <div >
+                    
+                    <div class="accordion">
+                      
+                        <dt>
+                          <a id="0" style="border-top: none;" href="#accordion1" aria-expanded="false" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger">Card payment</a>
+                        </dt>
+                        <dd  class="accordion-content accordionItem is-collapsed" id="accordion1" aria-hidden="true">
+                            <div style="padding-bottom: 15px ;" class="ContantMainPart">
+                                <form class="ContantMainPart" action="">
+                                    
+                                    <div class="ContantMainPartItem">
+                                        <div class="ContantMainPartItemFull"> 
+                                            <label for="">Name on card</label>
+                                            <input type="text">
+                                        </div>
+                                    
+                                    </div>
+            
+                                    <div class="ContantMainPartItem">
+                                        <div class="ContantMainPartItemFull"> 
+                                            <label for="">Card number</label>
+                                            <input type="text">
+                                        </div>
+                                    
+                                    </div>
+            
+            
+                                    <div class="ContantMainPartItem">
+                                        <div class="ContantMainPartItemCol">
+                                            <div class="ContantMainPartItemRow">
+                                                <label for="">Expiration date</label>
+                                                <input type="date">
+                                            </div>
+                                        </div>
+                                        <div class="ContantMainPartItemCol ColumnMargin">
+                                            <div class="ContantMainPartItemRow">
+                                                <label for="">CVV</label>
+                                                <input type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                </form>    
+                            </div>
+                        </dd>
+                        <dt>
+                          <a id="1" href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">
+                            Cash on boarding</a>
+                        </dt>
+                        <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
+                        </dd>
                         
-                        <div class="ContantMainPartItem">
-                            <div class="ContantMainPartItemFull"> 
-                                <label for="">Name on card</label>
-                                <input type="text">
-                            </div>
-                        
-                        </div>
-
-                        <div class="ContantMainPartItem">
-                            <div class="ContantMainPartItemFull"> 
-                                <label for="">Card number</label>
-                                <input type="text">
-                            </div>
-                        
-                        </div>
-
-
-                        <div class="ContantMainPartItem">
-                            <div class="ContantMainPartItemCol">
-                                <div class="ContantMainPartItemRow">
-                                    <label for="">Expiration date</label>
-                                    <input type="text">
-                                </div>
-                            </div>
-                            <div class="ContantMainPartItemCol ColumnMargin">
-                                <div class="ContantMainPartItemRow">
-                                    <label for="">CVV</label>
-                                    <input type="text">
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>    
-                </div>     
+                      
+                    </div>
+                  </div>    
             </div>
+            <from id="HomeForm" action="/Home/Index">
+
+            </from> 
             <div class="ToNextStage">
-                <button class="ToNextStageButton">Pay</button>
+                <button class="ToNextStageButton" onclick="makeOrder()">Make booking</button>
             </div>
         </div>
        
@@ -94,14 +116,14 @@
                             <div>Outbount</div>
                         </div>
                         <div class="RouteInfoMain">
-                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div id="RouteInfoMainDateOut" class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
                             <div class="RouteInfoMainContent">
-                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <div id="RouteInfoMainContentStationOut1" class="RouteInfoMainContentStation">London Gatwick Station</div>
                                 <span> — </span>
-                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                                <div id="RouteInfoMainContentStationOut2" class="RouteInfoMainContentStation">Florence Peretola Station</div>
                             </div>
                         </div>
-                        <div class="RouteInfoTime">
+                        <div id="RouteInfoTimeOut" class="RouteInfoTime">
                             <div>2h15m • 0 transfers</div>
                         </div>
                     </div>
@@ -110,49 +132,48 @@
                         
                     </div>
                 </div>
-    
-                <div class="RouteReturnInfo">
-                    <div class="RouteInfoContent">
-                        <div class="RouteInfoHeader">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <div>Return</div>
-                        </div>
-                        <div class="RouteInfoMain">
-                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
-                            <div class="RouteInfoMainContent">
-                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
-                                <span> — </span>
-                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                @if (ViewBag.ReturnalDate != null)
+                {
+                    <div class="RouteReturnInfo">
+                        <div class="RouteInfoContent">
+                            <div class="RouteInfoHeader">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>Return</div>
+                            </div>
+                            <div class="RouteInfoMain">
+                                <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                                <div class="RouteInfoMainContent">
+                                    <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                    <span> — </span>
+                                    <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                                </div>
+                            </div>
+                            <div class="RouteInfoTime">
+                                <div>2h15m • 0 transfers</div>
                             </div>
                         </div>
-                        <div class="RouteInfoTime">
-                            <div>2h15m • 0 transfers</div>
+                        <div class="RouteInfoDropDown">
+                            <i class="fa-solid fa-angle-down"></i>
+
                         </div>
                     </div>
-                    <div class="RouteInfoDropDown">
-                        <i class="fa-solid fa-angle-down"></i>
-                        
-                    </div>
-                </div>
+                }
             </div>
            <div class="Busket">
-               <div class="BusketItems">
-                    <div class="BusketItem">
-                        <div class="BusketItemDescription">Ticket(1 passanger)</div>
-                        <div class="BusketItemPrice">$12.40</div>
-                    </div>
-                    <div class="BusketItem">
-                        <div class="BusketItemDescription">Baggade upgrade</div>
-                        <div class="BusketItemPrice">$9.60</div>
-                    </div>
+               <div id="BusketItems" class="BusketItems">
+                    
                </div>
                
-               <div class="BusketTotal">
+               <div id="BusketTotal" class="BusketTotal">
                    <div class="BusketTotalDescription">Total</div>
-                   <div class="BusketTotalPrice">$22</div>
+                   <div class="BusketTotalPrice">0 hrn.</div>
                </div>
            </div>        
         </div>
 
         
     </div>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+ <script src="~/js/checkControl.js"></script>
+  <script src="~/js/reviewAndPay.js"></script>

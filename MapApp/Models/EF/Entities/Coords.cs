@@ -12,9 +12,12 @@ namespace MapApp.Models.EF.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
         public string PathId { get; set; }
         public Path Path { get; set; }
+        [Required]
         public float Longtitude { get; set; }
+        [Required]
         public float Latitude { get; set; }
     }
 }

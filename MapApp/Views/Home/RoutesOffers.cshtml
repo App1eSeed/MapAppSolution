@@ -1,12 +1,12 @@
-﻿@{
+﻿@using System.Globalization
+@{
     ViewData["Title"] = "Routes offers";
-    var test = ViewBag.RoutesOffers;
-    var test1 = ViewBag.RoutesOffers;
 }
 
 
-    <link href="~/css/header.css" rel="stylesheet">
+  
     <link href="~/css/RoutesOffers.css" rel="stylesheet">
+    <link href="~/css/autoSearch.css" rel="stylesheet" />
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
@@ -15,13 +15,13 @@
 <div class="UndeHeader">
 
       <div class="FormContainerForm">
-         <form class="RouteForm" action="/Home/RoutesOffers">
+         <form autocomplete="off" class="RouteForm" action="/Home/RoutesOffers">
                
-               <div class="RouteFormCityInput">
+               <div class="RouteFormCityInput autocomplete">
                  <input id="fromCity" type="text" name="fromCity"  placeholder="From: city" required/>
                </div>
-               <div class="RouteFormCityInput">
-                 <input id="toCIty" type="text" name="toCity" placeholder="To: city" required/>
+               <div class="RouteFormCityInput autocomplete">
+                 <input id="toCity" type="text" name="toCity" placeholder="To: city" required/>
                </div>
                <div class="RouteFormDateInput">
                  <input id="depDate" type="date" name="departDate" required/>
@@ -48,12 +48,35 @@
           <p class="RouteUnderHeaderText">Sorted by</p>
           <p class="RouteUnderHeaderText">Cheap and fast dd</p>
         </div>
+        <script>
+            var routes = [];
+            var listRoute;
+         </script>
         @foreach(List<Route> routes in ViewBag.RoutesOffers)
         {
-         
-        <div class="Route" id="@routes[0].BusId">
+
+            var transpDuration = (routes[0].DepartTime < @routes[routes.Count-1].ArrivalTime ?
+                   new TimeSpan((routes[routes.Count-1].ArrivalTime - routes[0].DepartTime).Hours,(routes[routes.Count-1].ArrivalTime - routes[0].DepartTime).Minutes,(routes[routes.Count-1].ArrivalTime - routes[0].DepartTime).Seconds)   :
+                   new TimeSpan(@*(routes[0].ArrivalDate - routes[0].DepartDate).Days*@24 - (routes[0].DepartTime -  routes[routes.Count-1].ArrivalTime).Hours,(routes[0].DepartTime -  routes[routes.Count-1].ArrivalTime).Minutes,(routes[0].DepartTime -  routes[routes.Count-1].ArrivalTime).Seconds) );
+         <script>
+             @*Need fix date from trans id for all route and need to be for part of route!!*@
+             listRoute = {
+		            transportationId: '@routes[0].TransportationId',
+		            fromCity: '@routes[0].CityFrom',
+		            fromCityTime: '@routes[0].DepartDate.Add(@routes[0].DepartTime).ToString("H:mm")',
+                    fromCityDate: '@routes[0].DepartDate.ToString("ddd, MMM d", new CultureInfo("en-US"))',
+		            toCity: '@routes[routes.Count-1].CityTo',
+		            toCityTime: '@routes[routes.Count-1].ArrivalDate.Add(@routes[routes.Count-1].ArrivalTime).ToString("H:mm")',
+                    toCityDate: '@routes[routes.Count-1].ArrivalDate.ToString("ddd, MMM d", new CultureInfo("en-US"))',
+		            tripDuration: '@transpDuration',
+		            fullPrice: '@routes.Sum(r => r.Price)',
+		            departDate: '@routes[0].DepartDate.ToString("dd MMM yyyy")'
+                }
+            routes['@routes[0].TransportationId'] = listRoute;
+         </script>
+        <div class="Route" id="@routes[0].TransportationId">
             <div class="RouteResult">CHEAPEST, FASTEST</div>
-            <div class="RouteOperator">Route operator1</div>
+            <div class="RouteOperator">@routes[0].BusOperator</div>
             <div class="RouteData">
               <div class="RouteDataDirection">
                 <div class="DestinationPoint">
@@ -61,7 +84,7 @@
                   <div class="DestinationPointText">@routes[0].CityFrom</div>
                 </div>
                 <span class="TimeLine"></span>
-                <div class="Duration">@(routes[0].DepartTime < @routes[routes.Count-1].ArrivalTime? @routes[routes.Count-1].ArrivalTime - routes[0].DepartTime:routes[0].DepartTime -  @routes[routes.Count-1].ArrivalTime)</div>
+                <div class="Duration">@transpDuration</div>
                   <span class="TimeLine"></span>
                 <div class="DestinationPoint">
                   <div class="Time">@routes[routes.Count-1].ArrivalTime.ToString(@"hh\:mm")</div>
@@ -69,12 +92,110 @@
                 </div>
                 
                 <div class="PriceBlock">
-                  <div class="Price">@routes.Sum(r => r.Price).ToString() Грн.</div>
+                  <div class="Price">@routes.Sum(r => r.Price).ToString() hrn.</div>
                 </div>
               </div>
               
             </div>
-            <div class=""></div>
+             <div  class = "HidderRoutePart">
+              <div class="WaypointTimes HiddenRoutePartCol">
+                @if(routes.Count == 1)
+                {
+                     <div class="WaypointTime">
+                                <div class="WaypointTimeDuration">@routes[0].DepartTime</div>
+                      </div>
+                      <div class="WaypointTime">
+                                <div class="WaypointTimeDuration">@routes[0].ArrivalTime</div>                             
+                      </div>
+                }
+                else
+                {
+                      for(int i = 0; i < routes.Count; i++)
+                      {
+                        if(i == 0)
+                        {
+                            <div class="WaypointTime">
+                                <div class="WaypointTimeDuration">@routes[i].DepartTime</div>
+                            </div>
+                        }
+                        if(i < routes.Count - 1 && i > 0)
+                        {
+                            <div class="WaypointTime">
+                                <div class="WaypointTimeDuration">@routes[i].DepartTime</div>
+                                <div class="WaypointTimePause">@((routes[i].DepartTime - routes[i-1].ArrivalTime).ToString(@"mm\:ss"))</div>
+                            </div>
+                        }
+                        else if(i == routes.Count - 1)
+                        {
+                            <div class="WaypointTime">
+                                <div class="WaypointTimeDuration">@routes[i].DepartTime</div>
+                                <div class="WaypointTimePause">@((routes[i].DepartTime - routes[i-1].ArrivalTime).ToString(@"mm\:ss"))</div>
+                            </div>
+                            <div class="WaypointTime">
+                                <div class="WaypointTimeDuration">@routes[i].ArrivalTime</div>                             
+                            </div>
+                        }
+                        
+                      }  
+                    }
+                  
+                  
+                 
+                  
+              </div>
+              <div class="WaypointTimeline HiddenRoutePartCol">
+                  @for(int i = 0; i <= routes.Count; i++){
+                    if (i != routes.Count)
+                    {
+                         <div class="VerticalTimeline "></div>   
+                    }
+                    else
+                    {
+                        <div class="VerticalTimelineEndPoint "></div> 
+                    }
+                        
+                  }
+                  
+              </div>
+              <div class="WaypointsInfo HiddenRoutePartCol">
+                  @for(int i = 0; i < routes.Count; i++){
+                        if (i != routes.Count - 1)
+                        {
+                            <div class="WaypointInfo ">
+                                <div class="WaypointInfoMainText">@routes[i].CityFrom</div>                  
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="WaypointInfo ">
+                                <div class="WaypointInfoMainText">@routes[i].CityFrom</div>                  
+                            </div>
+                            <div class="WaypointInfo ">
+                                <div class="WaypointInfoMainText">@routes[i].CityTo</div>                  
+                            </div>
+                        }    
+                    }
+                 
+                 
+                 
+              </div>
+                
+            </div>   
+            <form action="/Home/TripOptions" class="ToNextStage" method="post">
+                <div style="display:none">
+                    <input type="text" name="transportationId" value=@routes[0].TransportationId>
+                    <input type="text" name="fromCity" value=@(routes[0].CityFrom)>
+                    <input type="text" name="toCity" value='@(routes[routes.Count-1].CityTo.ToString())'>
+                </div> 
+               
+                <div id=@routes[0].TransportationId >
+                    <button type="submit" class="ToNextStageButton" >
+                        <div class="ToNextStageButtonText">Select this journay</div>
+                        <div class="ToNextStageButtonPrice">@routes.Sum(r => r.Price).ToString() hrn.</div>
+                    </button>
+                </div>
+            </form>    
+            
         </div>
 
         }
@@ -87,5 +208,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="~/js/rouesOffers.js"></script>
+    <script src="~/js/autoSerach.js"></script>
    
 

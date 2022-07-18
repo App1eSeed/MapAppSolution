@@ -12,7 +12,9 @@ namespace MapApp.Models.EF.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int SeatsCount { get; set; }
         public List<Bus> Buses { get; set; }
         public BusType()

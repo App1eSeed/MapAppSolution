@@ -12,9 +12,12 @@ namespace MapApp.Models.EF.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        [Required]
         public string WayPointsScheduleId { get; set; }
         public WayPointsSchedule WayPointsSchedule { get; set; }
+        [Required]
         public DayOfWeek ArrivalDay { get; set; }
+        [Required]
         public DayOfWeek DepartDay { get; set; }
 
     }

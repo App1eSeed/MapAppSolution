@@ -2,7 +2,6 @@
     ViewData["Title"] = "Trip options";
 }
 
-<link href="~/css/header.css" rel="stylesheet">
 <link href="~/css/tripOrder.css" rel="stylesheet">
 <link href="~/css/tripOptions.css" rel="stylesheet">
 
@@ -20,31 +19,50 @@
     </div> 
     <div class="MainContent">
         <div class="Info">
+            <div class="Content SeatForm">
+                    <div class="ContentHeader">
+                        <div class="ContentHeaderText">Seat selection</div>
+                       
+                    </div>
+                    <div class="SeatSelector">
+                        <span class="dropdown-el">
+                            @foreach (var seat in ViewBag.FreeSeats)
+                            {
+                                <input type="radio" name="SeatsNumbers" value='@("Seat number " + seat)' id=@seat ><label for=@seat  onclick="updateLocalStorageSeatNumber(@seat)">@("Seat number " + seat)</label>
+                            }
+                           
+                            
+                        </span>
+                    </div>             
+                </div>
             <div class="Content">
                 <div class="ContentHeader">
                     <div class="ContentHeaderText">Additional baggage</div>
                 </div>
                 <div class="Baggage">
                     <form class="AdditionalBaggageForm" action="">
-                        <div class="AdditionalBaggageFormItem">
-                            <label class="AdditionalBaggageFormItemLabel" for="Animals">Animals, birds</label>
-                            <input name ="Animals"  type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox">
-                        </div>
-                        <div class="AdditionalBaggageFormItem">
-                            <label class="AdditionalBaggageFormItemLabel" for="Apparatus">Apparatus</label>
-                            <input name ="Apparatus"  type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox">
-                        </div>
-                        <div class="AdditionalBaggageFormItem">
-                            <label class="AdditionalBaggageFormItemLabel" for="ExcessOfStuff">Excess of stuff (more than 1 suitcase)</label>
-                            <input name ="ExcessOfStuff" type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox">
-                        </div>
+                        
+                        @foreach(var service in ViewBag.Services)
+                        {
+
+                            
+                            <div class="AdditionalBaggageFormItem">
+                                <label class="AdditionalBaggageFormItemLabel" for='@service.Name'>@service.Name</label>
+                                <input name ='@service.Name'  type="checkbox" class="switch_1 AdditionalBaggageFormItemCheckBox" onclick="updateLocalStorageServices(this,@service.Id,'@service.Name',@service.Price)">
+                            </div>
+                           
+                        }
+                       
                     </form>
                 </div>
                 
             </div>
-            <div class="ToNextStage">
+            <form action="/Home/PassengerDetails">
+                <div class="ToNextStage">
                 <button class="ToNextStageButton">Go to passenger details</button>
-            </div>
+                </div>
+            </form>
+            
         </div>
        
         <div class="CheckSum">
@@ -56,14 +74,14 @@
                             <div>Outbount</div>
                         </div>
                         <div class="RouteInfoMain">
-                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div id="RouteInfoMainDateOut" class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
                             <div class="RouteInfoMainContent">
-                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <div id="RouteInfoMainContentStationOut1" class="RouteInfoMainContentStation">London Gatwick Station</div>
                                 <span> — </span>
-                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                                <div id="RouteInfoMainContentStationOut2" class="RouteInfoMainContentStation">Florence Peretola Station</div>
                             </div>
                         </div>
-                        <div class="RouteInfoTime">
+                        <div id="RouteInfoTimeOut" class="RouteInfoTime">
                             <div>2h15m • 0 transfers</div>
                         </div>
                     </div>
@@ -72,8 +90,9 @@
                         
                     </div>
                 </div>
-    
-                <div class="RouteReturnInfo">
+                @if (ViewBag.ReturnalDate != null)
+                {
+                    <div class="RouteReturnInfo">
                     <div class="RouteInfoContent">
                         <div class="RouteInfoHeader">
                             <i class="fa-solid fa-circle-check"></i>
@@ -96,9 +115,11 @@
                         
                     </div>
                 </div>
+                }
+                
             </div>
            <div class="Busket">
-               <div class="BusketItems">
+               <div id="BusketItems" class="BusketItems">
                     <div class="BusketItem">
                         <div class="BusketItemDescription">Ticket(1 passanger)</div>
                         <div class="BusketItemPrice">$12.40</div>
@@ -109,7 +130,7 @@
                     </div>
                </div>
                
-               <div class="BusketTotal">
+               <div id="BusketTotal" class="BusketTotal">
                    <div class="BusketTotalDescription">Total</div>
                    <div class="BusketTotalPrice">$22</div>
                </div>
@@ -118,3 +139,7 @@
 
         
     </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="~/js/checkControl.js"></script>
+   <script src="~/js/tripOrder.js"></script>
+  

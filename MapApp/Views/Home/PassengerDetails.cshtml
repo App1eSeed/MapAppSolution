@@ -44,18 +44,19 @@
                     
                 </div>
             </div>
+            <form class=" " action="/Home/ReviewAndPay" method="post">
             <div class="Content">
                 <div class="ContentHeader">
                     <div class="ContentHeaderText">Main passanger</div>
                     <div class="ContentHeaderPrefix">Adult</div>
                 </div>
                 <div class="PassengerDetails">
-                    <form class="ContantMainPart" action="">
-                        
+                    
+                        <div class="ContantMainPart">
                         <div class="ContantMainPartItem">
                             <div class="ContantMainPartItemFull"> 
                                 <label for="">Email address</label>
-                                <input type="text">
+                                <input name = "email" type="text" onchange="updateLocalStorage(this)" required>
                             </div>
                         
                         </div>
@@ -63,13 +64,13 @@
                             <div class="ContantMainPartItemCol">
                                 <div class="ContantMainPartItemRow">
                                     <label for="">First name</label>
-                                    <input type="text">
+                                    <input name = "fname" type="text" onchange="updateLocalStorage(this)" required>
                                 </div>
                             </div>
                             <div class="ContantMainPartItemCol ColumnMargin">
                                 <div class="ContantMainPartItemRow">
                                     <label for="">Last name</label>
-                                    <input type="text">
+                                    <input name = "lname" type="text" onchange="updateLocalStorage(this)" required>
                                 </div>
                             </div>
                         </div>
@@ -77,26 +78,31 @@
                             <div class="ContantMainPartItemCol">
                                 <div class="ContantMainPartItemRow">
                                     <label for="">Phone</label>
-                                    <input type="text">
+                                    <input name = "phone" type="text" onchange="updateLocalStorage(this)" required>
                                 </div>
                             </div>
                             <div class="ContantMainPartItemCol ColumnMargin">
                                 <div class="ContantMainPartItemRow">
                                     <label for="">Date of birth</label>
                                     <div class="ContantMainDate">
-                                        <input class="Month"  type="text" placeholder="MM"><span>/</span>
-                                        <input class="Day"  type="text" placeholder="DD"><span>/</span>
-                                        <input class="Year"  type="text" placeholder="YYYY">
+                                        <input class="Month" name = "month"  type="text" placeholder="MM" onchange="updateLocalStorage(this)" required>
+                                        <span>/</span>
+                                        <input class="Day" name = "day"  type="text" placeholder="DD" onchange="updateLocalStorage(this)" required>
+                                        <span>/</span>
+                                        <input class="Year" name = "year"  type="text" placeholder="YYYY" onchange="updateLocalStorage(this)" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>    
+                       </div>
                 </div>     
             </div>
-            <div class="ToNextStage">
-                <button class="ToNextStageButton">Review journey details</button>
-            </div>
+           
+                <div class="ToNextStage">
+                    <button class="ToNextStageButton">Review journey details</button>
+                </div>
+            </form>
+            
         </div>
        
         <div class="CheckSum">
@@ -108,14 +114,14 @@
                             <div>Outbount</div>
                         </div>
                         <div class="RouteInfoMain">
-                            <div class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
+                            <div id="RouteInfoMainDateOut" class="RouteInfoMainDate">Thu, May 19 10:00 AM – 1:15 PM</div>
                             <div class="RouteInfoMainContent">
-                                <div class="RouteInfoMainContentStation">London Gatwick Station</div>
+                                <div id="RouteInfoMainContentStationOut1" class="RouteInfoMainContentStation">London Gatwick Station</div>
                                 <span> — </span>
-                                <div class="RouteInfoMainContentStation">Florence Peretola Station</div>
+                                <div id="RouteInfoMainContentStationOut2" class="RouteInfoMainContentStation">Florence Peretola Station</div>
                             </div>
                         </div>
-                        <div class="RouteInfoTime">
+                        <div id="RouteInfoTimeOut" class="RouteInfoTime">
                             <div>2h15m • 0 transfers</div>
                         </div>
                     </div>
@@ -124,7 +130,8 @@
                         
                     </div>
                 </div>
-    
+                @if (ViewBag.ReturnalDate != null)
+            {
                 <div class="RouteReturnInfo">
                     <div class="RouteInfoContent">
                         <div class="RouteInfoHeader">
@@ -145,28 +152,26 @@
                     </div>
                     <div class="RouteInfoDropDown">
                         <i class="fa-solid fa-angle-down"></i>
-                        
+
                     </div>
                 </div>
-            </div>
+            }
+        </div>
            <div class="Busket">
-               <div class="BusketItems">
-                    <div class="BusketItem">
-                        <div class="BusketItemDescription">Ticket(1 passanger)</div>
-                        <div class="BusketItemPrice">$12.40</div>
-                    </div>
-                    <div class="BusketItem">
-                        <div class="BusketItemDescription">Baggade upgrade</div>
-                        <div class="BusketItemPrice">$9.60</div>
-                    </div>
+               <div id="BusketItems" class="BusketItems">
+                    
                </div>
                
-               <div class="BusketTotal">
+               <div id="BusketTotal" class="BusketTotal">
                    <div class="BusketTotalDescription">Total</div>
-                   <div class="BusketTotalPrice">$22</div>
+                   <div class="BusketTotalPrice">0 hrn.</div>
                </div>
-           </div>        
+           </div>       
         </div>
 
         
     </div>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+ <script src="~/js/checkControl.js"></script>
+ <script src="~/js/passengerDetails.js"></script>

@@ -1,0 +1,153 @@
+﻿@using MapApp.Models.EF.Entities
+@using MapApp.Models.QueryModels
+<link href="~/css/userBookings.css" rel="stylesheet">
+
+<div class="MainContent">
+        <div class="UserBookings">
+
+            @foreach (UserOrderQueryModel userOrder in ViewBag.UserOrders)
+            {
+                <div class="UserBooking" >
+                    <div class="MainBookingInfo">
+                        <div class="BookingPart BookingPartUserInfo">
+                            <div class="BookingPartHeader">Main user</div>
+                            <div class="BookingPartText">Name: @(userOrder.FirstName + " " + userOrder.LastName)</div>
+                            <div class="BookingPartText">Email: @userOrder.Email</div>
+                            <div class="BookingPartText">Phone: @userOrder.Phone</div>
+                        </div>
+                        <div class="BookingPart BookingPartSeatReservation">
+                            <div class="BookingPartHeader">Seat reservation</div>
+                            <div class="BookingPartText">Adults count: @userOrder.AdultsCount</div>
+                            <div class="BookingPartText">Children: @userOrder.Children</div>
+                    
+                        </div>
+                        <div class="BookingPart BookingPartServices">
+                            <div class="BookingPartHeader">Services</div>
+                            @foreach (Service service in userOrder.Services)
+                            {
+                                <div class="BookingPartText">@service.Name</div>
+                            }                            
+                  
+                        </div>
+                        <div class="BookingPart BookingPartDate">
+                            <div>
+                                <div class="BookingPartHeader">Dates</div>
+                                <div class="BookingPartText">Depart date: </div>
+                                <div class="BookingPartText">@userOrder.DepartDate.ToString("dd.MM.yyyy")</div>
+                                <div class="BookingPartText">Arrival date: </div>
+                                <div class="BookingPartText">@userOrder.ArrivalDate.ToString("dd.MM.yyyy")</div>
+                            </div>
+                        </div>
+                        <div class="BookingPart BookingPartSeats">
+                            <div>
+                                <div class="BookingPartHeader">Seats</div>
+                                <div class="BookingPartText">Seat number: @userOrder.SeatNumber</div>
+                      
+                            </div>
+                        </div>
+                        <div class="BookingPart BookingPartDestination">
+                            <div style="margin: 0 auto;" class="BookingPartHeader">Route</div>
+                            <div class="BookingPartDestinationPoints">
+                            <div class="DestinationPoint">
+                                <div class="Time">@userOrder.FromCityTime</div>
+                                <div class="DestinationPointText">@userOrder.FromCity Bus Station</div>
+                              </div>
+                              <span class="TimeLine"></span>
+                              <div class="Duration">20:31:00</div>
+                              <span class="TimeLine"></span>
+                              <div class="DestinationPoint">
+                                <div class="Time">@userOrder.ToCityTime</div>
+                                <div class="DestinationPointText">@userOrder.ToCity</div>
+                              </div>
+                           </div>
+                            
+                      
+                        </div>
+                        <div class="BookingPart BookingPartPrice">
+                            <div class="BookingPartHeader">Payment</div>
+                            <div class="BookingPartText">Payment method:</div>
+                            @if (@userOrder.PaymentMethod == PaymentMethod.CashOnBoarding)
+                            {
+                                <div class="BookingPartText">Cash on boarding</div>
+                            }
+                            else if (@userOrder.PaymentMethod == PaymentMethod.Card)
+                            {
+                                <div class="BookingPartText">Card</div>
+                            }
+                            
+                            @if (userOrder.OrderStatus == "1")
+                            {
+                                <div class="BookingPartText">Status: not confirmed </div>
+                            } 
+
+                            else if (userOrder.OrderStatus == "2")
+                            {
+                                <div class="BookingPartText">Status: Accepted </div>
+                            }
+                            else
+                            {
+                                <div class="BookingPartText">Status: Declined</div>
+                            }
+
+                           
+                            <div class="Total">Price: @userOrder.SumPrice hrn.</div>
+    
+                        </div>
+                    </div>
+                    <div class="HiddenBookingInfo">
+                        <div id="Bottom" class="">
+                            <ul>
+                      
+                                @for (int i = 0; i < @userOrder.Waypoints.Count; i++)
+                                {
+                                    <li class="Waypoint">
+                                        <span class="Time  text-sm text-gray-300 leading-none">
+                                            @if (i != 0)
+                                            {
+                        
+                                            <span class="ArriveTime"> @userOrder.Waypoints[i - 1].ToCityTime</span>
+                        
+                                            }
+
+                                          
+                        
+
+                                                <span class="DepTime"> @userOrder.Waypoints[i].FromCityTime</span>
+                                            
+                                        </span>
+                                        <span class="WaypointMarker"></span>
+                                        <span class="TimeLineHidden"></span>
+                                        <span class="Location text-sm text-gray-300 leading-none">@userOrder.Waypoints[i].FromCity</span>
+                                    </li>
+
+                                    @if (i == @userOrder.Waypoints.Count - 1)
+                                    {
+                                         <li class="Waypoint">
+                                            <span class="Time  text-sm text-gray-300 leading-none">
+                                                
+                        
+
+                                                    <span class="DepTime"> @userOrder.Waypoints[i].ToCityTime</span>
+                                                
+                                            </span>
+                                            <span class="WaypointMarker"></span>
+                                           
+                                            <span class="Location text-sm text-gray-300 leading-none">@userOrder.Waypoints[i].ToCity</span>
+                                        </li>   
+                                    }
+                                }
+                                                                
+                            </ul>
+                        </div>
+                    </div>
+                
+                </div>
+            }
+            
+            
+        </div>
+    </div>
+
+
+   
+ <script src="~/js/userBooking.js"></script>

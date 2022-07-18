@@ -10,5 +10,7 @@ namespace MapApp.Models.QueryModels
         public string City { get; set; }
         public string CityToArrivalTime { get; set; }
         public string CityFromDepartTime { get; set; }
+        public float Latitude { get; set; }
+        public float Longtitude { get; set; }
     }
 }

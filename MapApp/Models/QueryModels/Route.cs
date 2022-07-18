@@ -7,8 +7,9 @@ namespace MapApp
         public Route()
         {
         }
-
+        public string BusOperator { get; set; }
         public string BusId { get; set; }
+        public string TransportationId { get; set; }
         public string CityFrom { get; set; }
         public string CityTo { get; set; }
         public int Sequence { get; set; }

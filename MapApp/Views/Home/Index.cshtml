@@ -1,6 +1,7 @@
 ﻿
 
 <link href="~/css/site.css" rel="stylesheet" />
+<link href="~/css/autoSearch.css" rel="stylesheet" />
 
 
  <div class="FormContainer">
@@ -8,16 +9,16 @@
             <img src="~/images/pt_header_arrowgon_1920x700.jpg" class="img-fluid FormContainerImageT" alt="...">
         </div>
         <div class="FormContainerForm">
-            <form action="/Home/RoutesOffers">
+            <form autocomplete="off" action="/Home/RoutesOffers">
                
                 <div class="colums">
-                  <div class="item">
+                  <div class="item autocomplete">
 
                     <input id="fromCity" type="text" name="fromCity"  placeholder="From: city" required/>
                   </div>
-                  <div class="item">
+                  <div class="item autocomplete">
   
-                    <input id="toCIty" type="text" name="toCIty" placeholder="To: city" required/>
+                    <input id="toCity" type="text" name="toCity" placeholder="To: city" required/>
                   </div>
                   <div class="item">
                     <input id="departDate" type="date" name="departDate" required/>
@@ -60,3 +61,7 @@
     
         </div>
     </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="~/js/autoSerach.js"></script>

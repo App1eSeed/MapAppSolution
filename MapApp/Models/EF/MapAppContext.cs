@@ -20,18 +20,20 @@ namespace MapApp.Models.EF
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
             //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
 
         }
         public MapAppContext()
         {
             //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<ServicesInOrder> ServicesInOrders { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Transportation> Transportations { get; set; }
         public DbSet<TransportationWaypoint> TransportationWaypoints { get; set; }
@@ -52,7 +54,7 @@ namespace MapApp.Models.EF
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=DESKTOP-C6NQKSU;Database=MapAppDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-ERHD2RT;Database=MapAppDB;Trusted_Connection=True;");
             }
         }
        
@@ -79,6 +81,23 @@ namespace MapApp.Models.EF
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Path>()
+            .HasOne(f => f.CityFrom)
+            .WithMany(c => c.CityFromPath)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Path>()
+            .HasOne(f => f.CityTo)
+            .WithMany(c => c.CityToPath)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TransportationWaypoint>()
+            .HasOne(f => f.WayPointsSchedule)
+            .WithMany(c => c.TransportationWaypoints)
+            .OnDelete(DeleteBehavior.NoAction);
+
+
+
             modelBuilder.Entity<BusType>().HasData(new BusType()
             {
                 Id = "1",
@@ -104,6 +123,41 @@ namespace MapApp.Models.EF
             {
                 Id = "1",
                 Name = "User"
+            });
+
+            modelBuilder.Entity<Service>().HasData(new Service()
+            {
+                Id = "1",
+                Name = "Animals, birds",
+                Price = 85
+            },
+            new Service()
+            {
+                Id = "2",
+                Name = "Apparatus",
+                Price = 70
+            },
+            new Service()
+            {
+                Id = "3",
+                Name = "Excess of stuff (more than 1 suitcase)",
+                Price = 80
+            });
+
+            modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus()
+            {
+                Id = "1",
+                Name = "Not confirmed",
+            },
+            new Service()
+            {
+                Id = "2",
+                Name = "Accepted",
+            },
+            new Service()
+            {
+                Id = "3",
+                Name = "Declined",
             });
 
 

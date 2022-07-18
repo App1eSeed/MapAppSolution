@@ -54,29 +54,23 @@ namespace MapApp
                     }
 
                     var DataGen = CreateData(searchRange, stopTime, wayPointsCount, lastInsertedCoordsId);
-
+                    var ClonnedData = CloneWaypointsOnTimeIntervals(DataGen.Bus, DataGen.WayPointsSchedules,DataGen.Schedules);
 
 
 
                     context.Buses.Add(DataGen.Bus);
+                    context.Buses.AddRange(ClonnedData.ClonnedBuses);
+
                     context.Paths.AddRange(DataGen.Paths);
 
-
                     context.WayPointsSchedules.AddRange(DataGen.WayPointsSchedules);
-
-                    //int k = 0;
-                    //for (int j = 0; j < DataGen.WayPointsSchedules.Count; j++)
-                    //{
-                    //    if (DataGen.WayPointsSchedules[j].PathId == null)
-                    //    {
-                    //        DataGen.WayPointsSchedules[j].PathId = DataGen.Paths[k].Id;
-                    //        k++;
-                    //    }
-                    //    DataGen.WayPointsSchedules[j].BusId = DataGen.Bus.Id;
-                    //}
+                    context.WayPointsSchedules.AddRange(ClonnedData.WayPointsSchedules);
+                                    
+                    context.Schedules.AddRange(DataGen.Schedules);
+                    context.Schedules.AddRange(ClonnedData.Schedules);
 
                     context.Coords.AddRange(DataGen.Coords);
-                    context.Schedules.AddRange(DataGen.Schedules);
+
                     context.Database.OpenConnection();
                     try
                     {
@@ -110,7 +104,7 @@ namespace MapApp
                                     join path in context.Paths on waypoint.PathId equals path.Id
                                     join cityFrom in context.Cities on path.CityFromId equals cityFrom.Id
                                     join cityTo in context.Cities on path.CityToId equals cityTo.Id
-                                    orderby bus.Id,waypointSchedule.DepartDay,waypoint.Sequence
+                                    orderby bus.Id, waypoint.Sequence,waypointSchedule.DepartDay
                                     select new
                                     {
                                         BusId = bus.Id,
@@ -143,6 +137,8 @@ namespace MapApp
                             transportations.Add(transportation);//Проверить!
                             foreach (var busSchedule in BusSchedules.Where(s => s.BusId == bus.Id))
                             {
+                               
+
                                 TransportationWaypoint transWaypoint;
                                 transportationWaypoints.Add(transWaypoint = new TransportationWaypoint()
                                 {
@@ -173,7 +169,8 @@ namespace MapApp
                                 }
                                 if (counter % waypointsCount == 0)
                                 {
-                                    DateTime arrDate = DateTime.Now.AddDays(busSchedule.ArrivalDay - DateTime.Now.DayOfWeek + 7 * i);
+                                    
+                                    DateTime arrDate = DateTime.Now.AddDays(Math.Abs(busSchedule.ArrivalDay - DateTime.Now.DayOfWeek) + 7 * i);
                                     transportation.ArrivalDate = new DateTime(arrDate.Year,arrDate.Month,arrDate.Day);
                                     transportation.ArrivalTime = busSchedule.ArrivalTime;
                                     transportations.Add(transportation);
@@ -201,7 +198,6 @@ namespace MapApp
                 context.SaveChanges();
             }
         }
-
         private static DataGen CreateData(float searchRange, int stopTime, int pathCount, int LocalLastInsertedCoordsId)
         {
             var dataGen = new DataGen();
@@ -405,8 +401,8 @@ namespace MapApp
 
                         var CoordsBetweenCities = GetWayBetweenCities
                                  (ref path,
-                                 city1,
                                  city2,
+                                 city1,
                                  LocalLastInsertedCoordsId
                                  );
                         if (CoordsBetweenCities != null)
@@ -443,7 +439,7 @@ namespace MapApp
                         CityToArrivalTime = new TimeSpan((departTime + TimeSpan.FromSeconds(path.Time)).Hours, (departTime + TimeSpan.FromSeconds(path.Time)).Minutes, 0),
                         CityFromDepartTimeInSec = (int)departTime.TotalSeconds,
                         CityToArrivalTimeInSec = (int)new TimeSpan((departTime + TimeSpan.FromSeconds(path.Time)).Hours, (departTime + TimeSpan.FromSeconds(path.Time)).Minutes, 0).TotalSeconds
-                    });
+                    });         
 
                     if (wayPoint.CityToArrivalTime.TotalSeconds < wayPoint.CityFromDepartTime.TotalSeconds)
                     {
@@ -462,6 +458,9 @@ namespace MapApp
                 {
                     TimeSpan departTime = wayPoints[j - 1].CityToArrivalTime + TimeSpan.FromMinutes(stopTime); // TimeSpan.FromSeconds(path.Time)
                     var arrivalTime = departTime + TimeSpan.FromSeconds(path.Time);
+
+                    departDay = arrivalDay;
+
                     dataGen.WayPointsSchedules.Add(wayPoint = new WayPointsSchedule()
                     {
                         Id = Guid.NewGuid().ToString("N"),
@@ -554,7 +553,76 @@ namespace MapApp
 
             return dataGen;
         }
+        private static DataGen CloneWaypointsOnTimeIntervals(Bus bus, List<WayPointsSchedule> wayPointsSchedules,List<Schedule> schedules,int clonesCount = 6, int interval = 3)
+        {
+            List<Bus> clonedBuses = new List<Bus>();
+            List<WayPointsSchedule> clonedWaypoints = new List<WayPointsSchedule>();
+            List<Schedule> clonedSchedules = new List<Schedule>();
 
+            for (int i = 1; i <= clonesCount; i++)
+            {               
+                var newBus = new Bus()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FromCity = bus.FromCity,
+                    ToCity = bus.ToCity,
+                    Operator = bus.Operator,
+                    BusTypeId = bus.BusTypeId
+                };
+                clonedBuses.Add(newBus);
+                foreach (var waypoint in wayPointsSchedules)
+                {
+                    var newWaypoint = new WayPointsSchedule()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        PathId = waypoint.PathId,
+                        BusId = newBus.Id,
+                        CityFromDepartTimeInSec = waypoint.CityFromDepartTimeInSec,
+                        CityToArrivalTimeInSec = waypoint.CityToArrivalTimeInSec,
+                        Price = waypoint.Price,
+                        Sequence = waypoint.Sequence,
+                        CityFromDepartTime = new TimeSpan(
+                            (waypoint.CityFromDepartTime + new TimeSpan(interval * i, 0, 0)).Hours, 
+                            waypoint.CityFromDepartTime.Minutes, 
+                            waypoint.CityFromDepartTime.Seconds
+                            ),
+                        CityToArrivalTime = new TimeSpan(
+                            (waypoint.CityToArrivalTime + new TimeSpan(interval * i, 0, 0)).Hours,
+                            waypoint.CityToArrivalTime.Minutes,
+                            waypoint.CityToArrivalTime.Seconds
+                            )                      
+                    };
+                    clonedWaypoints.Add(newWaypoint);
+
+                    foreach (var schedule in schedules.Where(s => s.WayPointsScheduleId == waypoint.Id))
+                    {
+                        var newSchedule = new Schedule()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            WayPointsScheduleId = newWaypoint.Id,
+                            ArrivalDay = schedule.ArrivalDay,
+                            DepartDay = schedule.DepartDay
+                        };
+                        //NEED FIX 6-0 days
+                        if ((waypoint.CityFromDepartTime + new TimeSpan(interval * i, 0, 0)).Days > 0)
+                        {
+                            newSchedule.DepartDay = (DayOfWeek)(((int)schedule.DepartDay + 1) % 7);
+                        }
+                        if ((waypoint.CityToArrivalTime + new TimeSpan(interval * i, 0, 0)).Days > 0)
+                        {
+                            newSchedule.ArrivalDay = (DayOfWeek)(((int)schedule.ArrivalDay + 1) % 7);
+                        }
+                        clonedSchedules.Add(newSchedule);
+                    }
+                }                       
+            }
+            return new DataGen()
+            {
+                ClonnedBuses = clonedBuses,
+                WayPointsSchedules = clonedWaypoints,
+                Schedules = clonedSchedules
+            };
+        }
         private static City GetDepCityByType(Capital type)
         {
             Random r = new Random();
@@ -794,7 +862,7 @@ namespace MapApp
             public List<Coords> Coords { get; set; }
             public List<Path> Paths { get; set; }
             public List<Schedule> Schedules { get; set; }
-
+            public List<Bus> ClonnedBuses { get; set; }
             public DataGen()
             {
                 WayPointsSchedules = new List<WayPointsSchedule>();

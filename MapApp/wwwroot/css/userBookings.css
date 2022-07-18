@@ -1,0 +1,314 @@
+.MainContent{
+    margin-left: 16%;
+    margin-right: 12%;
+   
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: rgb(19 41 104 / 20%) 0px 2px 5px 0px;
+    margin-top: 8%;
+    margin-bottom: 40px;
+}
+    
+    .UserBookings{
+        display: flex;
+        flex-direction: column;
+    }
+        
+
+        .UserBooking{
+            display: flex;
+            flex-direction: column;
+            
+            transition: 0.3s;
+            height: 100%;
+            border-bottom: 0.5px solid rgba(178, 178, 178, 0.4);
+           
+        }
+
+            .MainBookingInfo{
+                display: flex;
+                flex-direction: row;
+                padding: 15px;
+                height: 100%;
+                transition: 0.3s;
+               
+            }
+
+.HiddenBookingInfo {
+    display: none;
+    height: 100%;
+    padding: 15px;
+    flex-direction: row;
+    border-top: 0.5px solid rgba(178, 178, 178, 0.4);
+    transition: 0.3s;
+    overflow-x: scroll;
+  
+}
+
+            .BookingPart{
+               
+                display: flex;
+                flex-direction: column;
+            }
+
+            .BookingPartUserInfo{
+                width: 20%;
+            }
+            
+            .BookingPartSeatReservation{
+                width: 13%;
+            }
+
+            .BookingPartServices{
+                width: 10%;
+            }   
+            .BookingPartDate{
+                width: 8%;
+              
+            } 
+            .BookingPartSeats{
+                width:11%;
+              
+            }      
+
+            .BookingPartDestination{
+                width: 28%;
+              
+            }
+
+                .BookingPartDestinationPoints{
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .Time{
+                    color: #3b3958;
+                    font-size: 11pt;
+                    font-weight: 600;
+                
+                }
+                
+                .Duration{
+                    color: #a1a9c3;
+                    font-size: 10pt;
+                    font-weight: 600;
+                    justify-content: center;
+                    align-items: center;
+                }
+                
+                .RouteDataDirection{
+                    display: flex;
+                }
+                .RouteDataDirection > *{
+                    display: flex;
+                }
+                
+                .TimeLine {
+                    height: 1px;
+                    padding: 1px 17px;
+                    margin: auto 5px;
+                    background-color: #a1a9c3;
+                    -webkit-box-flex: 2;
+                    -ms-flex-positive: 2;
+                    flex-grow: 2;
+                    border-radius: 1px;
+                }
+                
+                .DestinationPoint{
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .DestinationPointText{
+                    font-weight: 700;
+                    font-size: 12px;
+                }
+
+            .BookingPartPrice{
+                align-items: center;
+                width: 14%;
+            }
+
+                .Total{
+                    
+                    color:  #0c010e;
+                    font-size: 11.5pt;
+                    font-weight: 700;
+                }
+           
+
+                .BookingPartHeader{
+                    color:  #4f086d;
+                    font-size: 12pt;
+                    font-weight: 700;
+                    
+                }
+
+                .BookingPartText{
+                    color:  #23042a;
+                    font-size: 10pt;
+                    font-weight: 600;
+                }
+                
+
+                #Bottom{
+
+                }
+
+                .Wapoint{
+
+                }
+
+#Bottom > ul {
+    padding: 0;
+    padding-right: 0px;
+    padding-left: 0px;
+    margin: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  
+}
+                
+                #Bottom ul > li {
+                    list-style-type: none;
+                    margin-left: 0;
+                    padding-left: 0;
+                    margin: 0;
+                    overflow: visible;
+                   
+                  
+                    margin-bottom: 50px;
+                    padding-bottom: 90px;
+                    padding-left: 70px;
+                    padding-right: 70px;
+                    position: relative;
+                    float: left;
+                    
+                    line-height: 1 !important;
+                }
+                
+                    
+                
+                 #Bottom .Time {
+                    display: block;
+                    position: relative;
+                    top: 120px;
+                    width: 60px;
+                    left: -90px;
+                    text-align: center;
+                    height: 20px;
+                }
+
+                
+                .Wapoint .Time:last-child {
+                   left: 0;
+                }
+                
+                .WaypointMarker {
+                    position: absolute;
+                    width: 16px;
+                    height: 16px;
+                    -webkit-border-radius: 8px;
+                    -moz-border-radius: 8px;
+                    border-radius: 8px;
+                    bottom: 0;
+                    left: 0;
+                    background-color: #a1a9c3;
+                }
+                
+                 .TimeLineHidden {
+                    position: absolute;
+                    width: 100%;
+                    height: 3px;
+                    bottom: 6px;
+                    left: 0;
+                    background-color: #a1a9c3;
+                }
+                
+                .Location {
+                    position: absolute;
+                    bottom: 20px;
+                    left: 0;
+                    white-space: normal;
+                    margin-left: 1em;
+                    font-size: 13px;
+                    width: 150px;
+                    font-weight: bold;
+                    letter-spacing: .3px;
+                    padding: 5px;
+                    padding-left: 2px;
+                    transform: rotate(-40deg);
+                    transform-origin: 20px 50%;
+                    -webkit-transform: rotate(-40deg);
+                    -webkit-transform-origin: 20px 50%;
+                    -moz-transform: rotate(-40deg);
+                    -moz-transform-origin: 20px 50%;
+                    -ms-transform: rotate(-40deg);
+                    -ms-transform-origin: 20px 50%;
+                    -o-transform: rotate(-40deg);
+                    -o-transform-origin: 20px 50%;
+                    -webkit-border-radius: 10px;
+                    -moz-border-radius: 10px;
+                    border-radius: 10px;
+                    padding: 0;
+                    border: solid 5px transparent;
+                    border-top-color: transparent;
+                    border-right-color: transparent;
+                    border-bottom-color: transparent;
+                    border-left-color: transparent;
+                    border-left-style: solid;
+                    border-left-width: 5px;
+                    border-left: solid 2px transparent;
+                    border-left-color: transparent;
+                    -webkit-transition: background-color .1s ease-in-out;
+                    -moz-transition: background-color .1s ease-in-out;
+                    -o-transition: background-color .1s ease-in-out;
+                    transition: background-color .1s ease-in-out,border-color .1s ease-in-out;
+                }
+                
+                
+                .DedicatedPin {
+                    
+                width: 1rem;
+                height: 1rem;
+                display: block;
+                position: relative;
+                border-radius: 1rem 1rem 1rem 1rem;
+                transform: rotate(45deg);
+                border: 2px solid #000000;
+                -webkit-transition: .1s ease-in-out, max-height .1s ease-in-out;
+                -moz-transition:.1s ease-in-out, max-height .1s ease-in-out;
+                -o-transition: .1s ease-in-out, max-height .1s ease-in-out;
+                transition: .1s ease-in-out, max-height .1s ease-in-out;
+                }
+                
+                #loader {
+                    border: 6px solid #999;
+                    border-top: 6px solid rgba(31, 41, 55,1);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    z-index: 50;
+                    animation: spin 2s linear infinite;
+                    display: none;
+                    position: absolute;
+                    right: 50%;
+                    top: 40%;
+                }
+                
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+                

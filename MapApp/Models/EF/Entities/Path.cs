@@ -12,8 +12,10 @@ namespace MapApp.Models.EF.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        [Required]
         public string CityFromId { get; set; }
         public City CityFrom { get; set; }
+        [Required]
         public string CityToId { get; set; }
         public City CityTo { get; set; }
         public float Distance { get; set; }

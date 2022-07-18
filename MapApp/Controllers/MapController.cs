@@ -40,22 +40,29 @@ namespace MapApp.Controllers
             PathQuery fullRoute = new PathQuery();
             using (var context = new MapAppContext())
             {
-                var fullRoutePathIds = (from bus in context.Buses
-                                        join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                                        join path in context.Paths on waypoint.PathId equals path.Id
-                                        where bus.Id == busId
-                                        orderby waypoint.Sequence
-                                        select new
-                                        {
-                                            path.Id
-                                        }).ToList();
+                //var fullRoutePathIds = (from bus in context.Buses
+                //                        join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                //                        join path in context.Paths on waypoint.PathId equals path.Id
+                //                        where bus.Id == busId
+                //                        orderby waypoint.Sequence
+                //                        select new
+                //                        {
+                //                            path.Id
+                //                        }).ToList();
 
 
                 fullRoute.PathCoords = (from bus in context.Buses
                                         join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                                         join path in context.Paths on waypoint.PathId equals path.Id
                                         join coords in context.Coords on path.Id equals coords.PathId
-                                        where bus.Id == busId
+                                        where bus.Id == busId 
+                                           && (from bus1 in context.Buses
+                                               join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
+                                               join path1 in context.Paths on waypoint1.PathId equals path1.Id
+                                               where bus1.Id == busId
+                                               orderby waypoint1.Sequence
+                                               select path1.Id
+                                               ).ToList().Contains(path.Id)
                                         orderby waypoint.Sequence, coords.Id
                                         select new float[2]
                                         {
@@ -68,7 +75,7 @@ namespace MapApp.Controllers
 
         //public JsonResult GetFullRoute(string busId)
         //{
-           
+
         //    PathQuery fullRoute = new PathQuery();
 
         //    Dictionary<string, PathQuery> cacheResult = (Dictionary<string, PathQuery>)cache.Get("Paths") ?? new Dictionary<string, PathQuery>();
@@ -97,7 +104,7 @@ namespace MapApp.Controllers
         //                PathQuery partialRoute = (from bus in context.Buses
         //                                          join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
         //                                          join path in context.Paths on waypoint.PathId equals path.Id
-        //                                          where bus.Id == busId && waypoint.PathId == route.PathId
+        //                                          where waypoint.BusId == busId && waypoint.PathId == route.PathId
         //                                          select new PathQuery()
         //                                          {
         //                                              PathId = path.Id,
@@ -143,7 +150,7 @@ namespace MapApp.Controllers
                                join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                                join path in context.Paths on waypoint.PathId equals path.Id
                                join coords in context.Coords on path.Id equals coords.PathId
-                               where bus.Id == busId && waypoint.Sequence == sequence
+                               where waypoint.BusId == busId && waypoint.Sequence == sequence
                                select new float[2]
                                {
                                    coords.Longtitude,
@@ -164,7 +171,7 @@ namespace MapApp.Controllers
                 var pathTest = (from bus in context.Buses
                               join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                               join path in context.Paths on waypoint.PathId equals path.Id
-                              where bus.Id == busId && waypoint.Sequence == sequence
+                              where waypoint.BusId == busId && waypoint.Sequence == sequence
                               select new 
                               {
                                   path.Id
@@ -184,7 +191,7 @@ namespace MapApp.Controllers
                     busPath = (from bus in context.Buses
                                     join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
                                     join path in context.Paths on waypoint.PathId equals path.Id
-                                    where bus.Id == busId && waypoint.Sequence == sequence
+                                    where waypoint.BusId == busId && waypoint.Sequence == sequence
                                     select new PathQuery()
                                     {
                                         PathId = path.Id,
@@ -633,7 +640,7 @@ namespace MapApp.Controllers
 
         }
 
-        public JsonResult GetRouteFromCityToCity(string busId, string fromCity, string toCity)
+        public JsonResult GetRouteFromCityToCity(string transportationId, string fromCity, string toCity)
         {
             string category = Request.QueryString.Value;
             PathQuery fullRoute = new PathQuery();
@@ -643,86 +650,165 @@ namespace MapApp.Controllers
 
             using (var context = new MapAppContext())
             {
-
-                var routes = (from bus in context.Buses
-                              join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                              //join path in context.Paths on waypoint.PathId equals path.Id
-                              //join cityFrom in context.Cities on waypoint
-                              where bus.Id == busId
-                                 && waypoint.Sequence >= (from bus1 in context.Buses
+                var cityCoords = (from bus in context.Buses
+                                   join transp in context.Transportations on bus.Id equals transp.BusId
+                                   join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                                   join path in context.Paths on waypoint.PathId equals path.Id
+                                   join city in context.Cities on path.CityFromId equals city.Id
+                                   where transp.Id == transportationId
+                                   && waypoint.Sequence >= (from bus1 in context.Buses
+                                        join transp1 in context.Transportations on bus1.Id equals transp1.BusId
                                         join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
                                         join path1 in context.Paths on waypoint1.PathId equals path1.Id
                                         join cityFrom1 in context.Cities on path1.CityFromId equals cityFrom1.Id
                                         join cityTo1 in context.Cities on path1.CityToId equals cityTo1.Id
                                         where cityFrom1.Name == fromCity
-                                           && bus1.Id == busId
+                                            && transp1.Id == transportationId
                                         select waypoint1.Sequence).First()
-                                 && waypoint.Sequence <= (from bus1 in context.Buses
+                                    && waypoint.Sequence <= (from bus1 in context.Buses
+                                        join transp1 in context.Transportations on bus1.Id equals transp1.BusId
                                         join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
                                         join path1 in context.Paths on waypoint1.PathId equals path1.Id
                                         join cityFrom1 in context.Cities on path1.CityFromId equals cityFrom1.Id
                                         join cityTo1 in context.Cities on path1.CityToId equals cityTo1.Id
                                         where cityTo1.Name == toCity
-                                           && bus1.Id == busId
+                                            && transp1.Id == transportationId
                                         select waypoint1.Sequence).First()
-                              orderby waypoint.Sequence
-                              select new
-                              {
-                                  waypoint.PathId
-                              }).ToList();
+                                   orderby waypoint.Sequence
+                                   select new WaypointsInfoForBus()
+                                   {
+                                       City = city.Name,
+                                       Latitude = city.Latitude,
+                                       Longtitude = city.Longtitude,
+                                       CityToArrivalTime = waypoint.CityToArrivalTime.ToString(@"hh\:mm"),
+                                       CityFromDepartTime = waypoint.CityFromDepartTime.ToString(@"hh\:mm")
+                                   }).ToList()
+                                   .Union((from bus in context.Buses
+                                           join transp in context.Transportations on bus.Id equals transp.BusId
+                                           join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                                           join path in context.Paths on waypoint.PathId equals path.Id
+                                           join city in context.Cities on path.CityToId equals city.Id
+                                           where transp.Id == transportationId && waypoint.Sequence == (from innerBus in context.Buses
+                                                                                          join innerTransp in context.Transportations on innerBus.Id equals innerTransp.BusId
+                                                                                          join innerWaypoint in context.WayPointsSchedules on innerBus.Id equals innerWaypoint.BusId
+                                                                                          join innerPath in context.Paths on innerWaypoint.PathId equals path.Id
+                                                                                          join cityTo in context.Cities on path.CityToId equals cityTo.Id
+                                                                                          where innerTransp.Id == transportationId
+                                                                                             && cityTo.Name == toCity
+                                                                                          orderby innerWaypoint.Sequence
+                                                                                          select new
+                                                                                          {
+                                                                                              innerWaypoint.Sequence
+                                                                                          })
+                                                                                       .Last().Sequence
+                                           select new WaypointsInfoForBus()
+                                           {
+                                               City = city.Name,
+                                               Latitude = city.Latitude,
+                                               Longtitude = city.Longtitude,
+                                               CityToArrivalTime = waypoint.CityToArrivalTime.ToString(@"hh\:mm"),
+                                               CityFromDepartTime = waypoint.CityFromDepartTime.ToString(@"hh\:mm")
+                                           }).ToList()).ToList();
+                //.Union((from bus in context.Buses
+                //        join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                //        join path in context.Paths on waypoint.PathId equals path.Id
+                //        join city in context.Cities on path.CityToId equals city.Id
+                //        where bus.Id == busId && waypoint.Sequence == (from innerBus in context.Buses
+                //                                                       join innerWaypoint in context.WayPointsSchedules on innerBus.Id equals innerWaypoint.BusId
+                //                                                       where innerBus.Id == busId
+                //                                                       orderby innerWaypoint.Sequence
+                //                                                       select new
+                //                                                       {
+                //                                                           innerWaypoint.Sequence
+                //                                                       })
+                //                                                    .Last().Sequence
+                //select new WaypointsInfoForBus()
+                //{
+                //    City = city.Name,
+                //    Latitude = city.Latitude,
+                //    Longtitude = city.Longtitude,
+                //    CityToArrivalTime = waypoint.CityToArrivalTime.ToString(@"hh\:mm"),
+                //    CityFromDepartTime = waypoint.CityFromDepartTime.ToString(@"hh\:mm")
+                //})
+                // .ToList())).ToList();
+                //var routes = (from bus in context.Buses
+                //              join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                //              //join path in context.Paths on waypoint.PathId equals path.Id
+                //              //join cityFrom in context.Cities on waypoint
+                //              where bus.Id == busId
+                //                 && waypoint.Sequence >= (from bus1 in context.Buses
+                //                        join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
+                //                        join path1 in context.Paths on waypoint1.PathId equals path1.Id
+                //                        join cityFrom1 in context.Cities on path1.CityFromId equals cityFrom1.Id
+                //                        join cityTo1 in context.Cities on path1.CityToId equals cityTo1.Id
+                //                        where cityFrom1.Name == fromCity
+                //                           && bus1.Id == busId
+                //                        select waypoint1.Sequence).First()
+                //                 && waypoint.Sequence <= (from bus1 in context.Buses
+                //                        join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
+                //                        join path1 in context.Paths on waypoint1.PathId equals path1.Id
+                //                        join cityFrom1 in context.Cities on path1.CityFromId equals cityFrom1.Id
+                //                        join cityTo1 in context.Cities on path1.CityToId equals cityTo1.Id
+                //                        where cityTo1.Name == toCity
+                //                           && bus1.Id == busId
+                //                        select waypoint1.Sequence).First()
+                //              orderby waypoint.Sequence
+                //              select new
+                //              {
+                //                  waypoint.PathId
+                //              }).ToList();               
+                //foreach (var route in routes)
+                //{
 
-                foreach (var route in routes)
-                {
-                    
 
-                    if (cacheResult.ContainsKey(route.PathId))
-                    {
+                //    if (cacheResult.ContainsKey(route.PathId))
+                //    {
 
-                        fullRoute.PathCoords.AddRange(cacheResult[route.PathId].PathCoords);
-                    }
-                    else
-                    {
+                //        fullRoute.PathCoords.AddRange(cacheResult[route.PathId].PathCoords);
+                //    }
+                //    else
+                //    {
 
-                        PathQuery partialRoute = (from bus in context.Buses
-                                                  join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                                                  join path in context.Paths on waypoint.PathId equals path.Id
-                                                  where bus.Id == busId && waypoint.PathId == route.PathId
-                                                  select new PathQuery()
-                                                  {
-                                                      PathId = path.Id,
-                                                      Distance = path.Distance,
-                                                      Time = path.Time
+                //        PathQuery partialRoute = (from bus in context.Buses
+                //                                  join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                //                                  join path in context.Paths on waypoint.PathId equals path.Id
+                //                                  where bus.Id == busId && waypoint.PathId == route.PathId
+                //                                  select new PathQuery()
+                //                                  {
+                //                                      PathId = path.Id,
+                //                                      Distance = path.Distance,
+                //                                      Time = path.Time
 
-                                                  }).First();
+                //                                  }).First();
 
-                        partialRoute.PathCoords = (from bus in context.Buses
-                                                   join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                                                   join path in context.Paths on waypoint.PathId equals path.Id
-                                                   join coords in context.Coords on path.Id equals coords.PathId
-                                                   where path.Id == route.PathId
-                                                   orderby path.Id,coords.Id
-                                                   select new float[2]
-                                                   {
-                                                coords.Longtitude,
-                                                coords.Latitude
-                                                   }).ToList();
+                //        partialRoute.PathCoords = (from bus in context.Buses
+                //                                   join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                //                                   join path in context.Paths on waypoint.PathId equals path.Id
+                //                                   join coords in context.Coords on path.Id equals coords.PathId
+                //                                   where path.Id == route.PathId
+                //                                   orderby path.Id,coords.Id
+                //                                   select new float[2]
+                //                                   {
+                //                                coords.Longtitude,
+                //                                coords.Latitude
+                //                                   }).ToList();
 
-                        fullRoute.PathCoords.AddRange(partialRoute.PathCoords);
+                //        fullRoute.PathCoords.AddRange(partialRoute.PathCoords);
 
-                        cacheResult.Add(route.PathId, partialRoute);
+                //        cacheResult.Add(route.PathId, partialRoute);
 
-                        cache.Set("Paths", cacheResult, new MemoryCacheEntryOptions
-                        {
-                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(100)
-                        });
-                    }
-                    
-                }
+                //        cache.Set("Paths", cacheResult, new MemoryCacheEntryOptions
+                //        {
+                //            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(100)
+                //        });
+                //    }
 
-                
+                //}
+
+                return Json(cityCoords);
             }
 
-            return Json(fullRoute);
+            
 
         }
 

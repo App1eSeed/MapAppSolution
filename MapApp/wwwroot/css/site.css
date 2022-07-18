@@ -79,7 +79,7 @@ form {
     flex-direction:row;
     flex-wrap:wrap;
     }
-    .colums div {
+    .colums > div {
     width:25%;
     }
     
@@ -151,5 +151,3 @@ box-shadow: -2px 4px 29px 9px rgba(0,0,0,0.05);
     }
 
 
-
-    

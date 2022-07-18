@@ -1,4 +1,6 @@
 using MapApp.Models.EF;
+using MapApp.Models.QueryModels;
+using MapApp.Services.MailService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -79,8 +81,11 @@ namespace MapApp
                 //    }
                 //};
             });
-            
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddMemoryCache();
+
+            services.AddTransient<IMailService, MailService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
