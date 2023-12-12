@@ -5,9 +5,9 @@ function makeOrder() {
 
     let user = JSON.parse(localStorage.getItem("user"));
     let route = JSON.parse(localStorage.getItem("selectedRoute"));
-    let seatNumber = localStorage.getItem("seatNumber");
+    let seatNumber = JSON.parse(localStorage.getItem("seatNumber"));
     let userServices = JSON.parse(localStorage.getItem("userServices")); 
-
+   
     switch (localStorage["paymentMethod"]) {           
         case "1":
             $.post("/Order/MakeBookingWithPayment", { }, function (result) {
@@ -63,6 +63,12 @@ function makeOrder() {
 
     switchAccordion = function (e) {
         console.log(this);
+        let user = JSON.parse(localStorage.getItem("user"));
+        let user1 = localStorage.getItem("user");
+        let user2 = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        console.log(user1);
+        console.log("asdasd");
         e.preventDefault();
 
         if (beforeCollapsed != null) {

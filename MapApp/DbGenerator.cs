@@ -126,7 +126,7 @@ namespace MapApp
                     if (bus.Transportations.Count == 0)
                     {
 
-                        for (int i = 0; i < 1; i++)
+                        for (int i = 0; i < 3; i++)
                         {
                             Transportation transportation = new Transportation()
                             {
@@ -162,7 +162,7 @@ namespace MapApp
 
                                 if ((counter - 1) % waypointsCount == 0)
                                 {
-                                    DateTime depDate = DateTime.Now.AddDays(busSchedule.DepartDay - DateTime.Now.DayOfWeek + 7 * i);
+                                    DateTime depDate = DateTime.Now.AddDays(busSchedule.DepartDay - DateTime.Now.DayOfWeek + 7 * (i + 1));
                                     transportation.DepartDate = new DateTime(depDate.Year,depDate.Month,depDate.Day);
                                     transportation.DepartTime = busSchedule.DepartTime;
 
@@ -170,7 +170,7 @@ namespace MapApp
                                 if (counter % waypointsCount == 0)
                                 {
                                     
-                                    DateTime arrDate = DateTime.Now.AddDays(Math.Abs(busSchedule.ArrivalDay - DateTime.Now.DayOfWeek) + 7 * i);
+                                    DateTime arrDate = DateTime.Now.AddDays(Math.Abs(busSchedule.ArrivalDay - DateTime.Now.DayOfWeek) + 7 * (i + 1));
                                     transportation.ArrivalDate = new DateTime(arrDate.Year,arrDate.Month,arrDate.Day);
                                     transportation.ArrivalTime = busSchedule.ArrivalTime;
                                     transportations.Add(transportation);
@@ -760,7 +760,7 @@ namespace MapApp
             //var httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = client.PostAsJsonAsync(
-                "http://open.mapquestapi.com/directions/v2/route?key=S0B3YTkcDSAWJx7JPKAdw0vw43A67nvH", routingRequest).Result;
+                "https://www.mapquestapi.com/directions/v2/route?key=uHGPqKMfhmWh2UTM4Z9Uerhx9maBhWYn", routingRequest).Result;
 
             RoutingApiResponseModel responseModel = response.Content.ReadFromJsonAsync<RoutingApiResponseModel>().Result;
 

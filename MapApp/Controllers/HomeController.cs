@@ -13,7 +13,7 @@ namespace MapApp.Controllers
         public IActionResult Index()
         {
 
-             //DbGenerator.Generate(busCountGen: 20);
+            //DbGenerator.Generate(busCountGen: 20);
             //DbGenerator.GenerateTransportations();
             return View();
 
@@ -27,14 +27,14 @@ namespace MapApp.Controllers
                 TimeSpan time = departDate == DateTime.Today 
                     ? new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second)
                     : new TimeSpan(0,0,0);
-                
+
 
                 var routesOffers = (from bus in context.Buses
-                                            join transportation in context.Transportations on bus.Id equals transportation.BusId
-                                            join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
-                                            join path in context.Paths on waypoint.PathId equals path.Id
-                                            join cityFrom in context.Cities on path.CityFromId equals cityFrom.Id
-                                            join cityTo in context.Cities on path.CityToId equals cityTo.Id
+                                    join transportation in context.Transportations on bus.Id equals transportation.BusId
+                                    join waypoint in context.WayPointsSchedules on bus.Id equals waypoint.BusId
+                                    join path in context.Paths on waypoint.PathId equals path.Id
+                                    join cityFrom in context.Cities on path.CityFromId equals cityFrom.Id
+                                    join cityTo in context.Cities on path.CityToId equals cityTo.Id
                                     where (from bus1 in context.Buses
                                            join transportation1 in context.Transportations on bus1.Id equals transportation1.BusId
                                            join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
@@ -56,14 +56,14 @@ namespace MapApp.Controllers
                                            //  && transportation.DepartTime >= time
                                            select transportation1.Id).Contains(transportation.Id)
                                     && waypoint.Sequence >= (from bus1 in context.Buses
-                                                                join transportation1 in context.Transportations on bus1.Id equals transportation1.BusId
-                                                                join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
-                                                                join path1 in context.Paths on waypoint1.PathId equals path1.Id
-                                                                join cityFrom1 in context.Cities on path1.CityFromId equals cityFrom1.Id
-                                                                join cityTo1 in context.Cities on path1.CityToId equals cityTo1.Id
-                                                                where cityFrom1.Name == fromCity
-                                                                               && transportation1.Id == transportation.Id
-                                                                select waypoint1.Sequence).First()
+                                                             join transportation1 in context.Transportations on bus1.Id equals transportation1.BusId
+                                                             join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
+                                                             join path1 in context.Paths on waypoint1.PathId equals path1.Id
+                                                             join cityFrom1 in context.Cities on path1.CityFromId equals cityFrom1.Id
+                                                             join cityTo1 in context.Cities on path1.CityToId equals cityTo1.Id
+                                                             where cityFrom1.Name == fromCity
+                                                                            && transportation1.Id == transportation.Id
+                                                             select waypoint1.Sequence).First()
                                     && waypoint.Sequence <= (from bus1 in context.Buses
                                                              join transportation1 in context.Transportations on bus1.Id equals transportation1.BusId
                                                              join waypoint1 in context.WayPointsSchedules on bus1.Id equals waypoint1.BusId
@@ -74,21 +74,21 @@ namespace MapApp.Controllers
                                                                            && transportation1.Id == transportation.Id
                                                              select waypoint1.Sequence).First()
                                    && transportation.DepartDate == new DateTime(departDate.Year, departDate.Month, departDate.Day)
-                                            orderby bus.Id, waypoint.Sequence
-                                            select new Route()
-                                            {
-                                                BusId = bus.Id,
-                                                TransportationId = transportation.Id,
-                                                CityFrom = cityFrom.Name,
-                                                CityTo = cityTo.Name,
-                                                BusOperator = bus.Operator,
-                                                Sequence = waypoint.Sequence,
-                                                DepartTime = waypoint.CityFromDepartTime,
-                                                ArrivalTime = waypoint.CityToArrivalTime,
-                                                DepartDate = transportation.DepartDate,
-                                                ArrivalDate = transportation.ArrivalDate,
-                                                Price = waypoint.Price
-                                            }).ToList().GroupBy(g => g.TransportationId).Select(grp => grp.ToList()).ToList();
+                                    orderby bus.Id, waypoint.Sequence
+                                    select new Route()
+                                    {
+                                        BusId = bus.Id,
+                                        TransportationId = transportation.Id,
+                                        CityFrom = cityFrom.Name,
+                                        CityTo = cityTo.Name,
+                                        BusOperator = bus.Operator,
+                                        Sequence = waypoint.Sequence,
+                                        DepartTime = waypoint.CityFromDepartTime,
+                                        ArrivalTime = waypoint.CityToArrivalTime,
+                                        DepartDate = transportation.DepartDate,
+                                        ArrivalDate = transportation.ArrivalDate,
+                                        Price = waypoint.Price
+                                    }).ToList().GroupBy(g => g.TransportationId).Select(grp => grp.ToList()).ToList();
 
                 ViewBag.RoutesOffers = routesOffers;
 
@@ -326,45 +326,45 @@ namespace MapApp.Controllers
                                  join cityFrom in context.Cities on path.CityFromId equals cityFrom.Id
                                  join cityTo in context.Cities on path.CityToId equals cityTo.Id
                                  join groupedNumbers in (from transp2 in context.Transportations
-                                       join transpWaypoint2 in context.TransportationWaypoints on transp2.Id equals transpWaypoint2.TransportationId
-                                       join transpWaypointBusSeat2 in context.TransportationBusSeats on transpWaypoint2.Id equals transpWaypointBusSeat2.TransportationWaypointId
-                                       join waypoint2 in context.WayPointsSchedules on transpWaypoint2.WayPointsScheduleId equals waypoint2.Id
-                                       where transp2.Id == transportationId
-                                          && waypoint2.Sequence >= (from bus3 in context.Buses
-                                                                    join transp3 in context.Transportations on bus3.Id equals transp3.BusId
+                                                         join transpWaypoint2 in context.TransportationWaypoints on transp2.Id equals transpWaypoint2.TransportationId
+                                                         join transpWaypointBusSeat2 in context.TransportationBusSeats on transpWaypoint2.Id equals transpWaypointBusSeat2.TransportationWaypointId
+                                                         join waypoint2 in context.WayPointsSchedules on transpWaypoint2.WayPointsScheduleId equals waypoint2.Id
+                                                         where transp2.Id == transportationId
+                                                            && waypoint2.Sequence >= (from bus3 in context.Buses
+                                                                                      join transp3 in context.Transportations on bus3.Id equals transp3.BusId
+                                                                                      join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
+                                                                                      join path3 in context.Paths on waypoint3.PathId equals path3.Id
+                                                                                      join cityFrom3 in context.Cities on path3.CityFromId equals cityFrom3.Id
+                                                                                      where cityFrom3.Name == fromCity
+                                                                                          && transp3.Id == transportationId
+                                                                                      select waypoint3.Sequence).First()
+                                                            && waypoint2.Sequence <= (from bus3 in context.Buses
+                                                                                      join transp3 in context.Transportations on bus3.Id equals transp3.BusId
+                                                                                      join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
+                                                                                      join path3 in context.Paths on waypoint3.PathId equals path3.Id
+                                                                                      join cityTo3 in context.Cities on path3.CityToId equals cityTo3.Id
+                                                                                      where cityTo3.Name == toCity
+                                                                                         && transp3.Id == transportationId
+                                                                                      select waypoint3.Sequence).First()
+                                                            && transpWaypointBusSeat2.IsTaken == false
+                                                         group transpWaypointBusSeat2 by transpWaypointBusSeat2.SeatNumber into SeatNumbersGroup
+                                                         select new { Number = SeatNumbersGroup.Key, Count = SeatNumbersGroup.Count() }) on transpWaypointBusSeat.SeatNumber equals groupedNumbers.Number
+                                 where transp.Id == transportationId
+                                 && transpWaypointBusSeat.IsTaken == false
+                                 && cityFrom.Name == fromCity
+                                 && groupedNumbers.Count > ((from bus3 in context.Buses
+                                                             join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
+                                                             join path3 in context.Paths on waypoint3.PathId equals path3.Id
+                                                             join cityTo3 in context.Cities on path3.CityToId equals cityTo3.Id
+                                                             where cityTo3.Name == toCity
+                                                             select waypoint3.Sequence).First()
+                                                                   -
+                                                                   (from bus3 in context.Buses
                                                                     join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
                                                                     join path3 in context.Paths on waypoint3.PathId equals path3.Id
                                                                     join cityFrom3 in context.Cities on path3.CityFromId equals cityFrom3.Id
                                                                     where cityFrom3.Name == fromCity
-                                                                        && transp3.Id == transportationId
-                                                                    select waypoint3.Sequence).First()
-                                          && waypoint2.Sequence <= (from bus3 in context.Buses
-                                                                    join transp3 in context.Transportations on bus3.Id equals transp3.BusId
-                                                                    join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
-                                                                    join path3 in context.Paths on waypoint3.PathId equals path3.Id
-                                                                    join cityTo3 in context.Cities on path3.CityToId equals cityTo3.Id
-                                                                    where cityTo3.Name == toCity
-                                                                       && transp3.Id == transportationId
-                                                                    select waypoint3.Sequence).First()
-                                          && transpWaypointBusSeat2.IsTaken == false
-                                       group transpWaypointBusSeat2 by transpWaypointBusSeat2.SeatNumber into SeatNumbersGroup
-                                       select new { Number = SeatNumbersGroup.Key, Count = SeatNumbersGroup.Count() }) on transpWaypointBusSeat.SeatNumber equals groupedNumbers.Number
-                                    where transp.Id == transportationId
-                                    && transpWaypointBusSeat.IsTaken == false
-                                    && cityFrom.Name == fromCity
-                                    && groupedNumbers.Count > ((from bus3 in context.Buses
-                                                                   join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
-                                                                   join path3 in context.Paths on waypoint3.PathId equals path3.Id
-                                                                   join cityTo3 in context.Cities on path3.CityToId equals cityTo3.Id
-                                                                   where cityTo3.Name == toCity
-                                                                   select waypoint3.Sequence).First()
-                                                                      -
-                                                                      (from bus3 in context.Buses
-                                                                       join waypoint3 in context.WayPointsSchedules on bus3.Id equals waypoint3.BusId
-                                                                       join path3 in context.Paths on waypoint3.PathId equals path3.Id
-                                                                       join cityFrom3 in context.Cities on path3.CityFromId equals cityFrom3.Id
-                                                                       where cityFrom3.Name == fromCity
-                                                                       select waypoint3.Sequence).First())
+                                                                    select waypoint3.Sequence).First())
                                  orderby transpWaypointBusSeat.SeatNumber
                                  select transpWaypointBusSeat.SeatNumber).ToList();
 

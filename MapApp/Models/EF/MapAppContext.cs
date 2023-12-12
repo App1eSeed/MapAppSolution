@@ -19,7 +19,7 @@ namespace MapApp.Models.EF
         private static readonly HttpClient client = new HttpClient();
         public MapAppContext(DbContextOptions<MapAppContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
+           // Database.EnsureDeleted();
             Database.EnsureCreated();
 
         }
@@ -54,7 +54,8 @@ namespace MapApp.Models.EF
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseSqlServer("Server=DESKTOP-ERHD2RT;Database=MapAppDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-LUS54RF;Database=MapAppDB;Trusted_Connection=True;");
+                //optionsBuilder.UseSqlServer("Server=tcp:azuredbserver.database.windows.net,1433;Initial Catalog=MapApp;Persist Security Info=False;User ID=IliaBaliuk;Password=0123200)1qaz2wsX;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
        
